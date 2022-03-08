@@ -52,20 +52,11 @@ Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: boost169-devel
 Requires: smartmet-library-macgyver-devel >= 22.3.8
-Requires: smartmet-library-spine-devel >= 22.3.8
 Requires: smartmet-library-newbase-devel >= 21.1.21
 Requires: libconfig17-devel
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
-
-%package -n %{SPECNAME}-plugin-test
-Summary: SmartMet Timeseries development files: plugin test program
-Group: SmartMet/Development
-Requires: libconfig17
-Requires: %{SPECNAME} = %{version}-%{release}
-%description -n %{SPECNAME}-plugin-test
-SmartMet Timeseries development files: plugin test program
 
 %prep
 rm -rf $RPM_BUILD_ROOT
@@ -88,9 +79,6 @@ make %{_smp_mflags}
 %files -n %{SPECNAME}-devel
 %defattr(0644,root,root,0755)
 %{_includedir}/smartmet/%{DIRNAME}
-
-%files -n %{SPECNAME}-plugin-test
-%{_bindir}/smartmet-plugin-test
 
 %changelog
 

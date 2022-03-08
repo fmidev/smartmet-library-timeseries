@@ -22,7 +22,6 @@ DEFINES = -DUNIX -D_REENTRANT
 #	-isystem $(includedir)/oracle
 
 LIBS += -L$(libdir) \
-	-lsmartmet-spine \
 	-lsmartmet-macgyver \
 	-lboost_date_time \
 	-lboost_filesystem \
@@ -68,6 +67,7 @@ $(LIBFILE): $(OBJS)
 clean:
 	rm -f $(LIBFILE) *~ $(SUBNAME)/*~
 	rm -rf $(objdir)
+	make -C test clean
 
 format:
 	clang-format -i -style=file $(SUBNAME)/*.h $(SUBNAME)/*.cpp
