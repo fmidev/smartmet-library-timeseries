@@ -3,7 +3,7 @@ LIB = smartmet-$(SUBNAME)
 SPEC = smartmet-library-$(SUBNAME)
 INCDIR = smartmet/$(SUBNAME)
 
-REQUIRES = gdal configpp
+REQUIRES = 
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
@@ -18,21 +18,10 @@ DEFINES = -DUNIX -D_REENTRANT
  INCLUDES += \
 	-isystem $(includedir)/smartmet
 
-# RHEL8:
-#	-isystem $(includedir)/oracle
-
 LIBS += -L$(libdir) \
 	-lsmartmet-macgyver \
 	-lboost_date_time \
-	-lboost_filesystem \
-	-lboost_thread \
-	-lboost_system \
-	$(pkg-config --libs icu-i18n) \
-	-lpthread \
-	-lrt
-
-# RHEL8:
-#        -L/usr/lib64/oracle/ -Wl,-rpath,/usr/lib64/oracle lnnz11 -lclntsh
+	-lboost_system
 
 
 # What to install

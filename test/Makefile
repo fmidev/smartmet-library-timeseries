@@ -1,6 +1,6 @@
 PROG = $(patsubst %.cpp,%,$(wildcard *Test.cpp))
 
-REQUIRES = jsoncpp configpp
+REQUIRES =
 
 include $(shell smartbuildcfg --prefix)/share/smartmet/devel/makefile.inc
 
@@ -20,15 +20,8 @@ INCLUDES += -I../timeseries
 LIBS += ../libsmartmet-timeseries.so \
 	-lsmartmet-macgyver \
 	$(REQUIRED_LIBS) \
-	-lboost_filesystem \
-	-lboost_iostreams \
-	-lboost_regex \
 	-lboost_date_time \
-	-lboost_thread \
-	-lboost_program_options \
-	-lboost_chrono \
-	-lboost_system \
-	-lbz2 -lz -lpthread -ldl
+	-lboost_system
 
 all: $(PROG)
 clean:
