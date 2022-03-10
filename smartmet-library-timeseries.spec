@@ -31,6 +31,7 @@ Requires: ctpp2
 #TestRequires: make
 #TestRequires: smartmet-library-regression
 #TestRequires: smartmet-utils-devel >= 22.2.8
+#TestRequires: smartmet-timezones
 Provides: %{SPECNAME}
 
 %description
