@@ -16,10 +16,12 @@ BuildRequires: gcc-c++
 BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
-BuildRequires: smartmet-utils-devel >= 22.1.20
+BuildRequires: smartmet-utils-devel >= 22.2.8
+BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
+BuildRequires: smartmet-library-macgyver >= 22.3.8
 Requires: boost169-date-time
 Requires: boost169-system
 Requires: ctpp2
@@ -28,7 +30,7 @@ Requires: ctpp2
 #TestRequires: gcc-c++
 #TestRequires: make
 #TestRequires: smartmet-library-regression
-#TestRequires: smartmet-utils-devel >= 22.1.20
+#TestRequires: smartmet-utils-devel >= 22.2.8
 Provides: %{SPECNAME}
 
 %description
@@ -39,7 +41,7 @@ Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: boost169-devel
 Requires: smartmet-library-macgyver-devel >= 22.3.8
-Requires: smartmet-library-newbase-devel >= 21.1.21
+Requires: smartmet-library-newbase-devel >= 22.1.21
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
