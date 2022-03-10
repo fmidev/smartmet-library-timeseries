@@ -18,10 +18,10 @@ BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 22.2.8
 BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
+BuildRequires: smartmet-library-newbase-devel >= 22.1.21
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
-BuildRequires: smartmet-library-macgyver >= 22.3.8
 Requires: boost169-date-time
 Requires: boost169-system
 Requires: ctpp2
