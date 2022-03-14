@@ -14,6 +14,8 @@
 #include <ostream>
 #include <set>
 
+#include <spine/HTTP.h>
+
 namespace SmartMet
 {
 namespace TimeSeries
@@ -62,6 +64,8 @@ struct TimeSeriesGeneratorOptions
   bool endTimeData;    // Take end time from data
   bool isClimatology;
 };
+
+TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq);
 
 std::ostream& operator<<(std::ostream& stream, const TimeSeriesGeneratorOptions& opt);
 
