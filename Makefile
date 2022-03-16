@@ -3,7 +3,7 @@ LIB = smartmet-$(SUBNAME)
 SPEC = smartmet-library-$(SUBNAME)
 INCDIR = smartmet/$(SUBNAME)
 
-REQUIRES = 
+REQUIRES =
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
@@ -19,6 +19,7 @@ DEFINES = -DUNIX -D_REENTRANT
 	-isystem $(includedir)/smartmet
 
 LIBS += -L$(libdir) \
+	$(REQUIRES_LIBS) \
 	-lsmartmet-macgyver \
 	-lboost_date_time \
 	-lboost_system
