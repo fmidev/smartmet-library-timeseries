@@ -1,6 +1,12 @@
 #include "TimeSeriesOutput.h"
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <spine/LonLat.h>
+#include <spine/None.h>
+
+using ::SmartMet::Spine::LonLat;
+using ::SmartMet::Spine::LonLatFormat;
+using ::SmartMet::Spine::None;
 
 namespace SmartMet
 {

@@ -11,32 +11,27 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
+#include <spine/LonLat.h>
+#include <spine/None.h>
 
 namespace SmartMet
 {
 namespace TimeSeries
 {
-struct LonLat
-{
-  LonLat(double longitude, double latitude) : lon(longitude), lat(latitude) {}
-  double lon;
-  double lat;
-};
 
-bool operator==(const LonLat& lonlat1, const LonLat& lonlat2);
-
-// Type to indicate empty ('nan') result
-struct None
-{
-  // Nans are always identical to themselves, no nothing else
-  template <class T>
-  bool operator==(const T& other) const;
-};
+using None = ::SmartMet::Spine::None;
+using LonLat = ::SmartMet::Spine::LonLat;
+using LonFormat = ::SmartMet::Spine::LonLatFormat;
 
 // data variable for qengine, obsengine
 using Value =
-    boost::variant<None, std::string, double, int, LonLat, boost::local_time::local_date_time>;
+    boost::variant<
+    Spine::None,
+    std::string,
+    double,
+    int,
+    Spine::LonLat,
+    boost::local_time::local_date_time>;
 
 // Local time pool
 class LocalTimePool
@@ -104,8 +99,11 @@ using TimeSeriesPtr = boost::shared_ptr<TimeSeries>;
 // time series result variable for an area
 struct LonLatTimeSeries
 {
-  LonLatTimeSeries(const LonLat& coord, const TimeSeries& ts) : lonlat(coord), timeseries(ts) {}
-  LonLat lonlat;
+  LonLatTimeSeries(const Spine::LonLat& coord, const TimeSeries& ts)
+      : lonlat(coord), timeseries(ts)
+    {
+    }
+  Spine::LonLat lonlat;
   TimeSeries timeseries;
 };
 
@@ -116,9 +114,6 @@ using TimeSeriesGroupPtr = boost::shared_ptr<TimeSeriesGroup>;
 // time series vector
 using TimeSeriesVector = std::vector<TimeSeries>;
 using TimeSeriesVectorPtr = boost::shared_ptr<TimeSeriesVector>;
-
-template <>
-bool None::operator==(const None& other) const;
 
 std::ostream& operator<<(std::ostream& os, const LocalTimePool& localTimePool);
 

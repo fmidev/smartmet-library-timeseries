@@ -21,6 +21,7 @@ DEFINES = -DUNIX -D_REENTRANT
 LIBS += -L$(libdir) \
 	$(REQUIRES_LIBS) \
 	-lsmartmet-macgyver \
+	-lsmartmet-spine \
 	-lboost_date_time \
 	-lboost_system
 
@@ -89,7 +90,7 @@ rpm: clean $(SPEC).spec
 .SUFFIXES: $(SUFFIXES) .cpp
 
 obj/%.o: %.cpp
-	$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+	$(CXX) $(CFLAGS) $(INCLUDES) -c -MD -MF $(patsubst obj/%.o, obj/%.d, $@) -MT $@ -o $@ $<
 
 ifneq ($(wildcard obj/*.d),)
 -include $(wildcard obj/*.d)

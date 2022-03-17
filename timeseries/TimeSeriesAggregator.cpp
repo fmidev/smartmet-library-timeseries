@@ -8,6 +8,7 @@
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <newbase/NFmiGlobals.h>
+#include <spine/LonLat.h>
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
@@ -16,6 +17,8 @@ using namespace std;
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 using namespace boost::local_time;
+using SmartMet::Spine::LonLat;
+using SmartMet::Spine::None;
 
 // #define MYDEBUG 1
 
