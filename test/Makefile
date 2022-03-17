@@ -37,6 +37,11 @@ test: $(PROG)
 	for prog in $(PROG); do \
 	./$$prog || ok=false; \
 	done; \
+	echo; \
+	for source in $(wildcard *Compile.cpp) ; do \
+          echo Compile only test: $$source; \
+	  $(CXX) -c $(CFLAGS) -o /dev/null $$source $(INCLUDES) || ok = false; \
+	done; \
 	$$ok
 
 $(PROG) : % : %.cpp Makefile ../libsmartmet-timeseries.so
