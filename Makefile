@@ -23,8 +23,8 @@ LIBS += -L$(libdir) \
 	-lsmartmet-macgyver \
 	-lsmartmet-spine \
 	-lboost_date_time \
-	-lboost_system
-
+	-lboost_system \
+	-lpthread
 
 # What to install
 

@@ -22,7 +22,8 @@ LIBS += ../libsmartmet-timeseries.so \
 	-lsmartmet-macgyver \
 	$(REQUIRED_LIBS) \
 	-lboost_date_time \
-	-lboost_system
+	-lboost_system \
+	-lpthread
 
 all: $(PROG)
 clean:
@@ -37,11 +38,6 @@ test: $(PROG)
 	@ok=true; \
 	for prog in $(PROG); do \
 	./$$prog || ok=false; \
-	done; \
-	echo; \
-	for source in $(wildcard *Compile.cpp) ; do \
-          echo Compile only test: $$source; \
-	  $(CXX) -c $(CFLAGS) -o /dev/null $$source $(INCLUDES) || ok = false; \
 	done; \
 	$$ok
 

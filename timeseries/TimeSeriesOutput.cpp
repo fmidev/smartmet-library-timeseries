@@ -25,7 +25,7 @@ std::ostream& operator<<(std::ostream& os, const Value& val)
     else if (boost::get<LonLat>(&val) != nullptr)
     {
       LonLat coord = *(boost::get<LonLat>(&val));
-      os << coord;
+      os << coord.lon << ", " << coord.lat;
     }
     else if (boost::get<boost::local_time::local_date_time>(&val) != nullptr)
     {

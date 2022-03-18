@@ -7,7 +7,7 @@
 namespace SmartMet {
 namespace TimeSeries {
 // write content of Value to ostream (not formatted)
-std::ostream &operator<<(std::ostream &os, const Value &val);
+std::ostream &operator<<(std::ostream &os, const ::SmartMet::TimeSeries::Value &val);
 // write content of TimeSeries to ostream (not formatted)
 std::ostream &operator<<(std::ostream &os, const TimeSeries &ts);
 // write content of TimeSeriesGroup to ostream (not formatted)
