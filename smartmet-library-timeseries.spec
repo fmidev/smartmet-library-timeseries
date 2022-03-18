@@ -19,14 +19,14 @@ BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 22.2.8
 BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
 BuildRequires: smartmet-library-newbase-devel >= 22.1.21
-BuildRequires: smartmet-library-spine-devel >= 22.1.20
+BuildRequires: smartmet-library-spine-devel >= 22.3.18
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: boost169-date-time
 Requires: boost169-system
 Requires: boost169-thread
-Requires: smartmet-library-spine >= 22.1.20
+Requires: smartmet-library-spine >= 22.3.18
 Requires: ctpp2
 
 #TestRequires: boost169-devel
@@ -34,7 +34,7 @@ Requires: ctpp2
 #TestRequires: make
 #TestRequires: smartmet-library-regression
 #TestRequires: smartmet-utils-devel >= 22.2.8
-#TestRequires: smartmet-library-spine-devel >= 22.1.20
+#TestRequires: smartmet-library-spine-devel >= 22.3.18
 #TestRequires: smartmet-timezones
 Provides: %{SPECNAME}
 
