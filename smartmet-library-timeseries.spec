@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.3.10
+Version: 22.3.18
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -74,6 +74,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Mar 18 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.3.18-1.fmi
+- Import more code from smartmet-library-spine and require spine to be installed
+
 * Thu Mar 10 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.3.10-1.fmi
 - Removed incorrect dependencies
 
