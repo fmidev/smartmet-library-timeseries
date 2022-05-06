@@ -47,6 +47,7 @@ Group: SmartMet/Development
 Requires: boost169-devel
 Requires: smartmet-library-macgyver-devel >= 22.3.8
 Requires: smartmet-library-newbase-devel >= 22.1.21
+Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
