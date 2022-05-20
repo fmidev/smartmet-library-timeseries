@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.3.18
+Version: 22.5.20
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -17,16 +17,16 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 22.2.8
-BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
-BuildRequires: smartmet-library-newbase-devel >= 22.1.21
-BuildRequires: smartmet-library-spine-devel >= 22.3.18
+BuildRequires: smartmet-library-macgyver-devel >= 22.3.28
+BuildRequires: smartmet-library-newbase-devel >= 22.5.20
+BuildRequires: smartmet-library-spine-devel >= 22.5.16
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: boost169-date-time
 Requires: boost169-system
 Requires: boost169-thread
-Requires: smartmet-library-spine >= 22.3.18
+Requires: smartmet-library-spine >= 22.5.16
 Requires: ctpp2
 
 #TestRequires: boost169-devel
@@ -34,7 +34,7 @@ Requires: ctpp2
 #TestRequires: make
 #TestRequires: smartmet-library-regression
 #TestRequires: smartmet-utils-devel >= 22.2.8
-#TestRequires: smartmet-library-spine-devel >= 22.3.18
+#TestRequires: smartmet-library-spine-devel >= 22.5.16
 #TestRequires: smartmet-timezones
 Provides: %{SPECNAME}
 
@@ -45,8 +45,8 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: boost169-devel
-Requires: smartmet-library-macgyver-devel >= 22.3.8
-Requires: smartmet-library-newbase-devel >= 22.1.21
+Requires: smartmet-library-macgyver-devel >= 22.3.28
+Requires: smartmet-library-newbase-devel >= 22.5.20
 Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
@@ -75,6 +75,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri May 20 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.5.20-1.fmi
+- Repackaged due to newbase ABI changes to LatLon methods
+
 * Fri Mar 18 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.3.18-1.fmi
 - Import more code from smartmet-library-spine and require spine to be installed
 
