@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.5.20
+Version: 22.5.24
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -18,15 +18,15 @@ BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 22.2.8
 BuildRequires: smartmet-library-macgyver-devel >= 22.3.28
-BuildRequires: smartmet-library-newbase-devel >= 22.5.20
-BuildRequires: smartmet-library-spine-devel >= 22.5.16
+BuildRequires: smartmet-library-newbase-devel >= 22.5.24
+BuildRequires: smartmet-library-spine-devel >= 22.5.24
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: boost169-date-time
 Requires: boost169-system
 Requires: boost169-thread
-Requires: smartmet-library-spine >= 22.5.16
+Requires: smartmet-library-spine >= 22.5.24
 Requires: ctpp2
 
 #TestRequires: boost169-devel
@@ -34,7 +34,7 @@ Requires: ctpp2
 #TestRequires: make
 #TestRequires: smartmet-library-regression
 #TestRequires: smartmet-utils-devel >= 22.2.8
-#TestRequires: smartmet-library-spine-devel >= 22.5.16
+#TestRequires: smartmet-library-spine-devel >= 22.5.24
 #TestRequires: smartmet-timezones
 Provides: %{SPECNAME}
 
@@ -46,7 +46,7 @@ Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: boost169-devel
 Requires: smartmet-library-macgyver-devel >= 22.3.28
-Requires: smartmet-library-newbase-devel >= 22.5.20
+Requires: smartmet-library-newbase-devel >= 22.5.24
 Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
@@ -75,6 +75,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue May 24 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.5.24-1.fmi
+- Repackaged due to NFmiArea ABI changes
+
 * Fri May 20 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.5.20-1.fmi
 - Repackaged due to newbase ABI changes to LatLon methods
 
