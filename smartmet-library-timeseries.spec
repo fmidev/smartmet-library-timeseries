@@ -11,30 +11,36 @@ URL: https://github.com/fmidev/smartmet-library-timeseries
 Source0: %{name}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: boost169-devel
+%if 0%{?rhel} && 0%{rhel} < 9
+%define smartmet_boost boost169
+%else
+%define smartmet_boost boost
+%endif
+
+BuildRequires: %{smartmet_boost}-devel
 BuildRequires: gcc-c++
 BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 22.2.8
-BuildRequires: smartmet-library-macgyver-devel >= 22.3.28
-BuildRequires: smartmet-library-newbase-devel >= 22.5.24
-BuildRequires: smartmet-library-spine-devel >= 22.5.24
+BuildRequires: smartmet-library-macgyver-devel >= 22.6.16
+BuildRequires: smartmet-library-newbase-devel >= 22.6.16
+BuildRequires: smartmet-library-spine-devel >= 22.6.16
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
-Requires: boost169-date-time
-Requires: boost169-system
-Requires: boost169-thread
-Requires: smartmet-library-spine >= 22.5.24
+Requires: %{smartmet_boost}-date-time
+Requires: %{smartmet_boost}-system
+Requires: %{smartmet_boost}-thread
+Requires: smartmet-library-spine >= 22.6.16
 Requires: ctpp2
 
-#TestRequires: boost169-devel
+#TestRequires: %{smartmet_boost}-devel
 #TestRequires: gcc-c++
 #TestRequires: make
 #TestRequires: smartmet-library-regression
 #TestRequires: smartmet-utils-devel >= 22.2.8
-#TestRequires: smartmet-library-spine-devel >= 22.5.24
+#TestRequires: smartmet-library-spine-devel >= 22.6.16
 #TestRequires: smartmet-timezones
 Provides: %{SPECNAME}
 
@@ -44,9 +50,9 @@ FMI BrainStorm Timeseries Library
 %package -n %{SPECNAME}-devel
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
-Requires: boost169-devel
-Requires: smartmet-library-macgyver-devel >= 22.3.28
-Requires: smartmet-library-newbase-devel >= 22.5.24
+Requires: %{smartmet_boost}-devel
+Requires: smartmet-library-macgyver-devel >= 22.6.16
+Requires: smartmet-library-newbase-devel >= 22.6.16
 Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
