@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <spine/LonLat.h>
-#include <spine/None.h>
 #include <boost/date_time/local_time/local_time.hpp>
 #include <boost/variant.hpp>
-#include <type_traits>
+#include <spine/LonLat.h>
+#include <spine/None.h>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <vector>
 
@@ -19,59 +19,60 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-
 using None = ::SmartMet::Spine::None;
 using LonLat = ::SmartMet::Spine::LonLat;
 using LonLatFormat = ::SmartMet::Spine::LonLatFormat;
 
 // data variable for qengine, obsengine
-using Value_ = boost::variant<
-    Spine::None,
-    std::string,
-    double,
-    int,
-    Spine::LonLat,
-    boost::local_time::local_date_time>;
+using Value_ = boost::variant<Spine::None,
+                              std::string,
+                              double,
+                              int,
+                              Spine::LonLat,
+                              boost::local_time::local_date_time>;
 
 struct Value : public Value_
 {
-    Value() = default;
+  Value() = default;
 
-    inline Value(const Spine::None&) : Value() {}
+  inline Value(const Spine::None&) : Value() {}
 
-    inline Value(const std::string& s) : Value_(s) {}
+  inline Value(const std::string& s) : Value_(s) {}
 
-    inline Value(const char* s) : Value_(std::string(s)) {}
+  inline Value(const char* s) : Value_(std::string(s)) {}
 
-    template <typename ArgType>
-    inline Value(ArgType x,
-        typename std::enable_if<std::is_integral<ArgType>::value,int>::type = 0)
-        : Value_(int(x))
-    {}
+  template <typename ArgType>
+  inline Value(ArgType x, typename std::enable_if<std::is_integral<ArgType>::value, int>::type = 0)
+      : Value_(int(x))
+  {
+  }
 
-    template <typename ArgType>
-    inline Value(ArgType x,
-        typename std::enable_if<std::is_floating_point<ArgType>::value,int>::type = 0)
-        : Value_(double(x))
-    {}
+  template <typename ArgType>
+  inline Value(ArgType x,
+               typename std::enable_if<std::is_floating_point<ArgType>::value, int>::type = 0)
+      : Value_(double(x))
+  {
+  }
 
-    inline Value(const Spine::LonLat& x) : Value_(x) {}
+  inline Value(const Spine::LonLat& x) : Value_(x) {}
 
-    inline Value(const boost::local_time::local_date_time& x) : Value_(x) {}
+  inline Value(const boost::local_time::local_date_time& x) : Value_(x) {}
 
-    inline Value(const Value&) = default;
+  inline Value(const Value&) = default;
 
-    inline Value& operator = (const Value&) = default;
+  inline Value& operator=(const Value&) = default;
 
-    bool operator == (const Value& x) const
-    {
-        return this->Value_::operator == ((Value_&)x);;
-    }
+  bool operator==(const Value& x) const
+  {
+    return this->Value_::operator==((Value_&)x);
+    ;
+  }
 
-    bool operator != (const Value& x) const
-    {
-        return this->Value_::operator != ((Value_&)x);;
-    }
+  bool operator!=(const Value& x) const
+  {
+    return this->Value_::operator!=((Value_&)x);
+    ;
+  }
 };
 
 // Local time pool
@@ -140,10 +141,9 @@ using TimeSeriesPtr = boost::shared_ptr<TimeSeries>;
 // time series result variable for an area
 struct LonLatTimeSeries
 {
-  LonLatTimeSeries(const Spine::LonLat& coord, const TimeSeries& ts)
-      : lonlat(coord), timeseries(ts)
-    {
-    }
+  LonLatTimeSeries(const Spine::LonLat& coord, const TimeSeries& ts) : lonlat(coord), timeseries(ts)
+  {
+  }
   Spine::LonLat lonlat;
   TimeSeries timeseries;
 };
@@ -160,6 +160,5 @@ std::ostream& operator<<(std::ostream& os, const LocalTimePool& localTimePool);
 
 }  // namespace TimeSeries
 }  // namespace SmartMet
-
 
 // ======================================================================

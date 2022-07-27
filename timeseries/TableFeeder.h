@@ -1,12 +1,12 @@
 #pragma once
 
+#include "TimeSeries.h"
 #include <macgyver/ValueFormatter.h>
 #include <spine/Table.h>
 #include <spine/TableVisitor.h>
 #include <list>
 #include <string>
 #include <vector>
-#include "TimeSeries.h"
 
 namespace SmartMet
 {
@@ -72,5 +72,5 @@ class TableFeeder
   TableFeeder& operator<<(Spine::LonLatFormat newformat);
 };
 
-}  // namespace Spine
+}  // namespace TimeSeries
 }  // namespace SmartMet

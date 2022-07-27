@@ -266,6 +266,5 @@ OStreamVisitor& OStreamVisitor::operator<<(LonLatFormat newformat)
   }
 }
 
-
 }  // namespace TimeSeries
 }  // namespace SmartMet

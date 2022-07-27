@@ -20,7 +20,6 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-
 struct TimeSeriesGeneratorOptions
 {
  public:

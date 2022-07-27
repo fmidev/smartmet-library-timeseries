@@ -1,12 +1,12 @@
 #pragma once
 
 #include "OptionParsers.h"
+#include "TimeSeriesInclude.h"
 #include <macgyver/Exception.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeZones.h>
 #include <spine/Location.h>
 #include <spine/Parameter.h>
-#include "TimeSeriesInclude.h"
 
 namespace Fmi
 {

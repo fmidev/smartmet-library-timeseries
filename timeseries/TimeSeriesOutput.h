@@ -4,8 +4,10 @@
 #include <boost/date_time/local_time/local_time.hpp>
 #include <macgyver/ValueFormatter.h>
 
-namespace SmartMet {
-namespace TimeSeries {
+namespace SmartMet
+{
+namespace TimeSeries
+{
 // write content of Value to ostream (not formatted)
 std::ostream &operator<<(std::ostream &os, const ::SmartMet::TimeSeries::Value &val);
 // write content of TimeSeries to ostream (not formatted)
@@ -17,18 +19,22 @@ std::ostream &operator<<(std::ostream &os, const TimeSeriesVector &tsv);
 
 // format Value and write to output stream
 // usage: boost::apply_visitor(ostream_visitor, Value);
-class OStreamVisitor : public boost::static_visitor<> {
-private:
+class OStreamVisitor : public boost::static_visitor<>
+{
+ private:
   std::ostream &itsOutstream;
   const Fmi::ValueFormatter &itsValueFormatter;
   int itsPrecision;
   Spine::LonLatFormat itsLonLatFormat;
 
-public:
-  OStreamVisitor(std::ostream &outs, const Fmi::ValueFormatter &valueformatter,
-                 int precision)
-      : itsOutstream(outs), itsValueFormatter(valueformatter),
-        itsPrecision(precision), itsLonLatFormat(Spine::LonLatFormat::LONLAT) {}
+ public:
+  OStreamVisitor(std::ostream &outs, const Fmi::ValueFormatter &valueformatter, int precision)
+      : itsOutstream(outs),
+        itsValueFormatter(valueformatter),
+        itsPrecision(precision),
+        itsLonLatFormat(Spine::LonLatFormat::LONLAT)
+  {
+  }
 
   void operator()(const Spine::None &none) const;
   void operator()(const std::string &str) const;
@@ -43,16 +49,20 @@ public:
 
 // format Value into string
 // usage: boost::apply_visitor(ostream_visitor, Value);
-class StringVisitor : public boost::static_visitor<std::string> {
-private:
+class StringVisitor : public boost::static_visitor<std::string>
+{
+ private:
   const Fmi::ValueFormatter &itsValueFormatter;
   int itsPrecision;
   Spine::LonLatFormat itsLonLatFormat;
 
-public:
+ public:
   StringVisitor(const Fmi::ValueFormatter &valueformatter, int precision)
-      : itsValueFormatter(valueformatter), itsPrecision(precision),
-        itsLonLatFormat(Spine::LonLatFormat::LONLAT) {}
+      : itsValueFormatter(valueformatter),
+        itsPrecision(precision),
+        itsLonLatFormat(Spine::LonLatFormat::LONLAT)
+  {
+  }
 
   void setLonLatFormat(Spine::LonLatFormat newFormat) { itsLonLatFormat = newFormat; }
   void setPrecision(int newPrecision) { itsPrecision = newPrecision; }
@@ -64,5 +74,5 @@ public:
   std::string operator()(const boost::local_time::local_date_time &ldt) const;
 };
 
-} // namespace TimeSeries
-} // namespace SmartMet
+}  // namespace TimeSeries
+}  // namespace SmartMet

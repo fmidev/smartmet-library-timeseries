@@ -1,12 +1,11 @@
 #include "TableFeeder.h"
-#include <macgyver/Exception.h>
 #include "TimeSeriesOutput.h"
+#include <macgyver/Exception.h>
 
 namespace SmartMet
 {
 namespace TimeSeries
 {
-
 const TableFeeder& TableFeeder::operator<<(const TimeSeries& ts)
 {
   try
@@ -47,7 +46,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesGroup& ts_group)
     for (size_t i = 0; i < n_timestamps; i++)
     {
       std::stringstream ss;
-	  OStreamVisitor ostream_visitor(
+      OStreamVisitor ostream_visitor(
           ss, itsValueFormatter, itsPrecisions[itsTableVisitor.getCurrentColumn()]);
       ostream_visitor << itsLonLatFormat;
 

@@ -12,10 +12,8 @@
 
 namespace SmartMet
 {
-
 namespace TimeSeries
 {
-
 const int default_timestep = 60;
 
 // ----------------------------------------------------------------------
@@ -207,11 +205,11 @@ const TimeSeriesGeneratorOptions::TimeList& TimeSeriesGeneratorOptions::getDataT
 
 TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq)
 {
-  using Spine::optional_time;
+  using Spine::duration_string_to_minutes;
   using Spine::optional_int;
   using Spine::optional_string;
+  using Spine::optional_time;
   using Spine::required_string;
-  using Spine::duration_string_to_minutes;
 
   try
   {

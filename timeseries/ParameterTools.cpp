@@ -17,7 +17,6 @@ namespace TimeSeries
 {
 namespace
 {
-
 using Spine::Parameter;
 
 const std::set<std::string> location_parameters = {DEM_PARAM,
@@ -351,14 +350,14 @@ bool is_time_parameter(std::string paramname)
 // ----------------------------------------------------------------------
 
 Value time_parameter(const std::string paramname,
-                         const boost::local_time::local_date_time& ldt,
-                         const boost::posix_time::ptime now,
-                         const Spine::Location& loc,
-                         const std::string& timezone,
-                         const Fmi::TimeZones& timezones,
-                         const std::locale& outlocale,
-                         const Fmi::TimeFormatter& timeformatter,
-                         const std::string& timestring)
+                     const boost::local_time::local_date_time& ldt,
+                     const boost::posix_time::ptime now,
+                     const Spine::Location& loc,
+                     const std::string& timezone,
+                     const Fmi::TimeZones& timezones,
+                     const std::locale& outlocale,
+                     const Fmi::TimeFormatter& timeformatter,
+                     const std::string& timestring)
 {
   using boost::local_time::local_date_time;
 

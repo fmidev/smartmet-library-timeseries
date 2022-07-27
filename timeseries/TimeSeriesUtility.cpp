@@ -3,7 +3,6 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-
 namespace SmartMet
 {
 namespace TimeSeries
@@ -39,8 +38,7 @@ std::ostream& operator<<(std::ostream& os, const TimeSeriesData& tsdata)
  */
 // ----------------------------------------------------------------------
 
-void erase_redundant_timesteps(TimeSeries& ts,
-                               const TimeSeriesGenerator::LocalTimeList& timesteps)
+void erase_redundant_timesteps(TimeSeries& ts, const TimeSeriesGenerator::LocalTimeList& timesteps)
 {
   try
   {
@@ -103,8 +101,8 @@ void erase_redundant_timesteps(TimeSeries& ts,
  */
 // ----------------------------------------------------------------------
 
-TimeSeriesPtr erase_redundant_timesteps(
-    TimeSeriesPtr ts, const TimeSeriesGenerator::LocalTimeList& timesteps)
+TimeSeriesPtr erase_redundant_timesteps(TimeSeriesPtr ts,
+                                        const TimeSeriesGenerator::LocalTimeList& timesteps)
 {
   try
   {
@@ -123,9 +121,8 @@ TimeSeriesPtr erase_redundant_timesteps(
  */
 // ----------------------------------------------------------------------
 
-TimeSeriesVectorPtr erase_redundant_timesteps(
-    TimeSeriesVectorPtr tsv,
-    const TimeSeriesGenerator::LocalTimeList& timesteps)
+TimeSeriesVectorPtr erase_redundant_timesteps(TimeSeriesVectorPtr tsv,
+                                              const TimeSeriesGenerator::LocalTimeList& timesteps)
 {
   try
   {
@@ -146,9 +143,8 @@ TimeSeriesVectorPtr erase_redundant_timesteps(
  */
 // ----------------------------------------------------------------------
 
-TimeSeriesGroupPtr erase_redundant_timesteps(
-    TimeSeriesGroupPtr tsg,
-    const TimeSeriesGenerator::LocalTimeList& timesteps)
+TimeSeriesGroupPtr erase_redundant_timesteps(TimeSeriesGroupPtr tsg,
+                                             const TimeSeriesGenerator::LocalTimeList& timesteps)
 {
   try
   {
@@ -161,7 +157,6 @@ TimeSeriesGroupPtr erase_redundant_timesteps(
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
-
 
 }  // namespace TimeSeries
 }  // namespace SmartMet

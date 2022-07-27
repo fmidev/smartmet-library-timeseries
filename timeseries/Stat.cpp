@@ -18,7 +18,6 @@ namespace TimeSeries
 {
 namespace Stat
 {
-
 #define MODULO_VALUE_360 360.0
 using DataIterator = DataVector::iterator;
 using DataConstIterator = DataVector::const_iterator;

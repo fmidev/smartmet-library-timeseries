@@ -89,9 +89,8 @@ ParameterOptions parseParameters(const Spine::HTTP::Request& theReq)
     ParameterOptions options;
 
     // Get the option string
-    std::string opt = Spine::required_string(
-        theReq.getParameter("param"),
-        "Option param is required");
+    std::string opt =
+        Spine::required_string(theReq.getParameter("param"), "Option param is required");
 
     // Protect against empty selection
     if (opt.empty())

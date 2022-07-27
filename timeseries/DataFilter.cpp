@@ -11,7 +11,6 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-
 namespace
 {
 enum class ComparisonType

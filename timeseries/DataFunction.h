@@ -58,9 +58,9 @@ struct DataFunction
       itsNaNFunction = true;
   }
   DataFunction(FunctionId theFunctionId,
-                    FunctionType theFunctionType,
-                    double theLowerLimit = std::numeric_limits<double>::lowest(),
-                    double theUpperLimit = std::numeric_limits<double>::max())
+               FunctionType theFunctionType,
+               double theLowerLimit = std::numeric_limits<double>::lowest(),
+               double theUpperLimit = std::numeric_limits<double>::max())
       : itsFunctionId(theFunctionId),
         itsFunctionType(theFunctionType),
         itsLowerLimit(theLowerLimit),
@@ -121,8 +121,7 @@ struct DataFunction
 struct DataFunctions
 {
   DataFunctions() = default;
-  DataFunctions(const DataFunction& theInnerFunction,
-                     const DataFunction& theOuterFunction)
+  DataFunctions(const DataFunction& theInnerFunction, const DataFunction& theOuterFunction)
       : innerFunction(theInnerFunction), outerFunction(theOuterFunction)
   {
   }

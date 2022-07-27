@@ -7,7 +7,6 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-
 class DataFilter
 {
  public:

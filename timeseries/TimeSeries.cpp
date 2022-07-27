@@ -1,7 +1,6 @@
+#include "TimeSeries.h"
 #include <boost/make_shared.hpp>
 #include <macgyver/Hash.h>
-#include "TimeSeries.h"
-
 
 namespace SmartMet
 {

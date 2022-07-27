@@ -5,12 +5,10 @@
 
 namespace SmartMet
 {
-
 using Spine::LonLat;
 
 namespace TimeSeries
 {
-
 Spine::TableVisitor& operator<<(Spine::TableVisitor& tf, const Value& val)
 {
   try
@@ -41,5 +39,5 @@ Spine::TableVisitor& operator<<(Spine::TableVisitor& tf, const Value& val)
   }
 }
 
-}  // namespace Spine
+}  // namespace TimeSeries
 }  // namespace SmartMet

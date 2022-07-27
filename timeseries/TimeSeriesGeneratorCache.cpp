@@ -6,7 +6,6 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-
 // ----------------------------------------------------------------------
 /*!
  * \brief Resize the cache

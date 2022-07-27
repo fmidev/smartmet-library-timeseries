@@ -594,19 +594,19 @@ std::string ParameterFactory::parse_parameter_functions(
     if (!parts.empty())
       parts.pop_front();
 
-	double lower_limit = std::numeric_limits<double>::lowest();
-	double upper_limit = std::numeric_limits<double>::max();
+    double lower_limit = std::numeric_limits<double>::lowest();
+    double upper_limit = std::numeric_limits<double>::max();
     if (functionname1.size() > 0 && functionname2.size() > 0)
     {
       // inner and outer functions exist
       auto f_name = extract_function(functionname2, lower_limit, upper_limit);
 
-	  theInnerParameterFunction.setLimits(lower_limit, upper_limit);
+      theInnerParameterFunction.setLimits(lower_limit, upper_limit);
 
       theInnerParameterFunction.setId(parse_function(f_name));
-      theInnerParameterFunction.setType(
-										(f_name.substr(f_name.size() - 2) == "_t" ? FunctionType::TimeFunction
-										 : FunctionType::AreaFunction));
+      theInnerParameterFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
+                                             ? FunctionType::TimeFunction
+                                             : FunctionType::AreaFunction));
 
       theInnerParameterFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
       // Nearest && Interpolate functions always accepts NaNs in time series
@@ -616,35 +616,35 @@ std::string ParameterFactory::parse_parameter_functions(
       if (theInnerParameterFunction.type() == FunctionType::TimeFunction)
       {
         theInnerParameterFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-		theInnerParameterFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+        theInnerParameterFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
-	  
+
       f_name = extract_function(functionname1, lower_limit, upper_limit);
-	  theOuterParameterFunction.setLimits(lower_limit, upper_limit);
-	  
-	  theOuterParameterFunction.setId(parse_function(f_name));
-      theOuterParameterFunction.setType(
-										 (f_name.substr(f_name.size() - 2) == "_t" ? FunctionType::TimeFunction
-										  : FunctionType::AreaFunction));
+      theOuterParameterFunction.setLimits(lower_limit, upper_limit);
+
+      theOuterParameterFunction.setId(parse_function(f_name));
+      theOuterParameterFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
+                                             ? FunctionType::TimeFunction
+                                             : FunctionType::AreaFunction));
 
       theOuterParameterFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
 
       if (theOuterParameterFunction.type() == FunctionType::TimeFunction)
       {
         theOuterParameterFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-		theOuterParameterFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+        theOuterParameterFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
     }
     else if (functionname1.size() > 0)
     {
       // only inner function exists,
       auto f_name = extract_function(functionname1, lower_limit, upper_limit);
-	  theInnerParameterFunction.setLimits(lower_limit, upper_limit);
+      theInnerParameterFunction.setLimits(lower_limit, upper_limit);
 
       theInnerParameterFunction.setId(parse_function(f_name));
-      theInnerParameterFunction.setType(
-										(f_name.substr(f_name.size() - 2) == "_t" ? FunctionType::TimeFunction
-										 : FunctionType::AreaFunction));
+      theInnerParameterFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
+                                             ? FunctionType::TimeFunction
+                                             : FunctionType::AreaFunction));
       theInnerParameterFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
       // Nearest && Interpolate functions always accepts NaNs in time series
       if (theInnerParameterFunction.id() == FunctionId::Nearest ||
@@ -683,8 +683,8 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
   {
     auto tmpname = Fmi::trim_copy(name);
 
-	DataFunction innerFunction;
-	DataFunction outerFunction;
+    DataFunction innerFunction;
+    DataFunction outerFunction;
 
     size_t parenhesis_start = std::count(tmpname.begin(), tmpname.end(), '(');
     size_t parenhesis_end = std::count(tmpname.begin(), tmpname.end(), ')');
@@ -782,9 +782,8 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
  */
 // ----------------------------------------------------------------------
 
-Spine::Parameter
-ParameterFactory::parse(const std::string& paramname,
-                        bool ignoreBadParameter /* = false*/) const
+Spine::Parameter ParameterFactory::parse(const std::string& paramname,
+                                         bool ignoreBadParameter /* = false*/) const
 {
   using Spine::Parameter;
   using namespace Spine::Parameters;
