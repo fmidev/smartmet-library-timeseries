@@ -227,8 +227,8 @@ bool is_location_parameter(const std::string& paramname)
  */
 // ----------------------------------------------------------------------
 
-std::string location_parameter(const Spine::LocationPtr loc,
-                               const std::string paramName,
+std::string location_parameter(const Spine::LocationPtr& loc,
+                               const std::string& paramName,
                                const Fmi::ValueFormatter& valueformatter,
                                const std::string& timezone,
                                int precision,
@@ -292,8 +292,8 @@ std::string location_parameter(const Spine::LocationPtr loc,
 
       if (paramName == X_PARAM)
         return valueformatter.format(x_coord, precision);
-      else
-        return valueformatter.format(y_coord, precision);
+
+      return valueformatter.format(y_coord, precision);
     }
     if (paramName == LATLON_PARAM)
       return (valueformatter.format(loc->latitude, precision) + ", " +
@@ -349,9 +349,9 @@ bool is_time_parameter(std::string paramname)
  */
 // ----------------------------------------------------------------------
 
-Value time_parameter(const std::string paramname,
+Value time_parameter(const std::string& paramname,
                      const boost::local_time::local_date_time& ldt,
-                     const boost::posix_time::ptime now,
+                     const boost::posix_time::ptime& now,
                      const Spine::Location& loc,
                      const std::string& timezone,
                      const Fmi::TimeZones& timezones,

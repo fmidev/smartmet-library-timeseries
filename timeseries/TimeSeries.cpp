@@ -82,9 +82,12 @@ void TimeSeries::insert(TimedValueVector::iterator pos,
 
 TimeSeries& TimeSeries::operator=(const TimeSeries& ts)
 {
-  clear();
-  TimedValueVector::insert(end(), ts.begin(), ts.end());
-  local_time_pool = ts.local_time_pool;
+  if (this != &ts)
+  {
+    clear();
+    TimedValueVector::insert(end(), ts.begin(), ts.end());
+    local_time_pool = ts.local_time_pool;
+  }
 
   return *this;
 }

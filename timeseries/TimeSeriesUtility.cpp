@@ -148,8 +148,8 @@ TimeSeriesGroupPtr erase_redundant_timesteps(TimeSeriesGroupPtr tsg,
 {
   try
   {
-    for (size_t i = 0; i < tsg->size(); i++)
-      erase_redundant_timesteps(tsg->at(i).timeseries, timesteps);
+    for (auto& ts : *tsg)
+      erase_redundant_timesteps(ts.timeseries, timesteps);
     return tsg;
   }
   catch (...)

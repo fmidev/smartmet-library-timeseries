@@ -35,7 +35,7 @@ struct Value : public Value_
 {
   Value() = default;
 
-  inline Value(const Spine::None&) : Value() {}
+  inline Value(const Spine::None& /* none */) : Value() {}
 
   inline Value(const std::string& s) : Value_(s) {}
 
@@ -102,8 +102,11 @@ struct TimedValue
   }
   TimedValue& operator=(const TimedValue& tv)
   {
-    time = const_cast<boost::local_time::local_date_time&>(tv.time);
-    value = tv.value;
+    if (this != &tv)
+    {
+      time = const_cast<boost::local_time::local_date_time&>(tv.time);
+      value = tv.value;
+    }
     return *this;
   }
 

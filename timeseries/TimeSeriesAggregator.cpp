@@ -90,11 +90,8 @@ double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeig
         return (itsTimestep ? stat.interpolate(itsTimestep->utc_time())
                             : static_cast<double>(kFloatMissing));
       case FunctionId::NullFunction:
-        return kFloatMissing;
-#ifndef UNREACHABLE
       default:
         return kFloatMissing;
-#endif
     }
   }
   catch (...)
@@ -225,7 +222,7 @@ LonLat StatCalculator::getLonLatStatValue(const DataFunction &func) const
       double lat_max(*iter);
       return LonLat(lon_max, lat_max);
     }
-    else if (fid == FunctionId::Minimum)
+    if (fid == FunctionId::Minimum)
     {
       std::vector<double>::iterator iter;
       iter = std::min_element(lon_vector.begin(), lon_vector.end());
@@ -234,7 +231,7 @@ LonLat StatCalculator::getLonLatStatValue(const DataFunction &func) const
       double lat_min(*iter);
       return LonLat(lon_min, lat_min);
     }
-    else if (fid == FunctionId::Sum || fid == FunctionId::Integ)
+    if (fid == FunctionId::Sum || fid == FunctionId::Integ)
     {
       double lon_sum = std::accumulate(lon_vector.begin(), lon_vector.end(), 0.0);
       double lat_sum = std::accumulate(lat_vector.begin(), lat_vector.end(), 0.0);
@@ -246,12 +243,10 @@ LonLat StatCalculator::getLonLatStatValue(const DataFunction &func) const
 
       return LonLat(lon_sum, lat_sum);
     }
-    else
-    {
-      std::stringstream ss;
-      ss << "Function " << func.hash() << " can not be applied for a lonlat-coordinate!";
-      throw Fmi::Exception(BCP, ss.str());
-    }
+
+    std::stringstream ss;
+    ss << "Function " << func.hash() << " can not be applied for a lonlat-coordinate!";
+    throw Fmi::Exception(BCP, ss.str());
   }
   catch (...)
   {

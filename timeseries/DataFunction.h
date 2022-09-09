@@ -45,18 +45,8 @@ enum class FunctionType
 
 struct DataFunction
 {
-  DataFunction()
-      : itsFunctionId(FunctionId::NullFunction),
-        itsFunctionType(FunctionType::NullFunctionType),
-        itsLowerLimit(std::numeric_limits<double>::lowest()),
-        itsUpperLimit(std::numeric_limits<double>::max()),
-        itsAggregationIntervalBehind(MAX_AGGREGATION_INTERVAL),
-        itsAggregationIntervalAhead(MAX_AGGREGATION_INTERVAL),
-        itsNaNFunction(false)
-  {
-    if (itsFunctionId == FunctionId::Nearest || itsFunctionId == FunctionId::Interpolate)
-      itsNaNFunction = true;
-  }
+  DataFunction() = default;
+
   DataFunction(FunctionId theFunctionId,
                FunctionType theFunctionType,
                double theLowerLimit = std::numeric_limits<double>::lowest(),
@@ -64,16 +54,14 @@ struct DataFunction
       : itsFunctionId(theFunctionId),
         itsFunctionType(theFunctionType),
         itsLowerLimit(theLowerLimit),
-        itsUpperLimit(theUpperLimit),
-        itsAggregationIntervalBehind(MAX_AGGREGATION_INTERVAL),
-        itsAggregationIntervalAhead(MAX_AGGREGATION_INTERVAL),
-        itsNaNFunction(false)
+        itsUpperLimit(theUpperLimit)
   {
     if (itsFunctionId == FunctionId::Nearest || itsFunctionId == FunctionId::Interpolate)
       itsNaNFunction = true;
   }
   DataFunction(const DataFunction& pf) = default;
   DataFunction& operator=(const DataFunction& pf) = default;
+
   bool exists() const { return itsFunctionType != FunctionType::NullFunctionType; }
   std::string info() const;
   FunctionId id() const { return itsFunctionId; }
@@ -109,13 +97,13 @@ struct DataFunction
   friend std::ostream& operator<<(std::ostream& out, const DataFunction& func);
 
  private:
-  FunctionId itsFunctionId;
-  FunctionType itsFunctionType;
-  double itsLowerLimit;
-  double itsUpperLimit;
-  unsigned int itsAggregationIntervalBehind;
-  unsigned int itsAggregationIntervalAhead;
-  bool itsNaNFunction;
+  FunctionId itsFunctionId = FunctionId::NullFunction;
+  FunctionType itsFunctionType = FunctionType::NullFunctionType;
+  double itsLowerLimit = std::numeric_limits<double>::lowest();
+  double itsUpperLimit = std::numeric_limits<double>::max();
+  unsigned int itsAggregationIntervalBehind = MAX_AGGREGATION_INTERVAL;
+  unsigned int itsAggregationIntervalAhead = MAX_AGGREGATION_INTERVAL;
+  bool itsNaNFunction = false;
 };
 
 struct DataFunctions

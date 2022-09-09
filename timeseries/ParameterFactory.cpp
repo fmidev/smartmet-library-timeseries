@@ -93,85 +93,6 @@ int get_function_index(const std::string& theFunction)
 
 // ----------------------------------------------------------------------
 /*!
- * \brief Get an instance of the parameter factory (singleton)
- */
-// ----------------------------------------------------------------------
-
-const ParameterFactory& ParameterFactory::instance()
-{
-  try
-  {
-    static ParameterFactory factory;
-    return factory;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
- * \brief Initialize the factory
- *
- * This is only called once by instance()
- */
-// ----------------------------------------------------------------------
-
-ParameterFactory::ParameterFactory()
-
-{
-  try
-  {
-    // We must make one query to make sure the converter is
-    // initialized while the constructor is run thread safely
-    // only once. Unfortunately the init method is private.
-
-    converter.ToString(1);  // 1 == Pressure
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
- * \brief Return name for the given parameter
- */
-// ----------------------------------------------------------------------
-
-std::string ParameterFactory::name(int number) const
-{
-  try
-  {
-    return converter.ToString(number);
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
- * \brief Return number for the given name
- */
-
-int ParameterFactory::number(const std::string& name) const
-{
-  try
-  {
-    return converter.ToEnum(name);
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
  * \brief Parse a function id
  *
  * Throws if the name is not recognized.
@@ -181,7 +102,7 @@ int ParameterFactory::number(const std::string& name) const
  */
 // ----------------------------------------------------------------------
 
-FunctionId ParameterFactory::parse_function(const std::string& theFunction) const
+FunctionId parse_function(const std::string& theFunction)
 {
   try
   {
@@ -259,7 +180,7 @@ FunctionId ParameterFactory::parse_function(const std::string& theFunction) cons
  * \return The function modified alone (possibly empty string)
  */
 // ----------------------------------------------------------------------
-std::string ParameterFactory::extract_limits(const std::string& theString) const
+std::string extract_limits(const std::string& theString)
 {
   try
   {
@@ -272,6 +193,85 @@ std::string ParameterFactory::extract_limits(const std::string& theString) const
       throw Fmi::Exception(BCP, "Invalid function modifier in '" + theString + "'!");
 
     return theString.substr(pos1 + 1, pos2 - pos1 - 1);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Get an instance of the parameter factory (singleton)
+ */
+// ----------------------------------------------------------------------
+
+const ParameterFactory& ParameterFactory::instance()
+{
+  try
+  {
+    static ParameterFactory factory;
+    return factory;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Initialize the factory
+ *
+ * This is only called once by instance()
+ */
+// ----------------------------------------------------------------------
+
+ParameterFactory::ParameterFactory()
+
+{
+  try
+  {
+    // We must make one query to make sure the converter is
+    // initialized while the constructor is run thread safely
+    // only once. Unfortunately the init method is private.
+
+    converter.ToString(1);  // 1 == Pressure
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Return name for the given parameter
+ */
+// ----------------------------------------------------------------------
+
+std::string ParameterFactory::name(int number) const
+{
+  try
+  {
+    return converter.ToString(number);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Return number for the given name
+ */
+
+int ParameterFactory::number(const std::string& name) const
+{
+  try
+  {
+    return converter.ToEnum(name);
   }
   catch (...)
   {
@@ -481,12 +481,11 @@ std::string parse_parameter_name(const std::string& param_name)
  */
 // ----------------------------------------------------------------------
 
-std::string ParameterFactory::parse_parameter_functions(
-    const std::string& theParameterRequest,
-    std::string& theOriginalName,
-    std::string& theParameterNameAlias,
-    DataFunction& theInnerParameterFunction,
-    DataFunction& theOuterParameterFunction) const
+std::string ParameterFactory::parse_parameter_functions(const std::string& theParameterRequest,
+                                                        std::string& theOriginalName,
+                                                        std::string& theParameterNameAlias,
+                                                        DataFunction& theInnerDataFunction,
+                                                        DataFunction& theOuterDataFunction) const
 {
   try
   {
@@ -541,7 +540,7 @@ std::string ParameterFactory::parse_parameter_functions(
       pos1 = pos2 + 1;
     }
 
-    if (parts.size() == 0 || parts.size() > 3)
+    if (parts.empty() || parts.size() > 3)
       throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
 
     std::string paramname = parts.back();
@@ -596,73 +595,73 @@ std::string ParameterFactory::parse_parameter_functions(
 
     double lower_limit = std::numeric_limits<double>::lowest();
     double upper_limit = std::numeric_limits<double>::max();
-    if (functionname1.size() > 0 && functionname2.size() > 0)
+    if (!functionname1.empty() && !functionname2.empty())
     {
       // inner and outer functions exist
       auto f_name = extract_function(functionname2, lower_limit, upper_limit);
 
-      theInnerParameterFunction.setLimits(lower_limit, upper_limit);
+      theInnerDataFunction.setLimits(lower_limit, upper_limit);
 
-      theInnerParameterFunction.setId(parse_function(f_name));
-      theInnerParameterFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
-                                             ? FunctionType::TimeFunction
-                                             : FunctionType::AreaFunction));
+      theInnerDataFunction.setId(parse_function(f_name));
+      theInnerDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
+                                        ? FunctionType::TimeFunction
+                                        : FunctionType::AreaFunction));
 
-      theInnerParameterFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
+      theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
       // Nearest && Interpolate functions always accepts NaNs in time series
-      if (theInnerParameterFunction.id() == FunctionId::Nearest ||
-          theInnerParameterFunction.id() == FunctionId::Interpolate)
-        theInnerParameterFunction.setIsNaNFunction(true);
-      if (theInnerParameterFunction.type() == FunctionType::TimeFunction)
+      if (theInnerDataFunction.id() == FunctionId::Nearest ||
+          theInnerDataFunction.id() == FunctionId::Interpolate)
+        theInnerDataFunction.setIsNaNFunction(true);
+      if (theInnerDataFunction.type() == FunctionType::TimeFunction)
       {
-        theInnerParameterFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-        theInnerParameterFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+        theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
+        theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
 
       f_name = extract_function(functionname1, lower_limit, upper_limit);
-      theOuterParameterFunction.setLimits(lower_limit, upper_limit);
+      theOuterDataFunction.setLimits(lower_limit, upper_limit);
 
-      theOuterParameterFunction.setId(parse_function(f_name));
-      theOuterParameterFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
-                                             ? FunctionType::TimeFunction
-                                             : FunctionType::AreaFunction));
+      theOuterDataFunction.setId(parse_function(f_name));
+      theOuterDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
+                                        ? FunctionType::TimeFunction
+                                        : FunctionType::AreaFunction));
 
-      theOuterParameterFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
+      theOuterDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
 
-      if (theOuterParameterFunction.type() == FunctionType::TimeFunction)
+      if (theOuterDataFunction.type() == FunctionType::TimeFunction)
       {
-        theOuterParameterFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-        theOuterParameterFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+        theOuterDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
+        theOuterDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
     }
-    else if (functionname1.size() > 0)
+    else if (!functionname1.empty())
     {
       // only inner function exists,
       auto f_name = extract_function(functionname1, lower_limit, upper_limit);
-      theInnerParameterFunction.setLimits(lower_limit, upper_limit);
+      theInnerDataFunction.setLimits(lower_limit, upper_limit);
 
-      theInnerParameterFunction.setId(parse_function(f_name));
-      theInnerParameterFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
-                                             ? FunctionType::TimeFunction
-                                             : FunctionType::AreaFunction));
-      theInnerParameterFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
+      theInnerDataFunction.setId(parse_function(f_name));
+      theInnerDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
+                                        ? FunctionType::TimeFunction
+                                        : FunctionType::AreaFunction));
+      theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
       // Nearest && Interpolate functions always accepts NaNs in time series
-      if (theInnerParameterFunction.id() == FunctionId::Nearest ||
-          theInnerParameterFunction.id() == FunctionId::Interpolate)
-        theInnerParameterFunction.setIsNaNFunction(true);
+      if (theInnerDataFunction.id() == FunctionId::Nearest ||
+          theInnerDataFunction.id() == FunctionId::Interpolate)
+        theInnerDataFunction.setIsNaNFunction(true);
 
-      if (theInnerParameterFunction.type() == FunctionType::TimeFunction)
+      if (theInnerDataFunction.type() == FunctionType::TimeFunction)
       {
-        theInnerParameterFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-        theInnerParameterFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+        theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
+        theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
     }
 
-    if (theOuterParameterFunction.type() == theInnerParameterFunction.type() &&
-        theOuterParameterFunction.type() != FunctionType::NullFunctionType)
+    if (theOuterDataFunction.type() == theInnerDataFunction.type() &&
+        theOuterDataFunction.type() != FunctionType::NullFunctionType)
     {
       // remove outer function
-      theOuterParameterFunction = DataFunction();
+      theOuterDataFunction = DataFunction();
     }
 
     // We assume ASCII chars only in parameter names

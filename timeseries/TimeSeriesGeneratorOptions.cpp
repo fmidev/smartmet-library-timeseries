@@ -27,15 +27,7 @@ const int default_timestep = 60;
 // ----------------------------------------------------------------------
 
 TimeSeriesGeneratorOptions::TimeSeriesGeneratorOptions(const boost::posix_time::ptime& now)
-    : mode(Mode::TimeSteps),
-      startTime(now),
-      endTime(now),
-      startTimeUTC(true),
-      endTimeUTC(true),
-      dataTimes(new TimeList::element_type()),
-      startTimeData(false),
-      endTimeData(false),
-      isClimatology(false)
+    : startTime(now), endTime(now), dataTimes(new TimeList::element_type())
 {
 }
 

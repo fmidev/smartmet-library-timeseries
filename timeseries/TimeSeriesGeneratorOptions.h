@@ -48,20 +48,20 @@ struct TimeSeriesGeneratorOptions
   void setDataTimes(const TimeList& times, bool climatology = false);
   const TimeList& getDataTimes() const;
 
-  Mode mode;                                // algorithm selection
+  Mode mode = Mode::TimeSteps;              // algorithm selection
   boost::posix_time::ptime startTime;       // start time
   boost::posix_time::ptime endTime;         // end time
-  bool startTimeUTC;                        // timestamps can be interpreted to be in
-  bool endTimeUTC;                          // UTC time or in some specific time zone
+  bool startTimeUTC = true;                 // timestamps can be interpreted to be in
+  bool endTimeUTC = true;                   // UTC time or in some specific time zone
   boost::optional<unsigned int> timeSteps;  // number of time steps
   boost::optional<unsigned int> timeStep;   // Mode:TimeSteps, timestep in minutes
   std::set<unsigned int> timeList;          // Mode:FixedTimes,  integers of form HHMM
  private:
   TimeList dataTimes;  // Mode:DataTimes, Fixed times set from outside
  public:
-  bool startTimeData;  // Take start time from data
-  bool endTimeData;    // Take end time from data
-  bool isClimatology;
+  bool startTimeData = false;  // Take start time from data
+  bool endTimeData = false;    // Take end time from data
+  bool isClimatology = false;
 };
 
 TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq);

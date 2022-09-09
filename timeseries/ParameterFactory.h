@@ -37,11 +37,9 @@ class ParameterFactory
   ParameterFactory();
   mutable NFmiEnumConverter converter;
 
-  std::string extract_limits(const std::string& theString) const;
   std::string extract_function(const std::string& theString,
                                double& theLowerLimit,
                                double& theUpperLimit) const;
-  FunctionId parse_function(const std::string& theFunction) const;
   std::string parse_parameter_functions(const std::string& theParameterRequest,
                                         std::string& theOriginalName,
                                         std::string& theParameterNameAlias,

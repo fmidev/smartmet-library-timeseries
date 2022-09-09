@@ -13,7 +13,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeries& ts)
     if (ts.empty())
       return *this;
 
-    for (auto& t : ts)
+    for (const auto& t : ts)
     {
       Value val = t.value;
       boost::apply_visitor(itsTableVisitor, val);
@@ -32,7 +32,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesGroup& ts_group)
   try
   {
     // no time series
-    if (ts_group.size() == 0)
+    if (ts_group.empty())
       return *this;
 
     // one time series
@@ -95,7 +95,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesVector& ts_vector)
   try
   {
     // no time series
-    if (ts_vector.size() == 0)
+    if (ts_vector.empty())
       return *this;
 
     unsigned int startRow(itsTableVisitor.getCurrentRow());
@@ -125,13 +125,11 @@ const TableFeeder& TableFeeder::operator<<(const std::vector<Value>& value_vecto
   try
   {
     // no values
-    if (value_vector.size() == 0)
+    if (value_vector.empty())
       return *this;
 
-    for (auto& val : value_vector)
-    {
+    for (const auto& val : value_vector)
       boost::apply_visitor(itsTableVisitor, val);
-    }
 
     return *this;
   }

@@ -27,16 +27,16 @@ bool is_location_parameter(const std::string& paramname);
 
 bool is_time_parameter(std::string paramname);
 
-std::string location_parameter(const Spine::LocationPtr loc,
-                               const std::string paramName,
+std::string location_parameter(const Spine::LocationPtr& loc,
+                               const std::string& paramName,
                                const Fmi::ValueFormatter& valueformatter,
                                const std::string& timezone,
                                int precision,
                                const std::string& crs = "EPSG:4326");
 
-TS::Value time_parameter(const std::string paramname,
+TS::Value time_parameter(const std::string& paramname,
                          const boost::local_time::local_date_time& ldt,
-                         const boost::posix_time::ptime now,
+                         const boost::posix_time::ptime& now,
                          const Spine::Location& loc,
                          const std::string& timezone,
                          const Fmi::TimeZones& timezones,

@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.7.27
+Version: 22.9.9
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -23,16 +23,16 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 22.2.8
-BuildRequires: smartmet-library-macgyver-devel >= 22.7.27
-BuildRequires: smartmet-library-newbase-devel >= 22.6.16
-BuildRequires: smartmet-library-spine-devel >= 22.7.27
+BuildRequires: smartmet-library-macgyver-devel >= 22.8.23
+BuildRequires: smartmet-library-newbase-devel >= 22.8.29
+BuildRequires: smartmet-library-spine-devel >= 22.9.5
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 22.7.27
+Requires: smartmet-library-spine >= 22.9.5
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,8 +51,8 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 22.6.16
-Requires: smartmet-library-newbase-devel >= 22.6.16
+Requires: smartmet-library-macgyver-devel >= 22.8.23
+Requires: smartmet-library-newbase-devel >= 22.8.29
 Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Sep  9 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.9.9-1.fmi
+- Silenced several compiler warnings, some on unnecessary copying
+
 * Wed Jul 27 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.7.27-1.fmi
 - Repackaged since macgyver CacheStats ABI changed
 

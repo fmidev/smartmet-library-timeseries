@@ -50,13 +50,13 @@ bool comp_time(const DataItem& data1, const DataItem& data2)
 }
 
 Stat::Stat(double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
-    : itsMissingValue(theMissingValue), itsWeights(true), itsDegrees(false)
+    : itsMissingValue(theMissingValue), itsWeights(true)
 {
 }
 
-Stat::Stat(const DataVector& theData,
+Stat::Stat(const DataVector& theValues,
            double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
-    : itsData(theData), itsMissingValue(theMissingValue), itsWeights(true), itsDegrees(false)
+    : itsData(theValues), itsMissingValue(theMissingValue), itsWeights(true)
 {
   try
   {
@@ -70,7 +70,7 @@ Stat::Stat(const DataVector& theData,
 
 Stat::Stat(const std::vector<double>& theValues,
            double theMissingValue /*= std::numeric_limits<double>::quiet_NaN()*/)
-    : itsMissingValue(theMissingValue), itsWeights(false), itsDegrees(false)
+    : itsMissingValue(theMissingValue)
 {
   try
   {
@@ -84,7 +84,7 @@ Stat::Stat(const std::vector<double>& theValues,
 
 Stat::Stat(const LocalDateTimeValueVector& theValues,
            double theMissingValue /*= std::numeric_limits<double>::quiet_NaN()*/)
-    : itsMissingValue(theMissingValue), itsWeights(true), itsDegrees(false)
+    : itsMissingValue(theMissingValue), itsWeights(true)
 
 {
   try
@@ -103,7 +103,7 @@ Stat::Stat(const LocalDateTimeValueVector& theValues,
 
 Stat::Stat(const PosixTimeValueVector& theValues,
            double theMissingValue /*= std::numeric_limits<double>::quiet_NaN(*/)
-    : itsMissingValue(theMissingValue), itsWeights(true), itsDegrees(false)
+    : itsMissingValue(theMissingValue), itsWeights(true)
 {
   try
   {
@@ -119,11 +119,11 @@ Stat::Stat(const PosixTimeValueVector& theValues,
   }
 }
 
-void Stat::setData(const DataVector& theData)
+void Stat::setData(const DataVector& theValues)
 {
   try
   {
-    itsData = theData;
+    itsData = theValues;
     calculate_weights();
   }
   catch (...)
@@ -171,11 +171,11 @@ void Stat::addData(const boost::posix_time::ptime& theTime, double theValue)
   }
 }
 
-void Stat::addData(const vector<double>& theData)
+void Stat::addData(const vector<double>& theValues)
 {
   try
   {
-    for (double value : theData)
+    for (double value : theValues)
       itsData.push_back(DataItem(not_a_date_time, value));
 
     calculate_weights();
