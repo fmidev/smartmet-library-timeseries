@@ -274,8 +274,11 @@ std::string location_parameter(const Spine::LocationPtr& loc,
       return loc->feature;
     if (paramName == LOCALTZ_PARAM)
       return loc->timezone;
+	/*
+	  // This is time parameter
     if (paramName == TZ_PARAM)
       return (timezone == "localtime" ? loc->timezone : timezone);
+	*/
     if (paramName == LATITUDE_PARAM || paramName == LAT_PARAM)
       return valueformatter.format(loc->latitude, precision);
     if (paramName == LONGITUDE_PARAM || paramName == LON_PARAM)
@@ -407,7 +410,7 @@ Value time_parameter(const std::string& paramname,
       ret = timeformatter.format(now);
 
     else if (paramname == TZ_PARAM)
-      ret = timezone;
+      ret = (ldt.zone() ? ldt.zone()->std_zone_name() : timezone);
 
     else if (paramname == SUNELEVATION_PARAM)
     {
