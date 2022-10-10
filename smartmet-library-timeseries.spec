@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.10.5
+Version: 22.10.10
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -22,7 +22,7 @@ BuildRequires: gcc-c++
 BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
-BuildRequires: smartmet-utils-devel >= 22.2.8
+BuildRequires: smartmet-utils-devel >= 22.10.7
 BuildRequires: smartmet-library-macgyver-devel >= 22.8.23
 BuildRequires: smartmet-library-newbase-devel >= 22.8.29
 BuildRequires: smartmet-library-spine-devel >= 22.9.5
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Mon Oct 10 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.10.10-1.fmi
+- Improved keyword listing
+
 * Wed Oct 5 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.10.5-1.fmi
 - Fixed tz-parameter return value (BRAINSTORM-2420)
 
