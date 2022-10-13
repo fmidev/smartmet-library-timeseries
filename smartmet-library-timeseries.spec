@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.10.12
+Version: 22.10.13
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Oct 13 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.10.13-1.fmi
+- Fixed parameter name mapping bug (BRAINSTORM-2433)
+
 * Wed Oct 12 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.10.12-1.fmi
 - Return the original timezone name for 'tz' instead of the Boost 'standard name' which is +0545 for Asia/Kathmandu
 
