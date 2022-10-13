@@ -372,7 +372,7 @@ std::string parse_parameter_name(const std::string& param_name)
                                   "totalcloudcover",
                                   "cloudiness",
                                   "n",
-                                  "relativehumidity",
+                                  "humidity",
                                   "windspeed",
                                   "windspeedms",
                                   "wspd",
@@ -425,7 +425,7 @@ std::string parse_parameter_name(const std::string& param_name)
         "TotalCloudCover",          // "TotalCloudCover"
         "TotalCloudCover",          // "Cloudiness"
         "TotalCloudCover",          // "n"
-        "Humidity",                 // "RelativeHumidity"
+        "Humidity",                 // "Humidity"
         "WindSpeedMS",              // "WindSpeed"
         "WindSpeedMS",              // "WindSpeedMS"
         "WindSpeedMS",              // "wspd"
@@ -754,6 +754,7 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
 
     std::string paramname = parse_parameter_name(parse_parameter_functions(
         tmpname, originalParamName, paramnameAlias, innerFunction, outerFunction));
+
     Spine::Parameter parameter = parse(paramname, ignoreBadParameter);
 
     parameter.setAlias(paramnameAlias);
