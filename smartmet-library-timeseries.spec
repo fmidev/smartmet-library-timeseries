@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.10.13
+Version: 22.10.18
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -23,7 +23,7 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 22.10.7
-BuildRequires: smartmet-library-macgyver-devel >= 22.8.23
+BuildRequires: smartmet-library-macgyver-devel >= 22.10.12
 BuildRequires: smartmet-library-newbase-devel >= 22.8.29
 BuildRequires: smartmet-library-spine-devel >= 22.9.5
 %if %{with tests}
@@ -51,7 +51,7 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 22.8.23
+Requires: smartmet-library-macgyver-devel >= 22.10.12
 Requires: smartmet-library-newbase-devel >= 22.8.29
 Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
@@ -81,7 +81,7 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
-* Thu Oct 13 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.10.13-1.fmi
+* Tue Oct 18 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.10.18-1.fmi
 - Fixed parameter name mapping bug (BRAINSTORM-2433)
 
 * Wed Oct 12 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.10.12-1.fmi
