@@ -359,30 +359,33 @@ Value time_parameter(const std::string& paramname,
 {
   using boost::local_time::local_date_time;
 
+  auto p = paramname;
+  Fmi::ascii_tolower(p);
+
   try
   {
     TS::Value ret = Spine::None();
 
-    if (paramname == TIME_PARAM)
+    if (p == TIME_PARAM)
     {
       boost::local_time::time_zone_ptr tz = timezones.time_zone_from_string(timezone);
       ret = timeformatter.format(local_date_time(ldt.utc_time(), tz));
     }
 
-    else if (paramname == ORIGINTIME_PARAM)
+    else if (p == ORIGINTIME_PARAM)
     {
       boost::local_time::time_zone_ptr tz = timezones.time_zone_from_string(timezone);
       local_date_time ldt_now(now, tz);
       ret = timeformatter.format(ldt_now);
     }
 
-    else if (paramname == ISOTIME_PARAM)
+    else if (p == ISOTIME_PARAM)
       ret = Fmi::to_iso_string(ldt.local_time());
 
-    else if (paramname == XMLTIME_PARAM)
+    else if (p == XMLTIME_PARAM)
       ret = Fmi::to_iso_extended_string(ldt.local_time());
 
-    else if (paramname == LOCALTIME_PARAM)
+    else if (p == LOCALTIME_PARAM)
     {
       boost::local_time::time_zone_ptr localtz = timezones.time_zone_from_string(loc.timezone);
 
@@ -391,61 +394,61 @@ Value time_parameter(const std::string& paramname,
       ret = timeformatter.format(localt);
     }
 
-    else if (paramname == UTCTIME_PARAM)
+    else if (p == UTCTIME_PARAM)
       ret = timeformatter.format(ldt.utc_time());
 
-    else if (paramname == EPOCHTIME_PARAM)
+    else if (p == EPOCHTIME_PARAM)
     {
       boost::posix_time::ptime time_t_epoch(boost::gregorian::date(1970, 1, 1));
       boost::posix_time::time_duration diff = ldt.utc_time() - time_t_epoch;
       ret = Fmi::to_string(diff.total_seconds());
     }
 
-    else if (paramname == ORIGINTIME_PARAM)
+    else if (p == ORIGINTIME_PARAM)
       ret = timeformatter.format(now);
 
-    else if (paramname == TZ_PARAM)
+    else if (p == TZ_PARAM)
       ret = timezone;
 
-    else if (paramname == SUNELEVATION_PARAM)
+    else if (p == SUNELEVATION_PARAM)
     {
       Fmi::Astronomy::solar_position_t sp =
           Fmi::Astronomy::solar_position(ldt, loc.longitude, loc.latitude);
       ret = sp.elevation;
     }
 
-    else if (paramname == SUNDECLINATION_PARAM)
+    else if (p == SUNDECLINATION_PARAM)
     {
       Fmi::Astronomy::solar_position_t sp =
           Fmi::Astronomy::solar_position(ldt, loc.longitude, loc.latitude);
       ret = sp.declination;
     }
 
-    else if (paramname == SUNAZIMUTH_PARAM)
+    else if (p == SUNAZIMUTH_PARAM)
     {
       Fmi::Astronomy::solar_position_t sp =
           Fmi::Astronomy::solar_position(ldt, loc.longitude, loc.latitude);
       ret = sp.azimuth;
     }
 
-    else if (paramname == DARK_PARAM)
+    else if (p == DARK_PARAM)
     {
       Fmi::Astronomy::solar_position_t sp =
           Fmi::Astronomy::solar_position(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(sp.dark());
     }
 
-    else if (paramname == MOONPHASE_PARAM)
+    else if (p == MOONPHASE_PARAM)
       ret = Fmi::Astronomy::moonphase(ldt.utc_time());
 
-    else if (paramname == MOONRISE_PARAM)
+    else if (p == MOONRISE_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
       if (lt.moonrise_today())
         ret = timeformatter.format(lt.moonrise.local_time());
     }
-    else if (paramname == MOONRISE2_PARAM)
+    else if (p == MOONRISE2_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
@@ -453,14 +456,14 @@ Value time_parameter(const std::string& paramname,
       if (lt.moonrise2_today())
         ret = timeformatter.format(lt.moonrise2.local_time());
     }
-    else if (paramname == MOONSET_PARAM)
+    else if (p == MOONSET_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
       if (lt.moonset_today())
         ret = timeformatter.format(lt.moonset.local_time());
     }
-    else if (paramname == MOONSET2_PARAM)
+    else if (p == MOONSET2_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
@@ -469,74 +472,74 @@ Value time_parameter(const std::string& paramname,
         ret = timeformatter.format(lt.moonset2.local_time());
     }
 
-    else if (paramname == MOONRISETODAY_PARAM)
+    else if (p == MOONRISETODAY_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
 
       ret = Fmi::to_string(lt.moonrise_today());
     }
-    else if (paramname == MOONRISE2TODAY_PARAM)
+    else if (p == MOONRISE2TODAY_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(lt.moonrise2_today());
     }
-    else if (paramname == MOONSETTODAY_PARAM)
+    else if (p == MOONSETTODAY_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(lt.moonset_today());
     }
-    else if (paramname == MOONSET2TODAY_PARAM)
+    else if (p == MOONSET2TODAY_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(lt.moonset2_today());
     }
-    else if (paramname == MOONUP24H_PARAM)
+    else if (p == MOONUP24H_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(lt.above_horizont_24h());
     }
-    else if (paramname == MOONDOWN24H_PARAM)
+    else if (p == MOONDOWN24H_PARAM)
     {
       Fmi::Astronomy::lunar_time_t lt =
           Fmi::Astronomy::lunar_time(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(!lt.moonrise_today() && !lt.moonset_today() && !lt.above_horizont_24h());
     }
-    else if (paramname == SUNRISE_PARAM)
+    else if (p == SUNRISE_PARAM)
     {
       Fmi::Astronomy::solar_time_t st =
           Fmi::Astronomy::solar_time(ldt, loc.longitude, loc.latitude);
       ret = timeformatter.format(st.sunrise.local_time());
     }
-    else if (paramname == SUNSET_PARAM)
+    else if (p == SUNSET_PARAM)
     {
       Fmi::Astronomy::solar_time_t st =
           Fmi::Astronomy::solar_time(ldt, loc.longitude, loc.latitude);
       ret = timeformatter.format(st.sunset.local_time());
     }
-    else if (paramname == NOON_PARAM)
+    else if (p == NOON_PARAM)
     {
       Fmi::Astronomy::solar_time_t st =
           Fmi::Astronomy::solar_time(ldt, loc.longitude, loc.latitude);
       ret = timeformatter.format(st.noon.local_time());
     }
-    else if (paramname == SUNRISETODAY_PARAM)
+    else if (p == SUNRISETODAY_PARAM)
     {
       Fmi::Astronomy::solar_time_t st =
           Fmi::Astronomy::solar_time(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(st.sunrise_today());
     }
-    else if (paramname == SUNSETTODAY_PARAM)
+    else if (p == SUNSETTODAY_PARAM)
     {
       Fmi::Astronomy::solar_time_t st =
           Fmi::Astronomy::solar_time(ldt, loc.longitude, loc.latitude);
       ret = Fmi::to_string(st.sunset_today());
     }
-    else if (paramname == DAYLENGTH_PARAM)
+    else if (p == DAYLENGTH_PARAM)
     {
       Fmi::Astronomy::solar_time_t st =
           Fmi::Astronomy::solar_time(ldt, loc.longitude, loc.latitude);
@@ -544,26 +547,26 @@ Value time_parameter(const std::string& paramname,
       int minutes = boost::numeric_cast<int>(round(static_cast<double>(seconds) / 60.0));
       ret = minutes;
     }
-    else if (paramname == TIMESTRING_PARAM)
+    else if (p == TIMESTRING_PARAM)
       ret = format_date(ldt, outlocale, timestring);
 
-    else if (paramname == WDAY_PARAM)
+    else if (p == WDAY_PARAM)
       ret = format_date(ldt, outlocale, "%a");
 
-    else if (paramname == WEEKDAY_PARAM)
+    else if (p == WEEKDAY_PARAM)
       ret = format_date(ldt, outlocale, "%A");
 
-    else if (paramname == MON_PARAM)
+    else if (p == MON_PARAM)
       ret = format_date(ldt, outlocale, "%b");
 
-    else if (paramname == MONTH_PARAM)
+    else if (p == MONTH_PARAM)
     {
       ret = format_date(ldt, outlocale, "%B");
     }
 
-    else if (paramname == HOUR_PARAM)
+    else if (p == HOUR_PARAM)
       ret = Fmi::to_string(ldt.local_time().time_of_day().hours());
-    else if (paramname.substr(0, 5) == "date(" && paramname[paramname.size() - 1] == ')')
+    else if (p.substr(0, 5) == "date(" && p[p.size() - 1] == ')')
       ret = format_date(ldt, outlocale, paramname.substr(5, paramname.size() - 6));
 
     return ret;

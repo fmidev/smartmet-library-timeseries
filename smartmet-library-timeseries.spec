@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 22.10.18
+Version: 22.10.25
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue Oct 25 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.10.25-1.fmi
+- Fixed parameter name comparisons to use lower case
+
 * Tue Oct 18 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.10.18-1.fmi
 - Fixed parameter name mapping bug (BRAINSTORM-2433)
 
