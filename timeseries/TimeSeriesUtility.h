@@ -25,6 +25,7 @@ TimeSeriesVectorPtr erase_redundant_timesteps(TimeSeriesVectorPtr tsv,
                                               const TimeSeriesGenerator::LocalTimeList& timesteps);
 TimeSeriesGroupPtr erase_redundant_timesteps(TimeSeriesGroupPtr tsg,
                                              const TimeSeriesGenerator::LocalTimeList& timesteps);
+size_t number_of_elements(const OutputData& outputData);
 
 std::ostream& operator<<(std::ostream& os, const TimeSeriesData& tsdata);
 
