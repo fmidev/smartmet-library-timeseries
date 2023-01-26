@@ -158,5 +158,49 @@ TimeSeriesGroupPtr erase_redundant_timesteps(TimeSeriesGroupPtr tsg,
   }
 }
 
+size_t number_of_elements(const OutputData& outputData)
+{
+  try
+  {
+	size_t ret = 0;
+    for (const auto& output : outputData)
+    {
+      const std::vector<TimeSeriesData>& outdata = output.second;
+
+      // iterate columns (parameters)
+      for (unsigned int j = 0; j < outdata.size(); j++)
+      {
+        const TimeSeriesData& tsdata = outdata[j];
+
+        if (boost::get<TimeSeriesPtr>(&tsdata))
+        {
+          TimeSeriesPtr ts = *(boost::get<TimeSeriesPtr>(&tsdata));
+		  if(ts && !ts->empty())
+			ret += ts->size();
+        }
+        else if (boost::get<TimeSeriesVectorPtr>(&tsdata))
+        {
+          TimeSeriesVectorPtr tsv = *(boost::get<TimeSeriesVectorPtr>(&tsdata));
+		  if(tsv)
+			for (unsigned int k = 0; k < tsv->size(); k++)
+			  ret += tsv->at(k).size();
+        }
+        else if (boost::get<TimeSeriesGroupPtr>(&tsdata))
+        {
+          TimeSeriesGroupPtr tsg = *(boost::get<TimeSeriesGroupPtr>(&tsdata));
+		  if(tsg)
+			for (unsigned int k = 0; k < tsg->size(); k++)
+			  ret += tsg->at(k).timeseries.size();
+        }
+      }
+    }
+	return ret;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 }  // namespace TimeSeries
 }  // namespace SmartMet
