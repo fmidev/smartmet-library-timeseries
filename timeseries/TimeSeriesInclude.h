@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RequestLimits.h"
 #include "DataFilter.h"
 #include "TimeSeriesAggregator.h"
 #include "TimeSeriesGeneratorCache.h"
