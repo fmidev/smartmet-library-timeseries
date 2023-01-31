@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.1.26
+Version: 23.1.31
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue Jan 31 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.1.31-1.fmi
+- Fixed aggregation function parsing bug (BRAINSTORM-2529)
+
 * Thu Jan 26 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.1.26-1.fmi
 - Added support for request size limits (BRAINSTORM-2443)
 

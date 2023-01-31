@@ -167,6 +167,55 @@ FunctionId parse_function(const std::string& theFunction)
   }
 }
 
+void parse_intervals(std::string& paramname, unsigned int& aggregation_interval_behind, unsigned int& aggregation_interval_ahead)
+{
+  try
+  {
+    std::string intervalSeparator(":");
+    if (paramname.find('/') != std::string::npos)
+      intervalSeparator = "/";
+    else if (paramname.find(';') != std::string::npos)
+      intervalSeparator = ";";
+    else if (paramname.find(':') != std::string::npos)
+      intervalSeparator = ":";
+
+    if (paramname.find(intervalSeparator) != std::string::npos)
+    {
+      std::string aggregation_interval_string_behind =
+          paramname.substr(paramname.find(intervalSeparator) + 1);
+      std::string aggregation_interval_string_ahead = "0";
+      paramname = paramname.substr(0, paramname.find(intervalSeparator));
+
+      int agg_interval_behind = 0;
+      int agg_interval_ahead = 0;
+      // check if second aggregation interval is defined
+      if (aggregation_interval_string_behind.find(intervalSeparator) != std::string::npos)
+      {
+        aggregation_interval_string_ahead = aggregation_interval_string_behind.substr(
+            aggregation_interval_string_behind.find(intervalSeparator) + 1);
+        aggregation_interval_string_behind = aggregation_interval_string_behind.substr(
+            0, aggregation_interval_string_behind.find(intervalSeparator));
+        agg_interval_ahead = Spine::duration_string_to_minutes(aggregation_interval_string_ahead);
+        aggregation_interval_ahead = boost::numeric_cast<unsigned int>(agg_interval_ahead);
+      }
+
+      agg_interval_behind = Spine::duration_string_to_minutes(aggregation_interval_string_behind);
+
+      if (agg_interval_behind < 0 || agg_interval_ahead < 0)
+      {
+        throw Fmi::Exception(BCP,
+                             "The 'interval' option for '" + paramname + "' must be positive!");
+      }
+      aggregation_interval_behind = boost::numeric_cast<unsigned int>(agg_interval_behind);
+    }
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Extract the function modifier from a function call string
@@ -538,7 +587,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
         parts.emplace_back(paramreq.substr(pos1, pos2 - pos1));
 
       pos1 = pos2 + 1;
-    }
+    }	
 
     if (parts.empty() || parts.size() > 3)
       throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
@@ -547,43 +596,6 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
 
     unsigned int aggregation_interval_behind = std::numeric_limits<unsigned int>::max();
     unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
-    std::string intervalSeparator(":");
-    if (paramname.find('/') != std::string::npos)
-      intervalSeparator = "/";
-    else if (paramname.find(';') != std::string::npos)
-      intervalSeparator = ";";
-    else if (paramname.find(':') != std::string::npos)
-      intervalSeparator = ":";
-
-    if (paramname.find(intervalSeparator) != std::string::npos)
-    {
-      std::string aggregation_interval_string_behind =
-          paramname.substr(paramname.find(intervalSeparator) + 1);
-      std::string aggregation_interval_string_ahead = "0";
-      paramname = paramname.substr(0, paramname.find(intervalSeparator));
-
-      int agg_interval_behind = 0;
-      int agg_interval_ahead = 0;
-      // check if second aggregation interval is defined
-      if (aggregation_interval_string_behind.find(intervalSeparator) != std::string::npos)
-      {
-        aggregation_interval_string_ahead = aggregation_interval_string_behind.substr(
-            aggregation_interval_string_behind.find(intervalSeparator) + 1);
-        aggregation_interval_string_behind = aggregation_interval_string_behind.substr(
-            0, aggregation_interval_string_behind.find(intervalSeparator));
-        agg_interval_ahead = Spine::duration_string_to_minutes(aggregation_interval_string_ahead);
-        aggregation_interval_ahead = boost::numeric_cast<unsigned int>(agg_interval_ahead);
-      }
-
-      agg_interval_behind = Spine::duration_string_to_minutes(aggregation_interval_string_behind);
-
-      if (agg_interval_behind < 0 || agg_interval_ahead < 0)
-      {
-        throw Fmi::Exception(BCP,
-                             "The 'interval' option for '" + paramname + "' must be positive!");
-      }
-      aggregation_interval_behind = boost::numeric_cast<unsigned int>(agg_interval_behind);
-    }
 
     parts.pop_back();
     const std::string functionname1 = (parts.empty() ? "" : parts.front());
@@ -606,7 +618,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       theInnerDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
                                         ? FunctionType::TimeFunction
                                         : FunctionType::AreaFunction));
-
+	  
       theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
       // Nearest && Interpolate functions always accepts NaNs in time series
       if (theInnerDataFunction.id() == FunctionId::Nearest ||
@@ -614,6 +626,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
         theInnerDataFunction.setIsNaNFunction(true);
       if (theInnerDataFunction.type() == FunctionType::TimeFunction)
       {
+		parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
         theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
         theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
@@ -630,6 +643,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
 
       if (theOuterDataFunction.type() == FunctionType::TimeFunction)
       {
+		parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
         theOuterDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
         theOuterDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
@@ -644,7 +658,9 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       theInnerDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
                                         ? FunctionType::TimeFunction
                                         : FunctionType::AreaFunction));
+
       theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
+
       // Nearest && Interpolate functions always accepts NaNs in time series
       if (theInnerDataFunction.id() == FunctionId::Nearest ||
           theInnerDataFunction.id() == FunctionId::Interpolate)
@@ -652,6 +668,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
 
       if (theInnerDataFunction.type() == FunctionType::TimeFunction)
       {
+		parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
         theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
         theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
