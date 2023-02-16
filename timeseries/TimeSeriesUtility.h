@@ -28,6 +28,7 @@ TimeSeriesGroupPtr erase_redundant_timesteps(TimeSeriesGroupPtr tsg,
 size_t number_of_elements(const OutputData& outputData);
 
 std::ostream& operator<<(std::ostream& os, const TimeSeriesData& tsdata);
+std::ostream& operator<<(std::ostream& os, const OutputData& odata);
 
 template <typename T>
 T aggregate(const T& raw_data, const DataFunctions& pf)

@@ -32,6 +32,27 @@ std::ostream& operator<<(std::ostream& os, const TimeSeriesData& tsdata)
   }
 }
 
+std::ostream& operator<<(std::ostream& os, const OutputData& odata)
+{
+  try
+  {
+	for(const auto& item : odata)
+	  {
+		os << item.first << " -> " << std::endl;
+		unsigned int counter = 0;
+		for(const auto& item2 : item.second)
+		  os << "#" << counter++ << "\n" << item2 << std::endl;
+	  }
+	
+	return os;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+
 // ----------------------------------------------------------------------
 /*!
  * \brief
