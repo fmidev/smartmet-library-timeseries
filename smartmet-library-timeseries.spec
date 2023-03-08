@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.2.16
+Version: 23.3.8
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -25,14 +25,14 @@ BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 23.1.19
 BuildRequires: smartmet-library-macgyver-devel >= 22.12.16
 BuildRequires: smartmet-library-newbase-devel >= 22.11.14
-BuildRequires: smartmet-library-spine-devel >= 23.1.16
+BuildRequires: smartmet-library-spine-devel >= 23.3.8
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 23.1.16
+Requires: smartmet-library-spine >= 23.3.8
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Wed Mar 8 2023  Anssi Reponen <anssi.reponen@fmi.fi> - 23.3.8-1.fmi
+- Added new metaparameters: CloudCeiling,CloudCeilingFT,CloudCeilingHFT (BRAINSTORM-2556)
+
 * Thu Feb 16 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.2.16-1.fmi
 - Added utility function to print out TimeSeries::OutputData data structure
 
