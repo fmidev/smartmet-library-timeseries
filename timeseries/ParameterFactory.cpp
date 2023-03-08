@@ -807,13 +807,16 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
   try
   {
     if (paramname.empty())
-      throw Fmi::Exception(BCP, "Empty parameters are not allowed!");
+      throw Fmi::Exception(BCP, "Empty parameters are not allowed!");	
 
+	auto pname = paramname;
+	if(pname == "cloudceiling" || pname == "cloudceilingft" )
+	  pname = "cloudceilinghft";
     // Metaparameters are required to have a FmiParameterName too
-    auto number = FmiParameterName(converter.ToEnum(paramname));
+    auto number = FmiParameterName(converter.ToEnum(pname));
 
-    if (number == kFmiBadParameter && Fmi::looks_signed_int(paramname))
-      number = FmiParameterName(Fmi::stol(paramname));
+    if (number == kFmiBadParameter && Fmi::looks_signed_int(pname))
+      number = FmiParameterName(Fmi::stol(pname));
 
     Parameter::Type type = Parameter::Type::Data;
 
@@ -823,13 +826,13 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
       type = Parameter::Type::DataIndependent;
     else if (Spine::Parameters::IsDataDerived(number))
       type = Parameter::Type::DataDerived;
-    else if (paramname.substr(0, 5) == "date(" && paramname[paramname.size() - 1] == ')')
+    else if (pname.substr(0, 5) == "date(" && paramname[pname.size() - 1] == ')')
       type = Parameter::Type::DataIndependent;
-    else if (boost::algorithm::iends_with(paramname, ".raw"))
-      number = FmiParameterName(converter.ToEnum(paramname.substr(0, paramname.size() - 4)));
+    else if (boost::algorithm::iends_with(pname, ".raw"))
+      number = FmiParameterName(converter.ToEnum(pname.substr(0, pname.size() - 4)));
 
     if (number == kFmiBadParameter && !ignoreBadParameter)
-      throw Fmi::Exception(BCP, "Unknown parameter '" + paramname + "'");
+      throw Fmi::Exception(BCP, "Unknown parameter '" + pname + "'");
 
     return Parameter(paramname, type, number);
   }
