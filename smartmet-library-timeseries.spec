@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.3.8
+Version: 23.3.14
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -23,16 +23,16 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 23.1.19
-BuildRequires: smartmet-library-macgyver-devel >= 22.12.16
-BuildRequires: smartmet-library-newbase-devel >= 22.11.14
-BuildRequires: smartmet-library-spine-devel >= 23.3.8
+BuildRequires: smartmet-library-macgyver-devel >= 23.3.3
+BuildRequires: smartmet-library-newbase-devel >= 23.2.9
+BuildRequires: smartmet-library-spine-devel >= 23.3.14
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 23.3.8
+Requires: smartmet-library-spine >= 23.3.14
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,8 +51,8 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 22.12.16
-Requires: smartmet-library-newbase-devel >= 22.11.14
+Requires: smartmet-library-macgyver-devel >= 23.3.3
+Requires: smartmet-library-newbase-devel >= 23.2.9
 Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
@@ -81,7 +81,7 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
-* Wed Mar 8 2023  Anssi Reponen <anssi.reponen@fmi.fi> - 23.3.8-1.fmi
+* Tue Mar 14 2023 Anssi Reponen <mika.heiskanen@fmi.fi> - 23.3.14-1.fmi
 - Added new metaparameters: CloudCeiling,CloudCeilingFT,CloudCeilingHFT (BRAINSTORM-2556)
 
 * Thu Feb 16 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.2.16-1.fmi
