@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.3.14
+Version: 23.3.15
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Wed Mar 15 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.3.15-1.fmi
+- Added interpolatedir_t, meandir_t and stddevdir_t
+
 * Tue Mar 14 2023 Anssi Reponen <mika.heiskanen@fmi.fi> - 23.3.14-1.fmi
 - Added new metaparameters: CloudCeiling,CloudCeilingFT,CloudCeilingHFT (BRAINSTORM-2556)
 

@@ -84,6 +84,7 @@ struct DataFunction
     itsAggregationIntervalAhead = theIntervalAhead;
   }
   bool isNanFunction() const { return itsNaNFunction; }
+  bool isDirFunction() const { return itsDirFunction; }
   std::string hash() const;
   void setLimits(double theLowerLimit, double theUpperLimit)
   {
@@ -93,6 +94,7 @@ struct DataFunction
   void setId(FunctionId id) { itsFunctionId = id; }
   void setType(FunctionType type) { itsFunctionType = type; }
   void setIsNaNFunction(bool nan) { itsNaNFunction = nan; }
+  void setIsDirFunction(bool dir) { itsDirFunction = dir; }
 
   friend std::ostream& operator<<(std::ostream& out, const DataFunction& func);
 
@@ -104,6 +106,7 @@ struct DataFunction
   unsigned int itsAggregationIntervalBehind = MAX_AGGREGATION_INTERVAL;
   unsigned int itsAggregationIntervalAhead = MAX_AGGREGATION_INTERVAL;
   bool itsNaNFunction = false;
+  bool itsDirFunction = false;
 };
 
 struct DataFunctions

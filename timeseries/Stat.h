@@ -22,11 +22,10 @@
 
 #pragma once
 
-#include <limits>
-
 #include <boost/date_time/local_time/local_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <limits>
 
 namespace SmartMet
 {
@@ -34,28 +33,24 @@ namespace TimeSeries
 {
 namespace Stat
 {
-using namespace boost::posix_time;
+using boost::posix_time::not_a_date_time;
 
 struct DataItem
 {
-  DataItem(boost::posix_time::ptime tim = not_a_date_time,
-           double val = std::numeric_limits<double>::quiet_NaN(),
-           double wght = 1.0)
-      : time(tim), value(val), weight(wght)
-  {
-  }
-  boost::posix_time::ptime time;
-  double value;
-  double weight;
+  DataItem(boost::posix_time::ptime t, double v, double w = 1.0) : time(t), value(v), weight(w) {}
+
+  boost::posix_time::ptime time{not_a_date_time};
+  double value = std::numeric_limits<double>::quiet_NaN();
+  double weight = 1.0;
 };
 
 std::ostream& operator<<(std::ostream& os, const DataItem& item);
 
 using DataVector = std::vector<DataItem>;
-using LocalDateTimeValue = std::pair<boost::local_time::local_date_time, double>;
-using LocalDateTimeValueVector = std::vector<LocalDateTimeValue>;
-using PosixTimeValue = std::pair<boost::posix_time::ptime, double>;
-using PosixTimeValueVector = std::vector<PosixTimeValue>;
+using TimeValue = std::pair<boost::posix_time::ptime, double>;
+using TimeValueVector = std::vector<TimeValue>;
+using LocalTimeValue = std::pair<boost::local_time::local_date_time, double>;
+using LocalTimeValueVector = std::vector<LocalTimeValue>;
 
 class Stat
 {
@@ -63,9 +58,9 @@ class Stat
   Stat(double theMissingValue = std::numeric_limits<double>::quiet_NaN());
   Stat(const std::vector<double>& theValues,
        double theMissingValue = std::numeric_limits<double>::quiet_NaN());
-  Stat(const LocalDateTimeValueVector& theValues,
+  Stat(const LocalTimeValueVector& theValues,
        double theMissingValue = std::numeric_limits<double>::quiet_NaN());
-  Stat(const PosixTimeValueVector& theValues,
+  Stat(const TimeValueVector& theValues,
        double theMissingValue = std::numeric_limits<double>::quiet_NaN());
   Stat(const DataVector& theValues,
        double theMissingValue = std::numeric_limits<double>::quiet_NaN());

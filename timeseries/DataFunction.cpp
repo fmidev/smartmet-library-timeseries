@@ -155,6 +155,7 @@ std::string DataFunction::info() const
       ss << "NullFunctionType";
 
     ss << " => " << (itsNaNFunction ? "nan-function" : "not nan-function");
+    ss << " => " << (itsDirFunction ? "dir-function" : "not dir-function");
 
     return ss.str();
   }

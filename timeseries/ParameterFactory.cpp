@@ -74,6 +74,13 @@ int get_function_index(const std::string& theFunction)
                                 "nannearest_t",
                                 "interpolate_t",
                                 "naninterpolate_t",
+
+                                "interpolatedir_t",
+                                "naninterpolatedir_t",
+                                "meandir_t",
+                                "nanmeandir_t",
+                                "sdevdir_t",
+                                "nansdevdir_t",
                                 ""};
 
   std::string func_name(theFunction);
@@ -153,7 +160,14 @@ FunctionId parse_function(const std::string& theFunction)
                                      FunctionId::Nearest,
                                      FunctionId::Nearest,
                                      FunctionId::Interpolate,
-                                     FunctionId::Interpolate};
+                                     FunctionId::Interpolate,
+
+                                     FunctionId::Interpolate,
+                                     FunctionId::Interpolate,
+                                     FunctionId::Mean,
+                                     FunctionId::Mean,
+                                     FunctionId::StandardDeviation,
+                                     FunctionId::StandardDeviation};
 
     int function_index = get_function_index(theFunction);
     if (function_index >= 0)
@@ -167,7 +181,9 @@ FunctionId parse_function(const std::string& theFunction)
   }
 }
 
-void parse_intervals(std::string& paramname, unsigned int& aggregation_interval_behind, unsigned int& aggregation_interval_ahead)
+void parse_intervals(std::string& paramname,
+                     unsigned int& aggregation_interval_behind,
+                     unsigned int& aggregation_interval_ahead)
 {
   try
   {
@@ -214,7 +230,6 @@ void parse_intervals(std::string& paramname, unsigned int& aggregation_interval_
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
-
 
 // ----------------------------------------------------------------------
 /*!
@@ -587,7 +602,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
         parts.emplace_back(paramreq.substr(pos1, pos2 - pos1));
 
       pos1 = pos2 + 1;
-    }	
+    }
 
     if (parts.empty() || parts.size() > 3)
       throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
@@ -618,15 +633,17 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       theInnerDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
                                         ? FunctionType::TimeFunction
                                         : FunctionType::AreaFunction));
-	  
+
       theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
+      theInnerDataFunction.setIsDirFunction(f_name.substr(f_name.size() - 5) == "dir_t");
+
       // Nearest && Interpolate functions always accepts NaNs in time series
       if (theInnerDataFunction.id() == FunctionId::Nearest ||
           theInnerDataFunction.id() == FunctionId::Interpolate)
         theInnerDataFunction.setIsNaNFunction(true);
       if (theInnerDataFunction.type() == FunctionType::TimeFunction)
       {
-		parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
+        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
         theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
         theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
@@ -640,10 +657,11 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
                                         : FunctionType::AreaFunction));
 
       theOuterDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
+      theOuterDataFunction.setIsDirFunction(f_name.substr(f_name.size() - 5) == "dir_t");
 
       if (theOuterDataFunction.type() == FunctionType::TimeFunction)
       {
-		parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
+        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
         theOuterDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
         theOuterDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
@@ -660,6 +678,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
                                         : FunctionType::AreaFunction));
 
       theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
+      theInnerDataFunction.setIsDirFunction(f_name.substr(f_name.size() - 5) == "dir_t");
 
       // Nearest && Interpolate functions always accepts NaNs in time series
       if (theInnerDataFunction.id() == FunctionId::Nearest ||
@@ -668,7 +687,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
 
       if (theInnerDataFunction.type() == FunctionType::TimeFunction)
       {
-		parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
+        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
         theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
         theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
       }
@@ -807,11 +826,11 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
   try
   {
     if (paramname.empty())
-      throw Fmi::Exception(BCP, "Empty parameters are not allowed!");	
+      throw Fmi::Exception(BCP, "Empty parameters are not allowed!");
 
-	auto pname = paramname;
-	if(pname == "cloudceiling" || pname == "cloudceilingft" )
-	  pname = "cloudceilinghft";
+    auto pname = paramname;
+    if (pname == "cloudceiling" || pname == "cloudceilingft")
+      pname = "cloudceilinghft";
     // Metaparameters are required to have a FmiParameterName too
     auto number = FmiParameterName(converter.ToEnum(pname));
 

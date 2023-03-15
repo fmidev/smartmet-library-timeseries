@@ -57,6 +57,7 @@ double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeig
   {
     Stat::Stat stat(itsDataVector, static_cast<double>(kFloatMissing));
     stat.useWeights(useWeights);
+    stat.useDegrees(func.isDirFunction());
 
     switch (func.id())
     {

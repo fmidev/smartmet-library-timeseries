@@ -1,16 +1,16 @@
 #include "Stat.h"
-#include <macgyver/Exception.h>
-
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/weighted_mean.hpp>
 #include <boost/accumulators/statistics/weighted_median.hpp>
 #include <boost/accumulators/statistics/weighted_variance.hpp>
-
+#include <macgyver/Exception.h>
 #include <cmath>
 #include <iterator>
 #include <numeric>
 #include <stdexcept>
+
+using namespace boost::posix_time;
 
 namespace SmartMet
 {
@@ -82,14 +82,14 @@ Stat::Stat(const std::vector<double>& theValues,
   }
 }
 
-Stat::Stat(const LocalDateTimeValueVector& theValues,
+Stat::Stat(const LocalTimeValueVector& theValues,
            double theMissingValue /*= std::numeric_limits<double>::quiet_NaN()*/)
     : itsMissingValue(theMissingValue), itsWeights(true)
 
 {
   try
   {
-    for (const LocalDateTimeValue& item : theValues)
+    for (const LocalTimeValue& item : theValues)
     {
       itsData.push_back(DataItem(item.first.utc_time(), item.second));
     }
@@ -101,13 +101,13 @@ Stat::Stat(const LocalDateTimeValueVector& theValues,
   }
 }
 
-Stat::Stat(const PosixTimeValueVector& theValues,
+Stat::Stat(const TimeValueVector& theValues,
            double theMissingValue /*= std::numeric_limits<double>::quiet_NaN(*/)
     : itsMissingValue(theMissingValue), itsWeights(true)
 {
   try
   {
-    for (const PosixTimeValue& item : theValues)
+    for (const TimeValue& item : theValues)
     {
       itsData.push_back(DataItem(item.first, item.second));
     }
@@ -803,19 +803,39 @@ double Stat::interpolate(const boost::posix_time::ptime& timestep,
       }
     }
 
-    double value_diff = second_value - first_value;
     double time_diff_sec = (second_time - first_time).total_seconds();
-    double slope = value_diff / time_diff_sec;
-    double interpolated_value = (first_value + (slope * time_diff_to_timestep_sec));
+    double value_diff = second_value - first_value;
+
+    if (!itsDegrees)
+    {
+      double slope = value_diff / time_diff_sec;
+      double interpolated_value = (first_value + (slope * time_diff_to_timestep_sec));
 
 #ifdef MYDEBUG
-    std::cout << "first_time: " << first_time << ",second_time: " << second_time
-              << ", timestep: " << timestep << ", first_value: " << first_value
-              << ", second_value: " << second_value << ",slope: " << slope
-              << ", time_diff_to_timestep: " << time_diff_to_timestep_sec << " -> "
-              << interpolated_value << std::endl;
+      std::cout << "first_time: " << first_time << ",second_time: " << second_time
+                << ", timestep: " << timestep << ", first_value: " << first_value
+                << ", second_value: " << second_value << ",slope: " << slope
+                << ", time_diff_to_timestep: " << time_diff_to_timestep_sec << " -> "
+                << interpolated_value << std::endl;
 #endif
+      return interpolated_value;
+    }
 
+    // Interpolate mod 360
+
+    double slope = 0.0;
+    if (value_diff > 180)  // as in 10 --> 350
+      slope = (value_diff - 360) / time_diff_sec;
+    else if (value_diff < -180)  // as in 350 --> 10
+      slope = (value_diff + 360) / time_diff_sec;
+    else
+      slope = value_diff / time_diff_sec;
+
+    double interpolated_value = first_value + slope * time_diff_to_timestep_sec;
+    if (interpolated_value < 0)
+      interpolated_value += 360;
+    if (interpolated_value >= 360)
+      interpolated_value -= 360;
     return interpolated_value;
   }
   catch (...)

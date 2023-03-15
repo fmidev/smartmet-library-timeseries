@@ -66,7 +66,8 @@ TS::TimeSeries generate_observation_timeseries()
   return timeseries;
 }
 
-TS::TimeSeries generate_timeseries(bool add_missing_value = false)
+//  direction observations
+TS::TimeSeries generate_direction_timeseries()
 {
   using namespace SmartMet;
 
@@ -76,19 +77,80 @@ TS::TimeSeries generate_timeseries(bool add_missing_value = false)
   TS::TimeSeries timeseries(pool);
 
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 1.0));
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 2.0));
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(10)), zone),
+      340.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 3.0));
-  if (add_missing_value)
-    timeseries.push_back(TS::TimedValue(
-        bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), TS::None()));
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(15)), zone),
+      350.0));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(48)), zone),
+      355.0));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), TS::None()));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23) + bp::minutes(8)), zone),
+      5.0));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23) + bp::minutes(51)), zone),
+      20.0));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), TS::None()));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24) + bp::minutes(9)), zone),
+      10.0));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24) + bp::minutes(53)), zone),
+      355.0));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 350.));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25) + bp::minutes(50)), zone),
+      340.0));
+  timeseries.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), TS::None()));
+
+  return timeseries;
+}
+
+TS::TimeSeries generate_timeseries(bool add_missing_value = false, bool degrees = false)
+{
+  using namespace SmartMet;
+
+  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+
+  auto pool = boost::make_shared<TS::LocalTimePool>();
+  TS::TimeSeries timeseries(pool);
+
+  bl::local_date_time t1(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone);
+  bl::local_date_time t2(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone);
+  bl::local_date_time t3(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone);
+  bl::local_date_time t4(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone);
+  bl::local_date_time t5(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone);
+
+  if (!degrees)
+  {
+    timeseries.push_back(TS::TimedValue(t1, 1.0));
+    timeseries.push_back(TS::TimedValue(t2, 2.0));
+    timeseries.push_back(TS::TimedValue(t3, 3.0));
+    if (add_missing_value)
+      timeseries.push_back(TS::TimedValue(t4, TS::None()));
+    else
+      timeseries.push_back(TS::TimedValue(t4, 4.0));
+    timeseries.push_back(TS::TimedValue(t5, 5.0));
+  }
   else
-    timeseries.push_back(TS::TimedValue(
-        bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 4.0));
-  timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 5.0));
+  {
+    timeseries.push_back(TS::TimedValue(t1, 340.0));
+    timeseries.push_back(TS::TimedValue(t2, 350.0));
+    timeseries.push_back(TS::TimedValue(t3, 355.0));
+    if (add_missing_value)
+      timeseries.push_back(TS::TimedValue(t4, TS::None()));
+    else
+      timeseries.push_back(TS::TimedValue(t4, 5.0));
+    timeseries.push_back(TS::TimedValue(t5, 10.0));
+  }
 
   return timeseries;
 }
@@ -194,9 +256,8 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
       bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 1.0));
   timeseries_helsinki.push_back(TS::TimedValue(
       bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 6.0));
-  timeseries_helsinki.push_back(
-      TS::TimedValue(bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone),
-                     TS::None()));
+  timeseries_helsinki.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), TS::None()));
   timeseries_helsinki.push_back(TS::TimedValue(
       bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 16.0));
   timeseries_helsinki.push_back(TS::TimedValue(
@@ -210,9 +271,8 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
       bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 7.0));
   timeseries_tampere.push_back(TS::TimedValue(
       bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 17.0));
-  timeseries_tampere.push_back(
-      TS::TimedValue(bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone),
-                     TS::None()));
+  timeseries_tampere.push_back(TS::TimedValue(
+      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), TS::None()));
   timeseries_tampere.push_back(TS::TimedValue(
       bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 22.0));
 
@@ -281,14 +341,13 @@ std::string to_string(const T& result_set)
   return ret_ss.str();
 }
 
-TS::TimeSeriesPtr execute_time_area_aggregation_function_with_range(
-    TS::FunctionId fid_time,
-    TS::FunctionId fid_area,
-    unsigned int aggIntervalBehind,
-    unsigned int aggIntervalAhead,
-    double lowerLimit,
-    double upperLimit,
-    bool add_missing_value = false)
+TS::TimeSeriesPtr execute_time_area_aggregation_function_with_range(TS::FunctionId fid_time,
+                                                                    TS::FunctionId fid_area,
+                                                                    unsigned int aggIntervalBehind,
+                                                                    unsigned int aggIntervalAhead,
+                                                                    double lowerLimit,
+                                                                    double upperLimit,
+                                                                    bool add_missing_value = false)
 {
   using namespace TS;
 
@@ -307,14 +366,13 @@ TS::TimeSeriesPtr execute_time_area_aggregation_function_with_range(
   return aggregated_timeseries;
 }
 
-TS::TimeSeriesPtr execute_area_time_aggregation_function_with_range(
-    TS::FunctionId fid_time,
-    TS::FunctionId fid_area,
-    unsigned int aggIntervalBehind,
-    unsigned int aggIntervalAhead,
-    double lowerLimit,
-    double upperLimit,
-    bool add_missing_value = false)
+TS::TimeSeriesPtr execute_area_time_aggregation_function_with_range(TS::FunctionId fid_time,
+                                                                    TS::FunctionId fid_area,
+                                                                    unsigned int aggIntervalBehind,
+                                                                    unsigned int aggIntervalAhead,
+                                                                    double lowerLimit,
+                                                                    double upperLimit,
+                                                                    bool add_missing_value = false)
 {
   using namespace TS;
 
@@ -359,15 +417,17 @@ TS::TimeSeriesPtr execute_time_aggregation_function_with_range(TS::FunctionId fi
 TS::TimeSeriesPtr execute_time_aggregation_function(TS::FunctionId fid,
                                                     unsigned int aggIntervalBehind,
                                                     unsigned int aggIntervalAhead,
-                                                    bool add_missing_value = false)
+                                                    bool add_missing_value = false,
+                                                    bool degrees = false)
 {
   using namespace TS;
 
-  TimeSeries timeseries(generate_timeseries(add_missing_value));
+  TimeSeries timeseries(generate_timeseries(add_missing_value, degrees));
 
   DataFunction pf(fid, FunctionType::TimeFunction);
   pf.setAggregationIntervalBehind(aggIntervalBehind);
   pf.setAggregationIntervalAhead(aggIntervalAhead);
+  pf.setIsDirFunction(degrees);
   // lower limit (3) and upper limit (4) are used by Percentage and Count functions
   if (fid == FunctionId::Percentage || fid == FunctionId::Count)
     pf.setLimits(3.0, 4.0);
@@ -437,8 +497,9 @@ TS::TimeSeriesGroupPtr execute_area_aggregation_function_nans(TS::FunctionId fid
   return aggregated_timeseries_grp;
 }
 
-TS::TimeSeriesGroupPtr execute_area_aggregation_function_with_range_nans(
-    TS::FunctionId fid, double lowerLimit, double upperLimit)
+TS::TimeSeriesGroupPtr execute_area_aggregation_function_with_range_nans(TS::FunctionId fid,
+                                                                         double lowerLimit,
+                                                                         double upperLimit)
 {
   using namespace TS;
 
@@ -467,8 +528,7 @@ TS::TimeSeriesGroupPtr execute_time_area_aggregation_function(TS::FunctionId tim
   time_pf.setAggregationIntervalBehind(aggIntervalBehind);
   time_pf.setAggregationIntervalAhead(aggIntervalAhead);
   // lower limit (3) and upper limit (4) are used by Percentage and Count functions
-  if (time_fid == FunctionId::Percentage ||
-      time_fid == FunctionId::Count)
+  if (time_fid == FunctionId::Percentage || time_fid == FunctionId::Count)
     time_pf.setLimits(3.0, 4.0);
 
   DataFunctions time_pfs;
@@ -479,8 +539,7 @@ TS::TimeSeriesGroupPtr execute_time_area_aggregation_function(TS::FunctionId tim
 
   DataFunction area_pf(area_fid, FunctionType::AreaFunction);
   // lower limit (14) and upper limit (22) are used by Percentage and Count functions
-  if (area_fid == FunctionId::Percentage ||
-      area_fid == FunctionId::Count)
+  if (area_fid == FunctionId::Percentage || area_fid == FunctionId::Count)
     area_pf.setLimits(14.0, 22.0);
   DataFunctions area_pfs;
   area_pfs.innerFunction = area_pf;
@@ -502,8 +561,7 @@ TS::TimeSeriesGroupPtr execute_area_time_aggregation_function(TS::FunctionId are
 
   DataFunction area_pf(area_fid, FunctionType::AreaFunction);
   // lower limit (14) and upper limit (22) are used by Percentage and Count functions
-  if (area_fid == FunctionId::Percentage ||
-      area_fid == FunctionId::Count)
+  if (area_fid == FunctionId::Percentage || area_fid == FunctionId::Count)
     area_pf.setLimits(14.0, 22.0);
 
   DataFunctions area_pfs;
@@ -513,8 +571,7 @@ TS::TimeSeriesGroupPtr execute_area_time_aggregation_function(TS::FunctionId are
 
   // lower limit (3) and upper limit (4) are used by Percentage and Count functions
   DataFunction time_pf(time_fid, FunctionType::TimeFunction);
-  if (time_fid == FunctionId::Percentage ||
-      time_fid == FunctionId::Count)
+  if (time_fid == FunctionId::Percentage || time_fid == FunctionId::Count)
     time_pf.setLimits(3.0, 4.0);
 
   time_pf.setAggregationIntervalBehind(aggIntervalBehind);
@@ -655,6 +712,71 @@ void interpolate_t()
   TEST_PASSED();
 }
 
+void interpolatedir_t()
+{
+  using namespace TS;
+
+  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+
+  TimeSeries timeseries = generate_direction_timeseries();
+
+  // Replace None with the interpolated value using valid values within +n/-n minutes
+  DataFunction pf(FunctionId::Interpolate, FunctionType::TimeFunction);
+  pf.setAggregationIntervalAhead(10);
+  pf.setAggregationIntervalBehind(10);
+  pf.setIsDirFunction(true);
+
+  DataFunctions pfs;
+  pfs.innerFunction = pf;
+  std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+
+  std::string expected_result =
+      "2015-Sep-03 00:00:00 EET -> nan\n"
+      "2015-Sep-03 00:10:00 EET -> 340\n"
+      "2015-Sep-03 00:15:00 EET -> 350\n"
+      "2015-Sep-03 00:48:00 EET -> 355\n"
+      "2015-Sep-03 01:00:00 EET -> nan\n"
+      "2015-Sep-03 01:08:00 EET -> 5\n"
+      "2015-Sep-03 01:51:00 EET -> 20\n"
+      "2015-Sep-03 02:00:00 EET -> 15\n"
+      "2015-Sep-03 02:09:00 EET -> 10\n"
+      "2015-Sep-03 02:53:00 EET -> 355\n"
+      "2015-Sep-03 03:00:00 EET -> 350\n"
+      "2015-Sep-03 03:50:00 EET -> 340\n"
+      "2015-Sep-03 04:00:00 EET -> nan\n";
+
+  if (expected_result != test_result)
+    TEST_FAILED("InterpolateDir-function test (10 min) failed. Result should be:\n" +
+                expected_result + "\n not \n" + test_result);
+
+  pf.setAggregationIntervalAhead(15);
+  pf.setAggregationIntervalBehind(15);
+  pfs.innerFunction = pf;
+
+  test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+
+  expected_result =
+      "2015-Sep-03 00:00:00 EET -> 320\n"
+      "2015-Sep-03 00:10:00 EET -> 340\n"
+      "2015-Sep-03 00:15:00 EET -> 350\n"
+      "2015-Sep-03 00:48:00 EET -> 355\n"
+      "2015-Sep-03 01:00:00 EET -> 1\n"
+      "2015-Sep-03 01:08:00 EET -> 5\n"
+      "2015-Sep-03 01:51:00 EET -> 20\n"
+      "2015-Sep-03 02:00:00 EET -> 15\n"
+      "2015-Sep-03 02:09:00 EET -> 10\n"
+      "2015-Sep-03 02:53:00 EET -> 355\n"
+      "2015-Sep-03 03:00:00 EET -> 350\n"
+      "2015-Sep-03 03:50:00 EET -> 340\n"
+      "2015-Sep-03 04:00:00 EET -> nan\n";
+
+  if (expected_result != test_result)
+    TEST_FAILED("InterpolatDir-function test (15 min) failed. Result should be:\n" +
+                expected_result + "\n not \n" + test_result);
+
+  TEST_PASSED();
+}
+
 void min_t()
 {
   std::string test_result =
@@ -677,8 +799,8 @@ void min_t()
 void min_t_with_range()
 {
   // Include 2,3
-  std::string test_result = to_string(*execute_time_aggregation_function_with_range(
-      TS::FunctionId::Minimum, 120, 0, 2.0, 3.0));
+  std::string test_result = to_string(
+      *execute_time_aggregation_function_with_range(TS::FunctionId::Minimum, 120, 0, 2.0, 3.0));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> nan\n"
@@ -716,8 +838,8 @@ void max_t()
 void max_t_with_range()
 {
   // Incluee 3,4
-  std::string test_result = to_string(*execute_time_aggregation_function_with_range(
-      TS::FunctionId::Maximum, 0, 120, 3, 4));
+  std::string test_result = to_string(
+      *execute_time_aggregation_function_with_range(TS::FunctionId::Maximum, 0, 120, 3, 4));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 3\n"
@@ -752,11 +874,30 @@ void mean_t()
   TEST_PASSED();
 }
 
+void meandir_t()
+{
+  std::string test_result =
+      to_string(*execute_time_aggregation_function(TS::FunctionId::Mean, 120, 0, false, true));
+
+  std::string expected_result =
+      "2015-Sep-03 00:00:00 EET -> 340\n"
+      "2015-Sep-03 01:00:00 EET -> 345\n"
+      "2015-Sep-03 02:00:00 EET -> 348.75\n"
+      "2015-Sep-03 03:00:00 EET -> 356.25\n"
+      "2015-Sep-03 04:00:00 EET -> 3.75\n";
+
+  if (expected_result != test_result)
+    TEST_FAILED("MeanDir-function test failed. Result should be:\n" + expected_result +
+                "\n not \n" + test_result);
+
+  TEST_PASSED();
+}
+
 void mean_t_with_range()
 {
   // Include 2,3,4
-  std::string test_result = to_string(*execute_time_aggregation_function_with_range(
-      TS::FunctionId::Mean, 120, 0, 2.0, 4.0));
+  std::string test_result = to_string(
+      *execute_time_aggregation_function_with_range(TS::FunctionId::Mean, 120, 0, 2.0, 4.0));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> nan\n"
@@ -834,8 +975,8 @@ void median_t()
 void median_t_with_range()
 {
   // Include 2,3,4
-  std::string test_result = to_string(*execute_time_aggregation_function_with_range(
-      TS::FunctionId::Median, 240, 0, 2, 4));
+  std::string test_result = to_string(
+      *execute_time_aggregation_function_with_range(TS::FunctionId::Median, 240, 0, 2, 4));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> nan\n"
@@ -891,8 +1032,8 @@ void integ_t()
 
 void stddev_t()
 {
-  std::string test_result = to_string(
-      *execute_time_aggregation_function(TS::FunctionId::StandardDeviation, 240, 0));
+  std::string test_result =
+      to_string(*execute_time_aggregation_function(TS::FunctionId::StandardDeviation, 240, 0));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 0\n"
@@ -908,10 +1049,29 @@ void stddev_t()
   TEST_PASSED();
 }
 
-void percentage_t()
+void stddevdir_t()
 {
   std::string test_result = to_string(
-      *execute_time_aggregation_function(TS::FunctionId::Percentage, 120, 0));
+      *execute_time_aggregation_function(TS::FunctionId::StandardDeviation, 240, 0, false, true));
+
+  std::string expected_result =
+      "2015-Sep-03 00:00:00 EET -> 0\n"
+      "2015-Sep-03 01:00:00 EET -> 5\n"
+      "2015-Sep-03 02:00:00 EET -> 5.44862\n"
+      "2015-Sep-03 03:00:00 EET -> 7.5\n"
+      "2015-Sep-03 04:00:00 EET -> 9.27025\n";
+
+  if (expected_result != test_result)
+    TEST_FAILED("StandardDeviationDir-function test failed. Expected result should be:\n" +
+                expected_result + "\n not \n" + test_result);
+
+  TEST_PASSED();
+}
+
+void percentage_t()
+{
+  std::string test_result =
+      to_string(*execute_time_aggregation_function(TS::FunctionId::Percentage, 120, 0));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 0\n"
@@ -988,8 +1148,7 @@ void trend_t()
 // area aggregation
 void min_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Minimum));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Minimum));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 1\n"
@@ -1007,8 +1166,7 @@ void min_a()
 
 void max_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Maximum));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Maximum));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 5\n"
@@ -1045,8 +1203,8 @@ void max_a_nan()
 void max_a_with_range_nan()
 {
   // Include values between 5.0 and 15.0
-  std::string test_result = to_string(*execute_area_aggregation_function_with_range_nans(
-      TS::FunctionId::Maximum, 4.0, 22.0));
+  std::string test_result = to_string(
+      *execute_area_aggregation_function_with_range_nans(TS::FunctionId::Maximum, 4.0, 22.0));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 5\n"
@@ -1064,8 +1222,7 @@ void max_a_with_range_nan()
 
 void mean_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Mean));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Mean));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 3\n"
@@ -1084,8 +1241,8 @@ void mean_a()
 void mean_a_with_range()
 {
   // Inclue values between 3.0 and 15.0
-  std::string test_result = to_string(
-      *execute_area_aggregation_function_with_range(TS::FunctionId::Mean, 3.0, 15.0));
+  std::string test_result =
+      to_string(*execute_area_aggregation_function_with_range(TS::FunctionId::Mean, 3.0, 15.0));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 4\n"
@@ -1103,8 +1260,7 @@ void mean_a_with_range()
 
 void median_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Median));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Median));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 3\n"
@@ -1122,8 +1278,7 @@ void median_a()
 
 void sum_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Sum));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Sum));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 15\n"
@@ -1179,8 +1334,7 @@ void percentage_a()
 
 void count_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Count));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Count));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 0\n"
@@ -1198,8 +1352,7 @@ void count_a()
 
 void change_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Change));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Change));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 4\n"
@@ -1217,8 +1370,7 @@ void change_a()
 
 void trend_a()
 {
-  std::string test_result =
-      to_string(*execute_area_aggregation_function(TS::FunctionId::Trend));
+  std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Trend));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 100\n"
@@ -1276,8 +1428,8 @@ void min_max_at()
 
 void min_t_missing_value()
 {
-  std::string test_result = to_string(
-      *execute_time_aggregation_function(TS::FunctionId::Minimum, 120, 0, true));
+  std::string test_result =
+      to_string(*execute_time_aggregation_function(TS::FunctionId::Minimum, 120, 0, true));
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 1\n"
@@ -1304,6 +1456,9 @@ class tests : public tframe::tests
   virtual const char* error_message_prefix() const { return "\n\t"; }
   void test()
   {
+    TEST(interpolate_t);
+    return;
+
     // time aggregation
     TEST(nearest_t);
     TEST(interpolate_t);
@@ -1330,6 +1485,12 @@ class tests : public tframe::tests
     TEST(count_a);
     TEST(change_a);
     TEST(trend_a);
+
+    // modulo aggregation
+    TEST(interpolatedir_t);
+    TEST(meandir_t);
+    TEST(stddevdir_t);
+
     // first time then area aggregation
     TEST(min_max_ta);
     // first area then time aggregation
@@ -1343,9 +1504,7 @@ class tests : public tframe::tests
     TEST(median_t_with_range);
     TEST(mean_a_with_range);
     TEST(max_a_with_range_nan);
-
     TEST(mean_a_t_with_range);
-
     TEST(mean_t_a_with_range);
   }
 };

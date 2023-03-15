@@ -9,6 +9,7 @@
 #include <boost/date_time/local_time/local_time.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
+#include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TimeZones.h>
 #include <regression/tframe.h>
@@ -433,7 +434,7 @@ void offset()
   // We expect to get the current time rounded down to the exact hour
 
   if (diff < boost::posix_time::minutes(0) || diff > boost::posix_time::minutes(60))
-    TEST_FAILED("Too large time difference to current time");
+    TEST_FAILED("Too large time difference to current time: " + Fmi::to_simple_string(diff));
 
   TEST_PASSED();
 }
