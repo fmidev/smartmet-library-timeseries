@@ -630,12 +630,12 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       theInnerDataFunction.setLimits(lower_limit, upper_limit);
 
       theInnerDataFunction.setId(parse_function(f_name));
-      theInnerDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
-                                        ? FunctionType::TimeFunction
-                                        : FunctionType::AreaFunction));
+      theInnerDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
+                                       ? FunctionType::TimeFunction
+                                       : FunctionType::AreaFunction);
 
-      theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
-      theInnerDataFunction.setIsDirFunction(f_name.substr(f_name.size() - 5) == "dir_t");
+      theInnerDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
+      theInnerDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
 
       // Nearest && Interpolate functions always accepts NaNs in time series
       if (theInnerDataFunction.id() == FunctionId::Nearest ||
@@ -652,12 +652,12 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       theOuterDataFunction.setLimits(lower_limit, upper_limit);
 
       theOuterDataFunction.setId(parse_function(f_name));
-      theOuterDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
-                                        ? FunctionType::TimeFunction
-                                        : FunctionType::AreaFunction));
+      theOuterDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
+                                       ? FunctionType::TimeFunction
+                                       : FunctionType::AreaFunction);
 
-      theOuterDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
-      theOuterDataFunction.setIsDirFunction(f_name.substr(f_name.size() - 5) == "dir_t");
+      theOuterDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
+      theOuterDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
 
       if (theOuterDataFunction.type() == FunctionType::TimeFunction)
       {
@@ -673,12 +673,12 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       theInnerDataFunction.setLimits(lower_limit, upper_limit);
 
       theInnerDataFunction.setId(parse_function(f_name));
-      theInnerDataFunction.setType((f_name.substr(f_name.size() - 2) == "_t"
-                                        ? FunctionType::TimeFunction
-                                        : FunctionType::AreaFunction));
+      theInnerDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
+                                       ? FunctionType::TimeFunction
+                                       : FunctionType::AreaFunction);
 
-      theInnerDataFunction.setIsNaNFunction(f_name.substr(0, 3) == "nan");
-      theInnerDataFunction.setIsDirFunction(f_name.substr(f_name.size() - 5) == "dir_t");
+      theInnerDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
+      theInnerDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
 
       // Nearest && Interpolate functions always accepts NaNs in time series
       if (theInnerDataFunction.id() == FunctionId::Nearest ||
