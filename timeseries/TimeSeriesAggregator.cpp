@@ -55,7 +55,9 @@ double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeig
 {
   try
   {
-    Stat::Stat stat(itsDataVector, static_cast<double>(kFloatMissing));
+    const double kDoubleMissing = kFloatMissing;
+
+    Stat::Stat stat(itsDataVector, kDoubleMissing);
     stat.useWeights(useWeights);
     stat.useDegrees(func.isDirFunction());
 
@@ -85,14 +87,12 @@ double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeig
       case FunctionId::Trend:
         return stat.trend();
       case FunctionId::Nearest:
-        return (itsTimestep ? stat.nearest(itsTimestep->utc_time())
-                            : static_cast<double>(kFloatMissing));
+        return (itsTimestep ? stat.nearest(itsTimestep->utc_time()) : kDoubleMissing);
       case FunctionId::Interpolate:
-        return (itsTimestep ? stat.interpolate(itsTimestep->utc_time())
-                            : static_cast<double>(kFloatMissing));
+        return (itsTimestep ? stat.interpolate(itsTimestep->utc_time()) : kDoubleMissing);
       case FunctionId::NullFunction:
       default:
-        return kFloatMissing;
+        return kDoubleMissing;
     }
   }
   catch (...)
