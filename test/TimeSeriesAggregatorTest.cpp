@@ -1456,9 +1456,6 @@ class tests : public tframe::tests
   virtual const char* error_message_prefix() const { return "\n\t"; }
   void test()
   {
-    TEST(interpolate_t);
-    return;
-
     // time aggregation
     TEST(nearest_t);
     TEST(interpolate_t);
