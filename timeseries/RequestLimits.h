@@ -12,7 +12,7 @@ namespace SmartMet
 namespace TimeSeries
 {
 struct RequestLimits
-{  
+{
   std::size_t maxlocations{0};
   std::size_t maxparameters{0};
   std::size_t maxtimes{0};
@@ -29,7 +29,9 @@ enum class RequestLimitMember
   ELEMENTS
 };
 
-void check_request_limit(const RequestLimits &limits, std::size_t amount, RequestLimitMember member);
+void check_request_limit(const RequestLimits &limits,
+                         std::size_t amount,
+                         RequestLimitMember member);
 
 }  // namespace TimeSeries
 }  // namespace SmartMet
