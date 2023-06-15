@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.3.15
+Version: 23.6.15
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -22,17 +22,17 @@ BuildRequires: gcc-c++
 BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
-BuildRequires: smartmet-utils-devel >= 23.1.19
-BuildRequires: smartmet-library-macgyver-devel >= 23.3.3
+BuildRequires: smartmet-utils-devel >= 23.4.28
+BuildRequires: smartmet-library-macgyver-devel >= 23.6.6
 BuildRequires: smartmet-library-newbase-devel >= 23.2.9
-BuildRequires: smartmet-library-spine-devel >= 23.3.14
+BuildRequires: smartmet-library-spine-devel >= 23.6.13
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 23.3.14
+Requires: smartmet-library-spine >= 23.6.13
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,7 +51,7 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 23.3.3
+Requires: smartmet-library-macgyver-devel >= 23.6.6
 Requires: smartmet-library-newbase-devel >= 23.2.9
 Requires: smartmet-library-spine-devel
 Requires: %{SPECNAME} = %{version}-%{release}
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Jun 15 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.6.15-1.fmi
+- Changed status of station_elevation so that is read from observation metadata instead of the geonames database
+
 * Wed Mar 15 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.3.15-1.fmi
 - Added interpolatedir_t, meandir_t and stddevdir_t
 

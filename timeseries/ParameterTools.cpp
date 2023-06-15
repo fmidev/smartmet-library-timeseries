@@ -38,8 +38,7 @@ const std::set<std::string> location_parameters = {DEM_PARAM,
                                                    REGION_PARAM,
                                                    COUNTRY_PARAM,
                                                    ELEVATION_PARAM,
-                                                   POPULATION_PARAM,
-                                                   STATION_ELEVATION_PARAM};
+                                                   POPULATION_PARAM};
 
 const std::map<std::string, Parameter::Type> special_parameter_map = {
     {"cloudiness8th", Parameter::Type::DataDerived},
