@@ -48,5 +48,15 @@ Spine::Parameter makeParameter(const std::string& name);
 
 bool is_special_parameter(const std::string& name);
 
+Spine::Parameter get_query_param(const Spine::Parameter& parameter);
+void transform_wgs84_coordinates(const std::string& name,
+                                 const std::string& target_crs,
+                                 const Spine::Location& loc,
+                                 TS::TimeSeries& tseries);
+void transform_wgs84_coordinates(const std::string& name,
+                                 const std::string& crs,
+                                 TS::TimeSeriesGroup& tsg);
+std::string get_parameter_id(const Spine::Parameter& parameter);
+
 }  // namespace TimeSeries
 }  // namespace SmartMet

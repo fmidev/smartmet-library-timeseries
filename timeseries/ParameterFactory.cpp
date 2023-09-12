@@ -357,9 +357,9 @@ int ParameterFactory::number(const std::string& name) const
  */
 // ----------------------------------------------------------------------
 
-std::string ParameterFactory::extract_function(const std::string& theString,
-                                               double& theLowerLimit,
-                                               double& theUpperLimit) const
+std::string extract_function(const std::string& theString,
+							 double& theLowerLimit,
+							 double& theUpperLimit)
 {
   try
   {
@@ -539,6 +539,135 @@ std::string parse_parameter_name(const std::string& param_name)
   }
 }
 
+std::list<std::string> parse_parameter_parts(const std::string& paramreq)
+{
+  try
+  {
+    std::list<std::string> parts;
+    std::string::size_type pos1 = 0;
+    while (pos1 < paramreq.size())
+    {
+      std::string::size_type pos2 = pos1;
+      for (; pos2 < paramreq.size(); ++pos2)
+        if (paramreq[pos2] == '(' || paramreq[pos2] == ')')
+          break;
+      if (pos2 - pos1 > 0)
+        parts.emplace_back(paramreq.substr(pos1, pos2 - pos1));
+
+      pos1 = pos2 + 1;
+    }
+
+	return parts;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+void parse_functions(const std::string& functionname1,
+					 const std::string functionname2,
+					 std::string& paramname,
+					 DataFunction& theInnerDataFunction,
+					 DataFunction& theOuterDataFunction)
+{
+  try
+  {
+	double lower_limit = std::numeric_limits<double>::lowest();
+    double upper_limit = std::numeric_limits<double>::max();
+    unsigned int aggregation_interval_behind = std::numeric_limits<unsigned int>::max();
+    unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
+
+	// inner and outer functions exist
+	auto f_name = extract_function(functionname2, lower_limit, upper_limit);
+	
+	theInnerDataFunction.setLimits(lower_limit, upper_limit);
+	
+	theInnerDataFunction.setId(parse_function(f_name));
+	theInnerDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
+								 ? FunctionType::TimeFunction
+								 : FunctionType::AreaFunction);
+	
+	theInnerDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
+	theInnerDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
+	
+	// Nearest && Interpolate functions always accepts NaNs in time series
+	if (theInnerDataFunction.id() == FunctionId::Nearest ||
+		theInnerDataFunction.id() == FunctionId::Interpolate)
+	  theInnerDataFunction.setIsNaNFunction(true);
+	if (theInnerDataFunction.type() == FunctionType::TimeFunction)
+      {
+        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
+        theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
+        theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+      }
+	
+	f_name = extract_function(functionname1, lower_limit, upper_limit);
+	theOuterDataFunction.setLimits(lower_limit, upper_limit);
+	
+	theOuterDataFunction.setId(parse_function(f_name));
+	theOuterDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
+								 ? FunctionType::TimeFunction
+								 : FunctionType::AreaFunction);
+	
+	theOuterDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
+	theOuterDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
+	
+	if (theOuterDataFunction.type() == FunctionType::TimeFunction)
+      {
+        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
+        theOuterDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
+        theOuterDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+      }
+  }
+  catch (...)
+	{
+	  throw Fmi::Exception::Trace(BCP, "Operation failed!");
+	}
+}
+
+void parse_function(const std::string& functionname1,
+					 std::string& paramname,
+					DataFunction& theInnerDataFunction)
+{
+  try
+	{
+	  double lower_limit = std::numeric_limits<double>::lowest();
+	  double upper_limit = std::numeric_limits<double>::max();
+	  unsigned int aggregation_interval_behind = std::numeric_limits<unsigned int>::max();
+	  unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
+	  
+      // only inner function exists,
+      auto f_name = extract_function(functionname1, lower_limit, upper_limit);
+      theInnerDataFunction.setLimits(lower_limit, upper_limit);
+	  
+      theInnerDataFunction.setId(parse_function(f_name));
+      theInnerDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
+								   ? FunctionType::TimeFunction
+								   : FunctionType::AreaFunction);
+	  
+      theInnerDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
+      theInnerDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
+	  
+      // Nearest && Interpolate functions always accepts NaNs in time series
+      if (theInnerDataFunction.id() == FunctionId::Nearest ||
+          theInnerDataFunction.id() == FunctionId::Interpolate)
+        theInnerDataFunction.setIsNaNFunction(true);
+	  
+      if (theInnerDataFunction.type() == FunctionType::TimeFunction)
+      {
+        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
+        theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
+        theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
+      }
+    }
+  catch (...)
+	{
+	  throw Fmi::Exception::Trace(BCP, "Operation failed!");
+	}
+}
+
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Parse the given parameter name and functions
@@ -590,27 +719,15 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       return paramreq + date_formatting_string;
     }
 
-    std::list<std::string> parts;
-    std::string::size_type pos1 = 0;
-    while (pos1 < paramreq.size())
-    {
-      std::string::size_type pos2 = pos1;
-      for (; pos2 < paramreq.size(); ++pos2)
-        if (paramreq[pos2] == '(' || paramreq[pos2] == ')')
-          break;
-      if (pos2 - pos1 > 0)
-        parts.emplace_back(paramreq.substr(pos1, pos2 - pos1));
-
-      pos1 = pos2 + 1;
-    }
+	auto parts = parse_parameter_parts(paramreq);
 
     if (parts.empty() || parts.size() > 3)
       throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
 
     std::string paramname = parts.back();
 
-    unsigned int aggregation_interval_behind = std::numeric_limits<unsigned int>::max();
-    unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
+	//    unsigned int aggregation_interval_behind = std::numeric_limits<unsigned int>::max();
+	//    unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
 
     parts.pop_back();
     const std::string functionname1 = (parts.empty() ? "" : parts.front());
@@ -620,78 +737,20 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
     if (!parts.empty())
       parts.pop_front();
 
-    double lower_limit = std::numeric_limits<double>::lowest();
-    double upper_limit = std::numeric_limits<double>::max();
     if (!functionname1.empty() && !functionname2.empty())
-    {
-      // inner and outer functions exist
-      auto f_name = extract_function(functionname2, lower_limit, upper_limit);
-
-      theInnerDataFunction.setLimits(lower_limit, upper_limit);
-
-      theInnerDataFunction.setId(parse_function(f_name));
-      theInnerDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
-                                       ? FunctionType::TimeFunction
-                                       : FunctionType::AreaFunction);
-
-      theInnerDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
-      theInnerDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
-
-      // Nearest && Interpolate functions always accepts NaNs in time series
-      if (theInnerDataFunction.id() == FunctionId::Nearest ||
-          theInnerDataFunction.id() == FunctionId::Interpolate)
-        theInnerDataFunction.setIsNaNFunction(true);
-      if (theInnerDataFunction.type() == FunctionType::TimeFunction)
-      {
-        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
-        theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-        theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
-      }
-
-      f_name = extract_function(functionname1, lower_limit, upper_limit);
-      theOuterDataFunction.setLimits(lower_limit, upper_limit);
-
-      theOuterDataFunction.setId(parse_function(f_name));
-      theOuterDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
-                                       ? FunctionType::TimeFunction
-                                       : FunctionType::AreaFunction);
-
-      theOuterDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
-      theOuterDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
-
-      if (theOuterDataFunction.type() == FunctionType::TimeFunction)
-      {
-        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
-        theOuterDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-        theOuterDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
-      }
-    }
-    else if (!functionname1.empty())
-    {
-      // only inner function exists,
-      auto f_name = extract_function(functionname1, lower_limit, upper_limit);
-      theInnerDataFunction.setLimits(lower_limit, upper_limit);
-
-      theInnerDataFunction.setId(parse_function(f_name));
-      theInnerDataFunction.setType(boost::algorithm::ends_with(f_name, "_t")
-                                       ? FunctionType::TimeFunction
-                                       : FunctionType::AreaFunction);
-
-      theInnerDataFunction.setIsNaNFunction(boost::algorithm::starts_with(f_name, "nan"));
-      theInnerDataFunction.setIsDirFunction(boost::algorithm::ends_with(f_name, "dir_t"));
-
-      // Nearest && Interpolate functions always accepts NaNs in time series
-      if (theInnerDataFunction.id() == FunctionId::Nearest ||
-          theInnerDataFunction.id() == FunctionId::Interpolate)
-        theInnerDataFunction.setIsNaNFunction(true);
-
-      if (theInnerDataFunction.type() == FunctionType::TimeFunction)
-      {
-        parse_intervals(paramname, aggregation_interval_behind, aggregation_interval_ahead);
-        theInnerDataFunction.setAggregationIntervalBehind(aggregation_interval_behind);
-        theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
-      }
-    }
+	  {
+		parse_functions(functionname1,
+						functionname2,
+						paramname,
+						theInnerDataFunction,
+						theOuterDataFunction);
+	  }
+	else
+	  {
+		parse_function(functionname1,
+					   paramname,
+					   theInnerDataFunction);
+	  }
 
     if (theOuterDataFunction.type() == theInnerDataFunction.type() &&
         theOuterDataFunction.type() != FunctionType::NullFunctionType)
