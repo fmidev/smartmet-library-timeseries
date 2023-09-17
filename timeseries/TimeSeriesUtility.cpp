@@ -9,7 +9,7 @@ namespace TimeSeries
 {
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Output operator for debugging purposes
  */
 // ----------------------------------------------------------------------
 
@@ -52,9 +52,12 @@ std::ostream& operator<<(std::ostream& os, const OutputData& odata)
   }
 }
 
+namespace
+{
+
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Remove redundant timesteps used for aggregation only from the time series
  */
 // ----------------------------------------------------------------------
 
@@ -115,9 +118,11 @@ void erase_redundant_timesteps(TimeSeries& ts, const TimeSeriesGenerator::LocalT
   }
 }
 
+}  // namespace
+
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Erase timesteps used for aggregation only
  */
 // ----------------------------------------------------------------------
 
@@ -137,7 +142,7 @@ TimeSeriesPtr erase_redundant_timesteps(TimeSeriesPtr ts,
 
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Erase timesteps used for aggregation only
  */
 // ----------------------------------------------------------------------
 
@@ -159,7 +164,7 @@ TimeSeriesVectorPtr erase_redundant_timesteps(TimeSeriesVectorPtr tsv,
 
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Erase timesteps used for aggregation only
  */
 // ----------------------------------------------------------------------
 

@@ -147,19 +147,12 @@ std::string StringVisitor::operator()(const LonLat& lonlat) const
 {
   try
   {
-    switch (itsLonLatFormat)
-    {
-      case LonLatFormat::LONLAT:
-        return itsValueFormatter.format(lonlat.lon, itsPrecision) + ", " +
-               itsValueFormatter.format(lonlat.lat, itsPrecision);
-      case LonLatFormat::LATLON:
-        return itsValueFormatter.format(lonlat.lat, itsPrecision) + ", " +
-               itsValueFormatter.format(lonlat.lon, itsPrecision);
-#ifdef __GNUC__
-      default:
-        return "";
-#endif
-    }
+    if (itsLonLatFormat == LonLatFormat::LONLAT)
+      return itsValueFormatter.format(lonlat.lon, itsPrecision) + ", " +
+             itsValueFormatter.format(lonlat.lat, itsPrecision);
+
+    return itsValueFormatter.format(lonlat.lat, itsPrecision) + ", " +
+           itsValueFormatter.format(lonlat.lon, itsPrecision);
   }
   catch (...)
   {

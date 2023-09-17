@@ -51,292 +51,8 @@ class StatCalculator
   void setTimestep(const boost::local_time::local_date_time &timestep) { itsTimestep = timestep; }
 };
 
-double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeights) const
+namespace
 {
-  try
-  {
-    const double kDoubleMissing = kFloatMissing;
-
-    Stat::Stat stat(itsDataVector, kDoubleMissing);
-    stat.useWeights(useWeights);
-    stat.useDegrees(func.isDirFunction());
-
-    switch (func.id())
-    {
-      case FunctionId::Mean:
-        return stat.mean();
-      case FunctionId::Maximum:
-        return stat.max();
-      case FunctionId::Minimum:
-        return stat.min();
-      case FunctionId::Median:
-        return stat.median();
-      case FunctionId::Sum:
-        stat.useWeights(false);
-        return stat.sum();
-      case FunctionId::Integ:
-        return stat.integ();
-      case FunctionId::StandardDeviation:
-        return stat.stddev();
-      case FunctionId::Percentage:
-        return stat.percentage(func.lowerLimit(), func.upperLimit());
-      case FunctionId::Count:
-        return stat.count(func.lowerLimit(), func.upperLimit());
-      case FunctionId::Change:
-        return stat.change();
-      case FunctionId::Trend:
-        return stat.trend();
-      case FunctionId::Nearest:
-        return (itsTimestep ? stat.nearest(itsTimestep->utc_time()) : kDoubleMissing);
-      case FunctionId::Interpolate:
-        return (itsTimestep ? stat.interpolate(itsTimestep->utc_time()) : kDoubleMissing);
-      case FunctionId::NullFunction:
-      default:
-        return kDoubleMissing;
-    }
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-std::string StatCalculator::getStringStatValue(const DataFunction &func) const
-{
-  try
-  {
-    FunctionId fid(func.id());
-    if (fid == FunctionId::Mean || fid == FunctionId::StandardDeviation ||
-        fid == FunctionId::Percentage || fid == FunctionId::Change || fid == FunctionId::Trend)
-    {
-      return boost::get<std::string>(itsTimeSeries[0].value);
-    }
-
-    if (fid == FunctionId::Nearest || fid == FunctionId::Interpolate)
-    {
-      if (itsTimestep)
-      {
-        for (auto item : itsTimeSeries)
-          if (item.time.utc_time() == itsTimestep->utc_time())
-          {
-            return boost::get<std::string>(item.value);
-          }
-      }
-      return boost::get<std::string>(itsTimeSeries[0].value);
-    }
-
-    if (fid == FunctionId::Maximum)
-      return boost::get<std::string>(itsTimeSeries[itsTimeSeries.size() - 1].value);
-
-    if (fid == FunctionId::Minimum)
-      return boost::get<std::string>(itsTimeSeries[0].value);
-
-    if (fid == FunctionId::Sum || fid == FunctionId::Integ)
-    {
-      std::stringstream ss;
-      ss << "[";
-      for (const TimedValue &tv : itsTimeSeries)
-      {
-        if (ss.str().size() > 1)
-          ss << " ";
-        ss << boost::get<std::string>(tv.value);
-      }
-      ss << "]";
-      return ss.str();
-    }
-
-    if (fid == FunctionId::Median)
-      return boost::get<std::string>(itsTimeSeries[itsTimeSeries.size() / 2].value);
-
-    if (fid == FunctionId::Count)
-    {
-      // Stat::Count functions can not be applid to strings, so
-      // first add timesteps into data vector with double value 1.0,
-      // then call Stat::count-function
-      Stat::DataVector dataVector;
-      for (const auto &item : itsTimeSeries)
-        dataVector.emplace_back(Stat::DataItem(item.time.utc_time(), 1.0));
-      Stat::Stat stat(dataVector, kFloatMissing);
-      return Fmi::to_string(stat.count(func.lowerLimit(), func.upperLimit()));
-    }
-
-    std::stringstream ss;
-    ss << "Function " << func.hash() << " can not be applied for a string!";
-    throw Fmi::Exception(BCP, ss.str());
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-boost::local_time::local_date_time StatCalculator::getLocalDateTimeStatValue(
-    const DataFunction &func) const
-{
-  try
-  {
-    FunctionId fid(func.id());
-
-    if (fid == FunctionId::Maximum)
-      return boost::get<boost::local_time::local_date_time>(
-          itsTimeSeries[itsTimeSeries.size() - 1].value);
-
-    if (fid == FunctionId::Minimum)
-      return boost::get<boost::local_time::local_date_time>(itsTimeSeries[0].value);
-
-    if (fid == FunctionId::Median)
-      return boost::get<boost::local_time::local_date_time>(
-          itsTimeSeries[itsTimeSeries.size() / 2].value);
-
-    std::stringstream ss;
-    ss << "Function " << func.hash() << " can not be applied for a date!";
-    throw Fmi::Exception(BCP, ss.str());
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-LonLat StatCalculator::getLonLatStatValue(const DataFunction &func) const
-{
-  try
-  {
-    std::vector<double> lon_vector;
-    std::vector<double> lat_vector;
-
-    for (const TimedValue &tv : itsTimeSeries)
-    {
-      Value value(tv.value);
-      lon_vector.push_back((boost::get<LonLat>(value)).lon);
-      lat_vector.push_back((boost::get<LonLat>(value)).lat);
-    }
-
-    FunctionId fid(func.id());
-
-    if (fid == FunctionId::Maximum)
-    {
-      std::vector<double>::iterator iter;
-      iter = std::max_element(lon_vector.begin(), lon_vector.end());
-      double lon_max(*iter);
-      iter = std::max_element(lat_vector.begin(), lat_vector.end());
-      double lat_max(*iter);
-      return LonLat(lon_max, lat_max);
-    }
-    if (fid == FunctionId::Minimum)
-    {
-      std::vector<double>::iterator iter;
-      iter = std::min_element(lon_vector.begin(), lon_vector.end());
-      double lon_min(*iter);
-      iter = std::min_element(lat_vector.begin(), lat_vector.end());
-      double lat_min(*iter);
-      return LonLat(lon_min, lat_min);
-    }
-    if (fid == FunctionId::Sum || fid == FunctionId::Integ)
-    {
-      double lon_sum = std::accumulate(lon_vector.begin(), lon_vector.end(), 0.0);
-      double lat_sum = std::accumulate(lat_vector.begin(), lat_vector.end(), 0.0);
-
-      while (abs(lon_sum) > 180)
-        lon_sum -= 180;
-      while (abs(lat_sum) > 90)
-        lat_sum -= 90;
-
-      return LonLat(lon_sum, lat_sum);
-    }
-
-    std::stringstream ss;
-    ss << "Function " << func.hash() << " can not be applied for a lonlat-coordinate!";
-    throw Fmi::Exception(BCP, ss.str());
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-void StatCalculator::operator()(const TimedValue &tv)
-{
-  try
-  {
-    if (boost::get<double>(&(tv.value)))
-    {
-      double d(boost::get<double>(tv.value));
-      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
-    }
-    else if (boost::get<int>(&(tv.value)))
-    {
-      double d(boost::get<int>(tv.value));
-      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
-    }
-    else
-    {
-      itsTimeSeries.push_back(tv);
-    }
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) const
-{
-  try
-  {
-    // if result set contains missing values, then 'nan'-flag in DataFunction
-    // determines if we ignore nan values and do statistical calculations with
-    // existing values or return missing value
-    bool missingValuesPresent(false);
-    for (const TimedValue &tv : itsTimeSeries)
-    {
-      if (boost::get<None>(&(tv.value)))
-      {
-        missingValuesPresent = true;
-        break;
-      }
-    }
-
-    if (!func.isNanFunction() && missingValuesPresent)
-      return None();
-
-    Value ret = None();
-    if (itsDataVector.size() > 0)
-    {
-      double result = getDoubleStatValue(func, useWeights);
-      if (result == kFloatMissing &&
-          (func.id() == FunctionId::Nearest || func.id() == FunctionId::Interpolate))
-        return None();
-      ret = getDoubleStatValue(func, useWeights);
-    }
-    else if (itsTimeSeries.size() > 0)
-    {
-      Value value(itsTimeSeries[0].value);
-
-      if (boost::get<std::string>(&value))
-      {
-        if (!boost::get<None>(&value))
-        {
-          ret = getStringStatValue(func);
-        }
-      }
-      else if (boost::get<boost::local_time::local_date_time>(&value))
-      {
-        ret = getLocalDateTimeStatValue(func);
-      }
-      else if (boost::get<LonLat>(&value))
-      {
-        ret = getLonLatStatValue(func);
-      }
-    }
-    return ret;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
 bool include_value(const TimedValue &tv, const DataFunction &func)
 {
   bool ret = true;
@@ -480,7 +196,7 @@ TimedValue time_aggregate(const TimeSeries &ts,
         statcalculator(tv);
     }
 
-    return TimedValue(timestep, statcalculator.getStatValue(func, true));
+    return {timestep, statcalculator.getStatValue(func, true)};
   }
   catch (...)
   {
@@ -520,6 +236,302 @@ TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
       ret->emplace_back(TimedValue(ts[i].time, statcalculator.getStatValue(func, true)));
     }
 
+    return ret;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+}  // namespace
+
+double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeights) const
+{
+  try
+  {
+    const double kDoubleMissing = kFloatMissing;
+
+    Stat::Stat stat(itsDataVector, kDoubleMissing);
+    stat.useWeights(useWeights);
+    stat.useDegrees(func.isDirFunction());
+
+    switch (func.id())
+    {
+      case FunctionId::Mean:
+        return stat.mean();
+      case FunctionId::Maximum:
+        return stat.max();
+      case FunctionId::Minimum:
+        return stat.min();
+      case FunctionId::Median:
+        return stat.median();
+      case FunctionId::Sum:
+        stat.useWeights(false);
+        return stat.sum();
+      case FunctionId::Integ:
+        return stat.integ();
+      case FunctionId::StandardDeviation:
+        return stat.stddev();
+      case FunctionId::Percentage:
+        return stat.percentage(func.lowerLimit(), func.upperLimit());
+      case FunctionId::Count:
+        return stat.count(func.lowerLimit(), func.upperLimit());
+      case FunctionId::Change:
+        return stat.change();
+      case FunctionId::Trend:
+        return stat.trend();
+      case FunctionId::Nearest:
+        return (itsTimestep ? stat.nearest(itsTimestep->utc_time()) : kDoubleMissing);
+      case FunctionId::Interpolate:
+        return (itsTimestep ? stat.interpolate(itsTimestep->utc_time()) : kDoubleMissing);
+      case FunctionId::NullFunction:
+        return kDoubleMissing;
+    }
+    // NOTREACHED
+    return kDoubleMissing;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+std::string StatCalculator::getStringStatValue(const DataFunction &func) const
+{
+  try
+  {
+    FunctionId fid(func.id());
+
+    switch (fid)
+    {
+      case FunctionId::Mean:
+      case FunctionId::StandardDeviation:
+      case FunctionId::Percentage:
+      case FunctionId::Change:
+      case FunctionId::Trend:
+        return boost::get<std::string>(itsTimeSeries[0].value);
+
+      case FunctionId::Maximum:
+        return boost::get<std::string>(itsTimeSeries[itsTimeSeries.size() - 1].value);
+
+      case FunctionId::Minimum:
+        return boost::get<std::string>(itsTimeSeries[0].value);
+
+      case FunctionId::Median:
+        return boost::get<std::string>(itsTimeSeries[itsTimeSeries.size() / 2].value);
+
+      case FunctionId::Nearest:
+      case FunctionId::Interpolate:
+      {
+        if (itsTimestep)
+        {
+          for (auto item : itsTimeSeries)
+            if (item.time.utc_time() == itsTimestep->utc_time())
+              return boost::get<std::string>(item.value);
+        }
+        return boost::get<std::string>(itsTimeSeries[0].value);
+      }
+
+      case FunctionId::Sum:
+      case FunctionId::Integ:
+      {
+        std::stringstream ss;
+        ss << "[";
+        for (const TimedValue &tv : itsTimeSeries)
+        {
+          if (ss.str().size() > 1)
+            ss << " ";
+          ss << boost::get<std::string>(tv.value);
+        }
+        ss << "]";
+        return ss.str();
+      }
+
+      case FunctionId::Count:
+      {
+        // Stat::Count functions can not be applid to strings, so
+        // first add timesteps into data vector with double value 1.0,
+        // then call Stat::count-function
+        Stat::DataVector dataVector;
+        for (const auto &item : itsTimeSeries)
+          dataVector.emplace_back(Stat::DataItem(item.time.utc_time(), 1.0));
+        Stat::Stat stat(dataVector, kFloatMissing);
+        return Fmi::to_string(stat.count(func.lowerLimit(), func.upperLimit()));
+      }
+      default:
+      {
+        std::stringstream ss;
+        ss << "Function " << func.hash() << " can not be applied for a string!";
+        throw Fmi::Exception(BCP, ss.str());
+      }
+    }
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+boost::local_time::local_date_time StatCalculator::getLocalDateTimeStatValue(
+    const DataFunction &func) const
+{
+  try
+  {
+    FunctionId fid(func.id());
+
+    if (fid == FunctionId::Maximum)
+      return boost::get<boost::local_time::local_date_time>(
+          itsTimeSeries[itsTimeSeries.size() - 1].value);
+
+    if (fid == FunctionId::Minimum)
+      return boost::get<boost::local_time::local_date_time>(itsTimeSeries[0].value);
+
+    if (fid == FunctionId::Median)
+      return boost::get<boost::local_time::local_date_time>(
+          itsTimeSeries[itsTimeSeries.size() / 2].value);
+
+    std::stringstream ss;
+    ss << "Function " << func.hash() << " can not be applied for a date!";
+    throw Fmi::Exception(BCP, ss.str());
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+LonLat StatCalculator::getLonLatStatValue(const DataFunction &func) const
+{
+  try
+  {
+    std::vector<double> lon_vector;
+    std::vector<double> lat_vector;
+
+    for (const TimedValue &tv : itsTimeSeries)
+    {
+      Value value(tv.value);
+      lon_vector.push_back((boost::get<LonLat>(value)).lon);
+      lat_vector.push_back((boost::get<LonLat>(value)).lat);
+    }
+
+    FunctionId fid(func.id());
+
+    if (fid == FunctionId::Maximum)
+    {
+      std::vector<double>::iterator iter;
+      iter = std::max_element(lon_vector.begin(), lon_vector.end());
+      double lon_max(*iter);
+      iter = std::max_element(lat_vector.begin(), lat_vector.end());
+      double lat_max(*iter);
+      return {lon_max, lat_max};
+    }
+    if (fid == FunctionId::Minimum)
+    {
+      std::vector<double>::iterator iter;
+      iter = std::min_element(lon_vector.begin(), lon_vector.end());
+      double lon_min(*iter);
+      iter = std::min_element(lat_vector.begin(), lat_vector.end());
+      double lat_min(*iter);
+      return {lon_min, lat_min};
+    }
+    if (fid == FunctionId::Sum || fid == FunctionId::Integ)
+    {
+      double lon_sum = std::accumulate(lon_vector.begin(), lon_vector.end(), 0.0);
+      double lat_sum = std::accumulate(lat_vector.begin(), lat_vector.end(), 0.0);
+
+      while (abs(lon_sum) > 180)
+        lon_sum -= 180;
+      while (abs(lat_sum) > 90)
+        lat_sum -= 90;
+
+      return {lon_sum, lat_sum};
+    }
+
+    std::stringstream ss;
+    ss << "Function " << func.hash() << " can not be applied for a lonlat-coordinate!";
+    throw Fmi::Exception(BCP, ss.str());
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+void StatCalculator::operator()(const TimedValue &tv)
+{
+  try
+  {
+    if (boost::get<double>(&(tv.value)))
+    {
+      double d(boost::get<double>(tv.value));
+      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
+    }
+    else if (boost::get<int>(&(tv.value)))
+    {
+      double d(boost::get<int>(tv.value));
+      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
+    }
+    else
+    {
+      itsTimeSeries.push_back(tv);
+    }
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) const
+{
+  try
+  {
+    // if result set contains missing values, then 'nan'-flag in DataFunction
+    // determines if we ignore nan values and do statistical calculations with
+    // existing values or return missing value
+    bool missingValuesPresent(false);
+    for (const TimedValue &tv : itsTimeSeries)
+    {
+      if (boost::get<None>(&(tv.value)))
+      {
+        missingValuesPresent = true;
+        break;
+      }
+    }
+
+    if (!func.isNanFunction() && missingValuesPresent)
+      return None();
+
+    Value ret = None();
+    if (!itsDataVector.empty())
+    {
+      double result = getDoubleStatValue(func, useWeights);
+      if (result == kFloatMissing &&
+          (func.id() == FunctionId::Nearest || func.id() == FunctionId::Interpolate))
+        return None();
+      ret = getDoubleStatValue(func, useWeights);
+    }
+    else if (!itsTimeSeries.empty())
+    {
+      Value value(itsTimeSeries[0].value);
+
+      if (boost::get<std::string>(&value))
+      {
+        if (!boost::get<None>(&value))
+        {
+          ret = getStringStatValue(func);
+        }
+      }
+      else if (boost::get<boost::local_time::local_date_time>(&value))
+      {
+        ret = getLocalDateTimeStatValue(func);
+      }
+      else if (boost::get<LonLat>(&value))
+      {
+        ret = getLonLatStatValue(func);
+      }
+    }
     return ret;
   }
   catch (...)

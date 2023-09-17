@@ -191,6 +191,33 @@ std::string format_date(const boost::local_time::local_date_time& ldt,
   }
 }
 
+std::string x_y_param(const std::string& paramName,
+                      const Spine::LocationPtr& loc,
+                      const std::string& crs,
+                      const Fmi::ValueFormatter& valueformatter,
+                      int precision)
+{
+  try
+  {
+    double x_coord = loc->longitude;
+    double y_coord = loc->latitude;
+    if (!(crs.empty() || crs == "EPSG:4326"))
+    {
+      Fmi::CoordinateTransformation transformation("WGS84", crs);
+      transformation.transform(x_coord, y_coord);
+    }
+
+    if (paramName == X_PARAM)
+      return valueformatter.format(x_coord, precision);
+
+    return valueformatter.format(y_coord, precision);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 }  // anonymous namespace
 
 bool special(const Parameter& theParam)
@@ -271,7 +298,7 @@ bool is_plain_location_query(const OptionParsers::ParameterList& theParams)
 
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Check if the parameter depends on location only (not time)
  */
 // ----------------------------------------------------------------------
 
@@ -280,36 +307,9 @@ bool is_location_parameter(const std::string& paramname)
   return location_parameters.count(paramname) > 0;
 }
 
-std::string x_y_param(const std::string& paramName,
-                      const Spine::LocationPtr& loc,
-                      const std::string& crs,
-                      const Fmi::ValueFormatter& valueformatter,
-                      int precision)
-{
-  try
-  {
-    double x_coord = loc->longitude;
-    double y_coord = loc->latitude;
-    if (!(crs.empty() || crs == "EPSG:4326"))
-    {
-      Fmi::CoordinateTransformation transformation("WGS84", crs);
-      transformation.transform(x_coord, y_coord);
-    }
-
-    if (paramName == X_PARAM)
-      return valueformatter.format(x_coord, precision);
-
-    return valueformatter.format(y_coord, precision);
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Handle a location dependent parameter
  */
 // ----------------------------------------------------------------------
 
@@ -443,7 +443,7 @@ bool is_time_parameter(std::string paramname)
 
 // ----------------------------------------------------------------------
 /*!
- * \brief
+ * \brief Handle a parameter depending on time only
  */
 // ----------------------------------------------------------------------
 
@@ -739,19 +739,13 @@ Spine::Parameter makeParameter(const std::string& name)
 
     auto it = special_parameter_map.find(p);
     if (it != special_parameter_map.end())
-    {
       type = it->second;
-    }
     else if (boost::algorithm::ends_with(p, "data_source"))
-    {
       type = Parameter::Type::DataDerived;
-    }
     else
-    {
       type = Parameter::Type::Data;
-    }
 
-    return Spine::Parameter(name, type);
+    return {name, type};
   }
   catch (...)
   {

@@ -112,6 +112,8 @@ class Stat
                      const boost::posix_time::ptime& endTime = not_a_date_time) const;
 
  private:
+  double stddev_dir(const boost::posix_time::ptime& startTime = not_a_date_time,
+                    const boost::posix_time::ptime& endTime = not_a_date_time) const;
   bool get_subvector(DataVector& subvector,
                      const boost::posix_time::ptime& startTime = not_a_date_time,
                      const boost::posix_time::ptime& endTime = not_a_date_time,

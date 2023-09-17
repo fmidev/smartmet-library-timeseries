@@ -62,17 +62,9 @@ struct Value : public Value_
 
   inline Value& operator=(const Value&) = default;
 
-  bool operator==(const Value& x) const
-  {
-    return this->Value_::operator==((Value_&)x);
-    ;
-  }
+  bool operator==(const Value& x) const { return this->Value_::operator==((Value_&)x); }
 
-  bool operator!=(const Value& x) const
-  {
-    return this->Value_::operator!=((Value_&)x);
-    ;
-  }
+  bool operator!=(const Value& x) const { return this->Value_::operator!=((Value_&)x); }
 };
 
 // Local time pool

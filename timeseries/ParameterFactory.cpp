@@ -24,6 +24,9 @@ std::ostream& operator<<(std::ostream& out, const ParameterAndFunctions& paramfu
   return out;
 }
 
+namespace
+{
+
 int get_function_index(const std::string& theFunction)
 {
   static const char* names[] = {"mean_a",
@@ -113,61 +116,61 @@ FunctionId parse_function(const std::string& theFunction)
 {
   try
   {
-    static FunctionId functions[] = {FunctionId::Mean,
-                                     FunctionId::Mean,
-                                     FunctionId::Mean,
-                                     FunctionId::Mean,
-                                     FunctionId::Maximum,
-                                     FunctionId::Maximum,
-                                     FunctionId::Maximum,
-                                     FunctionId::Maximum,
-                                     FunctionId::Minimum,
-                                     FunctionId::Minimum,
-                                     FunctionId::Minimum,
-                                     FunctionId::Minimum,
-                                     FunctionId::Median,
-                                     FunctionId::Median,
-                                     FunctionId::Median,
-                                     FunctionId::Median,
-                                     FunctionId::Sum,
-                                     FunctionId::Sum,
-                                     FunctionId::Sum,
-                                     FunctionId::Sum,
-                                     FunctionId::Sum,
-                                     FunctionId::Integ,
-                                     FunctionId::Sum,
-                                     FunctionId::Integ,
-                                     FunctionId::StandardDeviation,
-                                     FunctionId::StandardDeviation,
-                                     FunctionId::StandardDeviation,
-                                     FunctionId::StandardDeviation,
-                                     FunctionId::Percentage,
-                                     FunctionId::Percentage,
-                                     FunctionId::Percentage,
-                                     FunctionId::Percentage,
-                                     FunctionId::Count,
-                                     FunctionId::Count,
-                                     FunctionId::Count,
-                                     FunctionId::Count,
-                                     FunctionId::Change,
-                                     FunctionId::Change,
-                                     FunctionId::Change,
-                                     FunctionId::Change,
-                                     FunctionId::Trend,
-                                     FunctionId::Trend,
-                                     FunctionId::Trend,
-                                     FunctionId::Trend,
-                                     FunctionId::Nearest,
-                                     FunctionId::Nearest,
-                                     FunctionId::Interpolate,
-                                     FunctionId::Interpolate,
+    static const FunctionId functions[] = {FunctionId::Mean,
+                                           FunctionId::Mean,
+                                           FunctionId::Mean,
+                                           FunctionId::Mean,
+                                           FunctionId::Maximum,
+                                           FunctionId::Maximum,
+                                           FunctionId::Maximum,
+                                           FunctionId::Maximum,
+                                           FunctionId::Minimum,
+                                           FunctionId::Minimum,
+                                           FunctionId::Minimum,
+                                           FunctionId::Minimum,
+                                           FunctionId::Median,
+                                           FunctionId::Median,
+                                           FunctionId::Median,
+                                           FunctionId::Median,
+                                           FunctionId::Sum,
+                                           FunctionId::Sum,
+                                           FunctionId::Sum,
+                                           FunctionId::Sum,
+                                           FunctionId::Sum,
+                                           FunctionId::Integ,
+                                           FunctionId::Sum,
+                                           FunctionId::Integ,
+                                           FunctionId::StandardDeviation,
+                                           FunctionId::StandardDeviation,
+                                           FunctionId::StandardDeviation,
+                                           FunctionId::StandardDeviation,
+                                           FunctionId::Percentage,
+                                           FunctionId::Percentage,
+                                           FunctionId::Percentage,
+                                           FunctionId::Percentage,
+                                           FunctionId::Count,
+                                           FunctionId::Count,
+                                           FunctionId::Count,
+                                           FunctionId::Count,
+                                           FunctionId::Change,
+                                           FunctionId::Change,
+                                           FunctionId::Change,
+                                           FunctionId::Change,
+                                           FunctionId::Trend,
+                                           FunctionId::Trend,
+                                           FunctionId::Trend,
+                                           FunctionId::Trend,
+                                           FunctionId::Nearest,
+                                           FunctionId::Nearest,
+                                           FunctionId::Interpolate,
+                                           FunctionId::Interpolate,
 
-                                     FunctionId::Interpolate,
-                                     FunctionId::Interpolate,
-                                     FunctionId::Mean,
-                                     FunctionId::Mean,
-                                     FunctionId::StandardDeviation,
-                                     FunctionId::StandardDeviation};
+                                           FunctionId::Interpolate,
+                                           FunctionId::Interpolate,
+                                           FunctionId::Mean,
+                                           FunctionId::Mean,
+                                           FunctionId::StandardDeviation,
+                                           FunctionId::StandardDeviation};
 
     int function_index = get_function_index(theFunction);
     if (function_index >= 0)
@@ -200,7 +203,7 @@ void parse_intervals(std::string& paramname,
       std::string aggregation_interval_string_behind =
           paramname.substr(paramname.find(intervalSeparator) + 1);
       std::string aggregation_interval_string_ahead = "0";
-      paramname = paramname.substr(0, paramname.find(intervalSeparator));
+      paramname.resize(paramname.find(intervalSeparator));
 
       int agg_interval_behind = 0;
       int agg_interval_ahead = 0;
@@ -209,8 +212,8 @@ void parse_intervals(std::string& paramname,
       {
         aggregation_interval_string_ahead = aggregation_interval_string_behind.substr(
             aggregation_interval_string_behind.find(intervalSeparator) + 1);
-        aggregation_interval_string_behind = aggregation_interval_string_behind.substr(
-            0, aggregation_interval_string_behind.find(intervalSeparator));
+        aggregation_interval_string_behind.resize(
+            aggregation_interval_string_behind.find(intervalSeparator));
         agg_interval_ahead = Spine::duration_string_to_minutes(aggregation_interval_string_ahead);
         aggregation_interval_ahead = boost::numeric_cast<unsigned int>(agg_interval_ahead);
       }
@@ -257,85 +260,6 @@ std::string extract_limits(const std::string& theString)
       throw Fmi::Exception(BCP, "Invalid function modifier in '" + theString + "'!");
 
     return theString.substr(pos1 + 1, pos2 - pos1 - 1);
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
- * \brief Get an instance of the parameter factory (singleton)
- */
-// ----------------------------------------------------------------------
-
-const ParameterFactory& ParameterFactory::instance()
-{
-  try
-  {
-    static ParameterFactory factory;
-    return factory;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
- * \brief Initialize the factory
- *
- * This is only called once by instance()
- */
-// ----------------------------------------------------------------------
-
-ParameterFactory::ParameterFactory()
-
-{
-  try
-  {
-    // We must make one query to make sure the converter is
-    // initialized while the constructor is run thread safely
-    // only once. Unfortunately the init method is private.
-
-    converter.ToString(1);  // 1 == Pressure
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
- * \brief Return name for the given parameter
- */
-// ----------------------------------------------------------------------
-
-std::string ParameterFactory::name(int number) const
-{
-  try
-  {
-    return converter.ToString(number);
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-// ----------------------------------------------------------------------
-/*!
- * \brief Return number for the given name
- */
-
-int ParameterFactory::number(const std::string& name) const
-{
-  try
-  {
-    return converter.ToEnum(name);
   }
   catch (...)
   {
@@ -566,7 +490,7 @@ std::list<std::string> parse_parameter_parts(const std::string& paramreq)
 }
 
 void parse_functions(const std::string& functionname1,
-                     const std::string functionname2,
+                     const std::string& functionname2,
                      std::string& paramname,
                      DataFunction& theInnerDataFunction,
                      DataFunction& theOuterDataFunction)
@@ -667,6 +591,87 @@ void parse_function(const std::string& functionname1,
   }
 }
 
+}  // namespace
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Get an instance of the parameter factory (singleton)
+ */
+// ----------------------------------------------------------------------
+
+const ParameterFactory& ParameterFactory::instance()
+{
+  try
+  {
+    static ParameterFactory factory;
+    return factory;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Initialize the factory
+ *
+ * This is only called once by instance()
+ */
+// ----------------------------------------------------------------------
+
+ParameterFactory::ParameterFactory()
+
+{
+  try
+  {
+    // We must make one query to make sure the converter is
+    // initialized while the constructor is run thread safely
+    // only once. Unfortunately the init method is private.
+
+    converter.ToString(1);  // 1 == Pressure
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Return name for the given parameter
+ */
+// ----------------------------------------------------------------------
+
+std::string ParameterFactory::name(int number) const
+{
+  try
+  {
+    return converter.ToString(number);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Return number for the given name
+ */
+
+int ParameterFactory::number(const std::string& name) const
+{
+  try
+  {
+    return converter.ToEnum(name);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Parse the given parameter name and functions
@@ -689,7 +694,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
     if (alias_name_pos != std::string::npos)
     {
       theParameterNameAlias = paramreq.substr(alias_name_pos + 3);
-      paramreq = paramreq.substr(0, alias_name_pos);
+      paramreq.resize(alias_name_pos);
       Fmi::trim(theParameterNameAlias);
       Fmi::trim(paramreq);
     }
@@ -799,14 +804,14 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
       if (innermost_item.find('[') != std::string::npos)
       {
         // Remove [..., for example percentage_t[0:60](TotalCloudCover)
-        innermost_name = innermost_name.substr(0, innermost_item.find('['));
+        innermost_name.substr(innermost_item.find('['));
       }
-      bool sensor_parameter_exists = false;
       // If the name before innermost parenthesis is not a function it must be a parameter
 
       if (get_function_index(innermost_name) < 0)
       {
         // Sensor info
+        bool sensor_parameter_exists = false;
         auto len = innermost_item.find(')') - innermost_item.find('(') + 1;
         auto sensor_info = innermost_item.substr(innermost_item.find('('), len);
         if (sensor_info.find(':') != sensor_info.rfind(':'))
@@ -857,7 +862,7 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
     if (!sensor_parameter.empty())
       parameter.setSensorParameter(sensor_parameter);
 
-    return ParameterAndFunctions(parameter, DataFunctions(innerFunction, outerFunction));
+    return {parameter, DataFunctions(innerFunction, outerFunction)};
   }
   catch (...)
   {
@@ -906,7 +911,7 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
     if (number == kFmiBadParameter && !ignoreBadParameter)
       throw Fmi::Exception(BCP, "Unknown parameter '" + pname + "'");
 
-    return Parameter(paramname, type, number);
+    return {paramname, type, number};
   }
   catch (...)
   {

@@ -25,6 +25,9 @@ using DataConstIterator = DataVector::const_iterator;
 using namespace boost::accumulators;
 using namespace std;
 
+namespace
+{
+
 bool comp_value(const DataItem& data1, const DataItem& data2)
 {
   try
@@ -48,6 +51,180 @@ bool comp_time(const DataItem& data1, const DataItem& data2)
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+
+double interpolate_mod_360(double first_value,
+                           double second_value,
+                           double time_diff_sec,
+                           double time_diff_to_timestep_sec)
+{
+  double value_diff = second_value - first_value;
+  double slope = 0.0;
+  if (value_diff > 180)  // as in 10 --> 350
+    slope = (value_diff - 360) / time_diff_sec;
+  else if (value_diff < -180)  // as in 350 --> 10
+    slope = (value_diff + 360) / time_diff_sec;
+  else
+    slope = value_diff / time_diff_sec;
+
+  double interpolated_value = first_value + slope * time_diff_to_timestep_sec;
+  if (interpolated_value < 0)
+    interpolated_value += 360;
+  if (interpolated_value >= 360)
+    interpolated_value -= 360;
+  return interpolated_value;
+}
+
+double interpolate_normal(double first_value,
+                          double second_value,
+                          double time_diff_sec,
+                          double time_diff_to_timestep_sec)
+{
+  double value_diff = second_value - first_value;
+  double slope = value_diff / time_diff_sec;
+  double interpolated_value = (first_value + (slope * time_diff_to_timestep_sec));
+
+#ifdef MYDEBUG
+  std::cout << "first_time: " << first_time << ",second_time: " << second_time
+            << ", timestep: " << timestep << ", first_value: " << first_value
+            << ", second_value: " << second_value << ",slope: " << slope
+            << ", time_diff_to_timestep: " << time_diff_to_timestep_sec << " -> "
+            << interpolated_value << std::endl;
+#endif
+  return interpolated_value;
+}
+
+double interpolate_value(bool normal,
+                         double first_value,
+                         double second_value,
+                         double time_diff_sec,
+                         double time_diff_to_timestep_sec)
+{
+  if (normal)
+    return interpolate_normal(first_value, second_value, time_diff_sec, time_diff_to_timestep_sec);
+
+  return interpolate_mod_360(first_value, second_value, time_diff_sec, time_diff_to_timestep_sec);
+}
+
+time_period extract_subvector_timeperiod(const DataVector& data,
+                                         const boost::posix_time::ptime& startTime,
+                                         const boost::posix_time::ptime& endTime)
+{
+  auto firstTimestamp =
+      ((startTime == not_a_date_time || startTime < data[0].time) ? data[0].time : startTime);
+  auto lastTimestamp = ((endTime == not_a_date_time || endTime > data[data.size() - 1].time)
+                            ? data[data.size() - 1].time
+                            : endTime);
+
+  return {firstTimestamp, lastTimestamp + microseconds(1)};
+}
+
+void extract_subvector_weighted_segment(DataVector& subvector,
+                                        const time_period& query_period,
+                                        const DataItem& item1,
+                                        const DataItem& item2)
+{
+  // iterate through the data vector and sort out periods and corresponding weights
+
+  // period between two timesteps
+  time_period timestep_period(item1.time, item2.time + microseconds(1));
+  // if timestep period is inside the queried period handle it
+
+  if (query_period.intersects(timestep_period))
+  {
+    // first find out intersecting period
+    time_period intersection_period(query_period.intersection(timestep_period));
+    if (intersection_period.length().total_seconds() == 0)
+      return;
+
+    // value changes halfway of timestep, so we have to handle first half and second half of
+    // separately
+    boost::posix_time::ptime halfway_time(timestep_period.begin() +
+                                          seconds(timestep_period.length().total_seconds() / 2));
+    if (intersection_period.contains(halfway_time))
+    {
+      time_period first_part_period(intersection_period.begin(), halfway_time + microseconds(1));
+      time_period second_part_period(halfway_time, intersection_period.end());
+      subvector.push_back(
+          DataItem(item1.time, item1.value, first_part_period.length().total_seconds()));
+      subvector.push_back(
+          DataItem(item2.time, item2.value, second_part_period.length().total_seconds()));
+    }
+    else
+    {
+      if (intersection_period.begin() > halfway_time)  // intersection_period is in the second half
+        subvector.push_back(
+            DataItem(item2.time, item2.value, intersection_period.length().total_seconds()));
+      else  // intersection_period must be in the first half
+        subvector.push_back(
+            DataItem(item1.time, item1.value, intersection_period.length().total_seconds()));
+    }
+  }
+}
+
+bool extract_subvector(const DataVector& data,
+                       DataVector& subvector,
+                       const boost::posix_time::ptime& startTime,
+                       const boost::posix_time::ptime& endTime,
+                       double itsMissingValue,
+                       bool itsWeights)
+{
+  try
+  {
+    // if startTime is later than endTime return empty vector
+    if ((startTime != not_a_date_time && endTime != not_a_date_time) && startTime > endTime)
+      return false;
+
+    auto query_period = extract_subvector_timeperiod(data, startTime, endTime);
+
+    // if there is only one element in the vector
+    if (data.size() == 1)
+    {
+      if (query_period.contains(data[0].time))
+      {
+        if (data[0].value == itsMissingValue)
+          return false;
+        subvector.push_back(DataItem(data[0].time, data[0].value, 1.0));
+      }
+      return true;
+    }
+
+#ifdef MYDEBUG
+    std::cout << "query_period: " << query_period << std::endl;
+#endif
+
+    for (auto iter = data.begin(); iter != data.end(); iter++)
+    {
+      if (iter->value == itsMissingValue)
+      {
+        subvector.clear();
+        return false;
+      }
+
+      if (!itsWeights)
+      {
+        if (query_period.contains(iter->time))
+          subvector.push_back(*iter);
+      }
+      else
+      {
+        if ((iter + 1) != data.end())
+        {
+          const auto& item1 = *iter;
+          const auto& item2 = *(iter + 1);
+          extract_subvector_weighted_segment(subvector, query_period, item1, item2);
+        }
+      }
+    }
+
+    return !subvector.empty();
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+}  // namespace
 
 Stat::Stat(double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
     : itsMissingValue(theMissingValue), itsWeights(true)
@@ -624,50 +801,65 @@ double Stat::stddev(const boost::posix_time::ptime& startTime /*= not_a_date_tim
     std::cout << "stddev(" << startTime << ", " << endTime << ")" << std::endl;
 #endif
     if (itsDegrees)
-    {
-      DataVector subvector;
-
-      if (!get_subvector(subvector, startTime, endTime) || subvector.empty())
-        return itsMissingValue;
-
-      double sum = 0;
-      double squaredSum = 0;
-      double previousDirection = 0;
-      for (unsigned int i = 0; i < subvector.size(); i++)
-      {
-        if (i == 0)
-        {
-          sum = subvector[i].value;
-          squaredSum = subvector[i].value * subvector[i].value;
-          previousDirection = subvector[i].value;
-        }
-        else
-        {
-          double diff = subvector[i].value - previousDirection;
-          double dir = previousDirection + diff;
-          if (diff < -MODULO_VALUE_360 / 2.0)
-          {
-            while (dir < MODULO_VALUE_360 / 2.0)
-              dir += MODULO_VALUE_360;
-          }
-          else if (diff > MODULO_VALUE_360 / 2.0)
-          {
-            while (dir > MODULO_VALUE_360 / 2.0)
-              dir -= MODULO_VALUE_360;
-          }
-          sum += dir;
-          squaredSum += dir * dir;
-          previousDirection = dir;
-        }
-      }
-      double tmp = squaredSum - sum * sum / subvector.size();
-      if (tmp < 0)
-        return 0.0;
-
-      return sqrt(tmp / subvector.size());
-    }
+      return stddev_dir(startTime, endTime);
 
     return sqrt(variance(startTime, endTime));
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+double Stat::stddev_dir(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
+                        const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+{
+  try
+  {
+#ifdef MYDEBUG
+    std::cout << "stddev_dir(" << startTime << ", " << endTime << ")" << std::endl;
+#endif
+
+    DataVector subvector;
+
+    if (!get_subvector(subvector, startTime, endTime) || subvector.empty())
+      return itsMissingValue;
+
+    double sum = 0;
+    double squaredSum = 0;
+    double previousDirection = 0;
+    for (unsigned int i = 0; i < subvector.size(); i++)
+    {
+      if (i == 0)
+      {
+        sum = subvector[i].value;
+        squaredSum = subvector[i].value * subvector[i].value;
+        previousDirection = subvector[i].value;
+      }
+      else
+      {
+        double diff = subvector[i].value - previousDirection;
+        double dir = previousDirection + diff;
+        if (diff < -MODULO_VALUE_360 / 2.0)
+        {
+          while (dir < MODULO_VALUE_360 / 2.0)
+            dir += MODULO_VALUE_360;
+        }
+        else if (diff > MODULO_VALUE_360 / 2.0)
+        {
+          while (dir > MODULO_VALUE_360 / 2.0)
+            dir -= MODULO_VALUE_360;
+        }
+        sum += dir;
+        squaredSum += dir * dir;
+        previousDirection = dir;
+      }
+    }
+    double tmp = squaredSum - sum * sum / subvector.size();
+    if (tmp < 0)
+      return 0.0;
+
+    return sqrt(tmp / subvector.size());
   }
   catch (...)
   {
@@ -804,143 +996,9 @@ double Stat::interpolate(const boost::posix_time::ptime& timestep,
     }
 
     double time_diff_sec = (second_time - first_time).total_seconds();
-    double value_diff = second_value - first_value;
-
-    if (!itsDegrees)
-    {
-      double slope = value_diff / time_diff_sec;
-      double interpolated_value = (first_value + (slope * time_diff_to_timestep_sec));
-
-#ifdef MYDEBUG
-      std::cout << "first_time: " << first_time << ",second_time: " << second_time
-                << ", timestep: " << timestep << ", first_value: " << first_value
-                << ", second_value: " << second_value << ",slope: " << slope
-                << ", time_diff_to_timestep: " << time_diff_to_timestep_sec << " -> "
-                << interpolated_value << std::endl;
-#endif
-      return interpolated_value;
-    }
-
-    // Interpolate mod 360
-
-    double slope = 0.0;
-    if (value_diff > 180)  // as in 10 --> 350
-      slope = (value_diff - 360) / time_diff_sec;
-    else if (value_diff < -180)  // as in 350 --> 10
-      slope = (value_diff + 360) / time_diff_sec;
-    else
-      slope = value_diff / time_diff_sec;
-
-    double interpolated_value = first_value + slope * time_diff_to_timestep_sec;
-    if (interpolated_value < 0)
-      interpolated_value += 360;
-    if (interpolated_value >= 360)
-      interpolated_value -= 360;
-    return interpolated_value;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-bool extract_subvector(const DataVector& itsData,
-                       DataVector& subvector,
-                       const boost::posix_time::ptime& startTime,
-                       const boost::posix_time::ptime& endTime,
-                       double itsMissingValue,
-                       bool itsWeights)
-{
-  try
-  {
-    // if startTime is later than endTime return empty vector
-    if ((startTime != not_a_date_time && endTime != not_a_date_time) && startTime > endTime)
-      return false;
-
-    boost::posix_time::ptime firstTimestamp(
-        (startTime == not_a_date_time || startTime < itsData[0].time) ? itsData[0].time
-                                                                      : startTime);
-    boost::posix_time::ptime lastTimestamp(
-        (endTime == not_a_date_time || endTime > itsData[itsData.size() - 1].time)
-            ? itsData[itsData.size() - 1].time
-            : endTime);
-
-    time_period query_period(firstTimestamp, lastTimestamp + microseconds(1));
-
-    // if there is only one element in the vector
-    if (itsData.size() == 1)
-    {
-      if (query_period.contains(itsData[0].time))
-      {
-        if (itsData[0].value == itsMissingValue)
-          return false;
-        subvector.push_back(DataItem(itsData[0].time, itsData[0].value, 1.0));
-      }
-      return true;
-    }
-
-#ifdef MYDEBUG
-    std::cout << "query_period: " << query_period << std::endl;
-#endif
-
-    for (auto iter = itsData.begin(); iter != itsData.end(); iter++)
-    {
-      if (iter->value == itsMissingValue)
-      {
-        subvector.clear();
-        return false;
-      }
-
-      if (!itsWeights)
-      {
-        if (query_period.contains(iter->time))
-          subvector.push_back(*iter);
-        continue;
-      }
-
-      // iterate through the data vector and sort out periods and corresponding weights
-      if ((iter + 1) != itsData.end())
-      {
-        // period between two timesteps
-        time_period timestep_period(iter->time, (iter + 1)->time + microseconds(1));
-        // if timestep period is inside the queried period handle it
-        if (query_period.intersects(timestep_period))
-        {
-          // first find out intersecting period
-          time_period intersection_period(query_period.intersection(timestep_period));
-          if (intersection_period.length().total_seconds() == 0)
-            continue;
-
-          // value changes halfway of timestep, so we have to handle first half and second half of
-          // separately
-          boost::posix_time::ptime halfway_time(
-              timestep_period.begin() + seconds(timestep_period.length().total_seconds() / 2));
-          if (intersection_period.contains(halfway_time))
-          {
-            time_period first_part_period(intersection_period.begin(),
-                                          halfway_time + microseconds(1));
-            time_period second_part_period(halfway_time, intersection_period.end());
-            subvector.push_back(
-                DataItem(iter->time, iter->value, first_part_period.length().total_seconds()));
-            subvector.push_back(DataItem(
-                (iter + 1)->time, (iter + 1)->value, second_part_period.length().total_seconds()));
-          }
-          else
-          {
-            if (intersection_period.begin() >
-                halfway_time)  // intersection_period is in the second half
-              subvector.push_back(DataItem((iter + 1)->time,
-                                           (iter + 1)->value,
-                                           intersection_period.length().total_seconds()));
-            else  // intersection_period must be in the first half
-              subvector.push_back(
-                  DataItem(iter->time, iter->value, intersection_period.length().total_seconds()));
-          }
-        }
-      }
-    }
-
-    return !subvector.empty();
+    bool normal = !itsDegrees;
+    return interpolate_value(
+        normal, first_value, second_value, time_diff_sec, time_diff_to_timestep_sec);
   }
   catch (...)
   {
@@ -971,7 +1029,7 @@ bool Stat::get_subvector(DataVector& subvector,
       }
       return true;
     }
-    bool applyWeights = (useWeights == false ? false : itsWeights);
+    bool applyWeights = (useWeights ? itsWeights : false);
     return extract_subvector(itsData, subvector, startTime, endTime, itsMissingValue, applyWeights);
   }
   catch (...)

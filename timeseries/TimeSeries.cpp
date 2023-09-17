@@ -25,8 +25,7 @@ const boost::local_time::local_date_time& LocalTimePool::create(
     return pos->second;
 
   // Note: iterators may be invalidated by a rehash caused by this, but references are not
-  auto pos_bool =
-      localtimes.emplace(std::make_pair(key, boost::local_time::local_date_time(t, tz)));
+  auto pos_bool = localtimes.emplace(key, boost::local_time::local_date_time(t, tz));
 
   assert(pos_bool.second == true);
   return pos_bool.first->second;
@@ -43,10 +42,7 @@ void LocalTimePool::print(std::ostream& os) const
     os << item.first << " -> " << item.second << std::endl;
 }
 
-TimeSeries::TimeSeries(LocalTimePoolPtr time_pool)
-{
-  local_time_pool = time_pool;
-}
+TimeSeries::TimeSeries(LocalTimePoolPtr time_pool) : local_time_pool(time_pool) {}
 
 void TimeSeries::emplace_back(const TimedValue& tv)
 {

@@ -3,6 +3,7 @@
 #include "TimeSeries.h"
 #include <boost/date_time/local_time/local_time.hpp>
 #include <macgyver/ValueFormatter.h>
+#include <spine/LonLat.h>
 
 namespace SmartMet
 {
@@ -25,14 +26,11 @@ class OStreamVisitor : public boost::static_visitor<>
   std::ostream &itsOutstream;
   const Fmi::ValueFormatter &itsValueFormatter;
   int itsPrecision;
-  Spine::LonLatFormat itsLonLatFormat;
+  Spine::LonLatFormat itsLonLatFormat = Spine::LonLatFormat::LONLAT;
 
  public:
   OStreamVisitor(std::ostream &outs, const Fmi::ValueFormatter &valueformatter, int precision)
-      : itsOutstream(outs),
-        itsValueFormatter(valueformatter),
-        itsPrecision(precision),
-        itsLonLatFormat(Spine::LonLatFormat::LONLAT)
+      : itsOutstream(outs), itsValueFormatter(valueformatter), itsPrecision(precision)
   {
   }
 
@@ -54,13 +52,11 @@ class StringVisitor : public boost::static_visitor<std::string>
  private:
   const Fmi::ValueFormatter &itsValueFormatter;
   int itsPrecision;
-  Spine::LonLatFormat itsLonLatFormat;
+  Spine::LonLatFormat itsLonLatFormat = Spine::LonLatFormat::LONLAT;
 
  public:
   StringVisitor(const Fmi::ValueFormatter &valueformatter, int precision)
-      : itsValueFormatter(valueformatter),
-        itsPrecision(precision),
-        itsLonLatFormat(Spine::LonLatFormat::LONLAT)
+      : itsValueFormatter(valueformatter), itsPrecision(precision)
   {
   }
 
