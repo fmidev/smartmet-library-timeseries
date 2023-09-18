@@ -26,7 +26,6 @@ std::ostream& operator<<(std::ostream& out, const ParameterAndFunctions& paramfu
 
 namespace
 {
-
 int get_function_index(const std::string& theFunction)
 {
   static const char* names[] = {"mean_a",
@@ -804,7 +803,7 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
       if (innermost_item.find('[') != std::string::npos)
       {
         // Remove [..., for example percentage_t[0:60](TotalCloudCover)
-        innermost_name.substr(innermost_item.find('['));
+        innermost_name.resize(innermost_item.find('['));
       }
       // If the name before innermost parenthesis is not a function it must be a parameter
 
