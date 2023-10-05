@@ -39,7 +39,6 @@ class ParameterFactory
 
   std::string parse_parameter_functions(const std::string& theParameterRequest,
                                         std::string& theOriginalName,
-                                        std::string& theParameterNameAlias,
                                         DataFunction& theInnerDataFunction,
                                         DataFunction& theOuterDataFunction) const;
 

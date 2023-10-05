@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.9.18
+Version: 23.10.5
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Oct 5 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.5-1.fmi
+- Fixed parameter name parsing bug (BRAINSTORM-2743)
+
 * Mon Sep 18 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.9.18-1.fmi
 - Refactored code for simplicity
 
