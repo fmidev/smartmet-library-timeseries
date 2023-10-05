@@ -679,7 +679,6 @@ int ParameterFactory::number(const std::string& name) const
 
 std::string ParameterFactory::parse_parameter_functions(const std::string& theParameterRequest,
                                                         std::string& theOriginalName,
-                                                        std::string& theParameterNameAlias,
                                                         DataFunction& theInnerDataFunction,
                                                         DataFunction& theOuterDataFunction) const
 {
@@ -687,16 +686,6 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
   {
     std::string paramreq = theParameterRequest;
     std::string date_formatting_string;
-
-    // extract alias name for the parameter
-    size_t alias_name_pos(paramreq.find("as "));
-    if (alias_name_pos != std::string::npos)
-    {
-      theParameterNameAlias = paramreq.substr(alias_name_pos + 3);
-      paramreq.resize(alias_name_pos);
-      Fmi::trim(theParameterNameAlias);
-      Fmi::trim(paramreq);
-    }
 
     // special handling for date formatting, for example date(%Y-...)
     if (paramreq.find("date(") != std::string::npos)
@@ -728,9 +717,6 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
 
     std::string paramname = parts.back();
-
-    //    unsigned int aggregation_interval_behind = std::numeric_limits<unsigned int>::max();
-    //    unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
 
     parts.pop_back();
     const std::string functionname1 = (parts.empty() ? "" : parts.front());
@@ -774,6 +760,18 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
   try
   {
     auto tmpname = Fmi::trim_copy(name);
+
+	// Remove alias-part before start parisng functions (BRAINSTORM-2743)
+    std::string paramnameAlias = tmpname;
+	auto alias_pos = tmpname.find(" as ");
+	if(alias_pos != std::string::npos)
+	  {
+		paramnameAlias = tmpname.substr(alias_pos+4);
+		tmpname.resize(alias_pos);
+		Fmi::trim(paramnameAlias);
+		Fmi::trim(tmpname);
+
+	  }
 
     DataFunction innerFunction;
     DataFunction outerFunction;
@@ -842,11 +840,10 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
       }
     }
 
-    std::string paramnameAlias = tmpname;
     std::string originalParamName = tmpname;
 
     std::string paramname = parse_parameter_name(parse_parameter_functions(
-        tmpname, originalParamName, paramnameAlias, innerFunction, outerFunction));
+        tmpname, originalParamName, innerFunction, outerFunction));
 
     Spine::Parameter parameter = parse(paramname, ignoreBadParameter);
 
