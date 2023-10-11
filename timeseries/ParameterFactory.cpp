@@ -761,16 +761,26 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
   {
     auto tmpname = Fmi::trim_copy(name);
 
-    // Remove alias-part before start parisng functions (BRAINSTORM-2743)
+    // Remove alias-part before start parsing functions (BRAINSTORM-2743)
     std::string paramnameAlias = tmpname;
     auto alias_pos = tmpname.find(" as ");
     if (alias_pos != std::string::npos)
     {
       paramnameAlias = tmpname.substr(alias_pos + 4);
       tmpname.resize(alias_pos);
-      Fmi::trim(paramnameAlias);
-      Fmi::trim(tmpname);
     }
+    else
+    {
+      alias_pos = tmpname.find(")as ");
+      if (alias_pos != std::string::npos)
+      {
+        paramnameAlias = tmpname.substr(alias_pos + 4);
+        tmpname.resize(alias_pos + 1);
+      }
+    }
+
+    Fmi::trim(paramnameAlias);
+    Fmi::trim(tmpname);
 
     DataFunction innerFunction;
     DataFunction outerFunction;
