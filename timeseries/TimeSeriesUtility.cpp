@@ -227,5 +227,158 @@ size_t number_of_elements(const OutputData& outputData)
   }
 }
 
+int get_fmisid_value(const Value& value)
+{
+  try
+  {
+    // fmisid can be std::string or double
+    if (boost::get<std::string>(&value))
+    {
+      std::string fmisidstr = boost::get<std::string>(value);
+      boost::algorithm::trim(fmisidstr);
+      if (!fmisidstr.empty())
+        return std::stoi(fmisidstr);
+
+      throw Fmi::Exception(BCP, "fmisid value is an empty string");
+    }
+    if (boost::get<int>(&value))
+      return boost::get<int>(value);
+    if (boost::get<double>(&value))
+      return boost::get<double>(value);
+    if (boost::get<None>(&value))
+      throw Fmi::Exception(BCP, "Station with null fmisid encountered!");
+    if (boost::get<LonLat>(&value))
+      throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!");
+
+    throw Fmi::Exception(BCP, "Unknown fmisid type");
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+int get_fmisid_value(const TimeSeries& ts)
+{
+  for (const auto& tv : ts)
+  {
+    try
+    {
+      return get_fmisid_value(tv.value);
+    }
+    catch (...)
+    {
+    }
+  }
+  return -1;
+}
+
+
+void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeList& tlist)
+{
+  if (!tlist || tlist->empty())
+    return;
+
+  TimeSeries ts2(ts.getLocalTimePool());
+
+  auto it = tlist->begin();
+
+  for (const auto& value : ts)
+  {
+    // Add missing timesteps
+    while (it != tlist->end() && *it < value.time)
+    {
+      ts2.emplace_back(TimedValue(*it, None()));
+      ++it;
+    }
+    ts2.emplace_back(value);
+    // If list has been iterated to the end and
+    // iteration time is same as observed timestep, go to next step
+    if (it != tlist->end() && *it == value.time)
+      ++it;
+  }
+  // If there are requested timesteps after last value, add them
+  while (it != tlist->end())
+  {
+    ts2.emplace_back(TimedValue(*it, None()));
+    ++it;
+  }
+  ts = ts2;
+}
+
+TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
+											  const TimeSeriesVectorPtr& observation_result,
+											  const TimeSeriesGeneratorCache::TimeList& tlist,
+											  int fmisid_index)
+{
+  try
+  {
+    TimeSeriesByLocation ret;
+
+	/*
+    if (UtilityFunctions::is_flash_or_mobile_producer(producer))
+    {
+      ret.emplace_back(make_pair(0, observation_result));
+      return ret;
+    }
+	*/
+
+    // find fmisid time series
+    const TimeSeries& fmisid_ts = observation_result->at(fmisid_index);
+
+    // find indexes for locations
+    std::vector<std::pair<unsigned int, unsigned int>> location_indexes;
+
+    unsigned int start_index = 0;
+    unsigned int end_index = 0;
+    for (unsigned int i = 1; i < fmisid_ts.size(); i++)
+    {
+      if (fmisid_ts[i].value == fmisid_ts[i - 1].value)
+        continue;
+
+      end_index = i;
+      location_indexes.emplace_back(std::pair<unsigned int, unsigned int>(start_index, end_index));
+      start_index = i;
+    }
+    end_index = fmisid_ts.size();
+    location_indexes.emplace_back(std::pair<unsigned int, unsigned int>(start_index, end_index));
+
+    // Iterate through locations
+    for (const auto& location_index : location_indexes)
+    {
+      TimeSeriesVectorPtr tsv(new TimeSeriesVector());
+      start_index = location_index.first;
+      end_index = location_index.second;
+      for (unsigned int k = 0; k < observation_result->size(); k++)
+      {
+        const TimeSeries& ts_k = observation_result->at(k);
+        if (ts_k.empty())
+          tsv->push_back(ts_k);
+        else
+        {
+          TimeSeries ts_ik(fmisid_ts.getLocalTimePool());
+          ts_ik.insert(ts_ik.begin(), ts_k.begin() + start_index, ts_k.begin() + end_index);
+          // Add missing timesteps
+          add_missing_timesteps(ts_ik, tlist);
+          tsv->emplace_back(ts_ik);
+        }
+      }
+
+      if (fmisid_ts.empty())
+        continue;
+      int fmisid = get_fmisid_value(fmisid_ts[start_index].value);
+      ret.emplace_back(make_pair(fmisid, tsv));
+    }
+
+    return ret;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+
+
 }  // namespace TimeSeries
 }  // namespace SmartMet
