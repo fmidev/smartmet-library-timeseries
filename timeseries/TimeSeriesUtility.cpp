@@ -54,7 +54,6 @@ std::ostream& operator<<(std::ostream& os, const OutputData& odata)
 
 namespace
 {
-
 // ----------------------------------------------------------------------
 /*!
  * \brief Remove redundant timesteps used for aggregation only from the time series

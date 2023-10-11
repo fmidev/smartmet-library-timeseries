@@ -81,8 +81,11 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
-* Wed Oct 11 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.11-1.fmi
+* Wed Oct 11 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.11-2.fmi
 - Moved aggregation related functions here from timeseries/edr plugin (BRAINSTORM-2457)
+
+* Wed Oct 11 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.10.11-1.fmi
+- Loosen the required syntax for defining a parameter alias by allowing ")as name"
 
 * Thu Oct 5 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.5-1.fmi
 - Fixed parameter name parsing bug (BRAINSTORM-2743)

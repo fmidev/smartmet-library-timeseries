@@ -27,7 +27,6 @@ using namespace std;
 
 namespace
 {
-
 bool comp_value(const DataItem& data1, const DataItem& data2)
 {
   try
