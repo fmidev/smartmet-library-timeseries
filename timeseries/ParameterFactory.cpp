@@ -761,17 +761,16 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
   {
     auto tmpname = Fmi::trim_copy(name);
 
-	// Remove alias-part before start parisng functions (BRAINSTORM-2743)
+    // Remove alias-part before start parisng functions (BRAINSTORM-2743)
     std::string paramnameAlias = tmpname;
-	auto alias_pos = tmpname.find(" as ");
-	if(alias_pos != std::string::npos)
-	  {
-		paramnameAlias = tmpname.substr(alias_pos+4);
-		tmpname.resize(alias_pos);
-		Fmi::trim(paramnameAlias);
-		Fmi::trim(tmpname);
-
-	  }
+    auto alias_pos = tmpname.find(" as ");
+    if (alias_pos != std::string::npos)
+    {
+      paramnameAlias = tmpname.substr(alias_pos + 4);
+      tmpname.resize(alias_pos);
+      Fmi::trim(paramnameAlias);
+      Fmi::trim(tmpname);
+    }
 
     DataFunction innerFunction;
     DataFunction outerFunction;
@@ -842,8 +841,8 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
 
     std::string originalParamName = tmpname;
 
-    std::string paramname = parse_parameter_name(parse_parameter_functions(
-        tmpname, originalParamName, innerFunction, outerFunction));
+    std::string paramname = parse_parameter_name(
+        parse_parameter_functions(tmpname, originalParamName, innerFunction, outerFunction));
 
     Spine::Parameter parameter = parse(paramname, ignoreBadParameter);
 
