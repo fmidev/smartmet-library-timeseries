@@ -4,7 +4,7 @@
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
 Version: 23.10.11
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
