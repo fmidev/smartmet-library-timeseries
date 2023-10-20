@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.10.11
-Release: 2%{?dist}.fmi
+Version: 23.10.20
+Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Oct 20 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.20-1.fmi
+- Added amean_t function (BRAINSTORM-2575)
+
 * Wed Oct 11 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.11-2.fmi
 - Moved aggregation related functions here from timeseries/edr plugin (BRAINSTORM-2457)
 

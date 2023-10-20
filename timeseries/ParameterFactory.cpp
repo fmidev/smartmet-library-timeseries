@@ -30,8 +30,10 @@ int get_function_index(const std::string& theFunction)
 {
   static const char* names[] = {"mean_a",
                                 "mean_t",
+                                "amean_t",
                                 "nanmean_a",
                                 "nanmean_t",
+                                "nanamean_t",
                                 "max_a",
                                 "max_t",
                                 "nanmax_a",
@@ -117,8 +119,10 @@ FunctionId parse_function(const std::string& theFunction)
   {
     static const FunctionId functions[] = {FunctionId::Mean,
                                            FunctionId::Mean,
+                                           FunctionId::Amean,
                                            FunctionId::Mean,
                                            FunctionId::Mean,
+                                           FunctionId::Amean,
                                            FunctionId::Maximum,
                                            FunctionId::Maximum,
                                            FunctionId::Maximum,

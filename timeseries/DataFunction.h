@@ -33,6 +33,7 @@ enum class FunctionId
   Trend,
   Nearest,
   Interpolate,
+  Amean,
   NullFunction
 };
 

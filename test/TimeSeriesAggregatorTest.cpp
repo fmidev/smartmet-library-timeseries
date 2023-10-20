@@ -114,6 +114,47 @@ TS::TimeSeries generate_direction_timeseries()
   return timeseries;
 }
 
+TS::TimeSeries generate_timeseries_with_diverse_values(bool add_missing_value = false, bool degrees = false)
+{
+  using namespace SmartMet;
+
+  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+
+  auto pool = boost::make_shared<TS::LocalTimePool>();
+  TS::TimeSeries timeseries(pool);
+
+  bl::local_date_time t1(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone);
+  bl::local_date_time t2(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone);
+  bl::local_date_time t3(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone);
+  bl::local_date_time t4(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone);
+  bl::local_date_time t5(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone);
+
+  if (!degrees)
+  {
+    timeseries.push_back(TS::TimedValue(t1, 1.0));
+    timeseries.push_back(TS::TimedValue(t2, 7.0));
+    timeseries.push_back(TS::TimedValue(t3, 4.0));
+    if (add_missing_value)
+      timeseries.push_back(TS::TimedValue(t4, TS::None()));
+    else
+      timeseries.push_back(TS::TimedValue(t4, 5.0));
+    timeseries.push_back(TS::TimedValue(t5, 3.0));
+  }
+  else
+  {
+    timeseries.push_back(TS::TimedValue(t1, 340.0));
+    timeseries.push_back(TS::TimedValue(t2, 350.0));
+    timeseries.push_back(TS::TimedValue(t3, 355.0));
+    if (add_missing_value)
+      timeseries.push_back(TS::TimedValue(t4, TS::None()));
+    else
+      timeseries.push_back(TS::TimedValue(t4, 5.0));
+    timeseries.push_back(TS::TimedValue(t5, 10.0));
+  }
+
+  return timeseries;
+}
+
 TS::TimeSeries generate_timeseries(bool add_missing_value = false, bool degrees = false)
 {
   using namespace SmartMet;
@@ -407,7 +448,6 @@ TS::TimeSeriesPtr execute_time_aggregation_function_with_range(TS::FunctionId fi
   pf.setAggregationIntervalAhead(aggIntervalAhead);
   DataFunctions pfs;
   pfs.innerFunction = pf;
-  Value missing_value("nan");
 
   TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
 
@@ -433,12 +473,31 @@ TS::TimeSeriesPtr execute_time_aggregation_function(TS::FunctionId fid,
     pf.setLimits(3.0, 4.0);
   DataFunctions pfs;
   pfs.innerFunction = pf;
-  Value missing_value("nan");
 
   TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
 
   return aggregated_timeseries;
 }
+
+TS::TimeSeriesPtr execute_time_aggregation_function_with_diverse_values(TS::FunctionId fid,
+																		unsigned int aggIntervalBehind,
+																		unsigned int aggIntervalAhead,
+																		bool add_missing_value = false)
+{
+  using namespace TS;
+  TimeSeries timeseries(generate_timeseries_with_diverse_values(add_missing_value));
+
+  DataFunction pf(fid, FunctionType::TimeFunction);
+  pf.setAggregationIntervalBehind(aggIntervalBehind);
+  pf.setAggregationIntervalAhead(aggIntervalAhead);
+  DataFunctions pfs;
+  pfs.innerFunction = pf;
+
+  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
+
+  return aggregated_timeseries;
+}
+
 
 TS::TimeSeriesGroupPtr execute_area_aggregation_function(TS::FunctionId fid)
 {
@@ -873,6 +932,37 @@ void mean_t()
 
   TEST_PASSED();
 }
+
+void amean_t()
+{
+  std::string test_result =
+	("mean:\n" + to_string(*execute_time_aggregation_function_with_diverse_values(TS::FunctionId::Mean, 60, 60)));
+  test_result.append
+	("amean:\n" + to_string(*execute_time_aggregation_function_with_diverse_values(TS::FunctionId::Amean, 60, 60)));
+
+  std::string expected_result =
+      "mean:\n"
+      "2015-Sep-03 00:00:00 EET -> 4\n"
+      "2015-Sep-03 01:00:00 EET -> 4.75\n"
+      "2015-Sep-03 02:00:00 EET -> 5\n"
+      "2015-Sep-03 03:00:00 EET -> 4.25\n"
+      "2015-Sep-03 04:00:00 EET -> 4\n"
+      "amean:\n"
+      "2015-Sep-03 00:00:00 EET -> 4\n"
+      "2015-Sep-03 01:00:00 EET -> 4\n"
+      "2015-Sep-03 02:00:00 EET -> 5.33333\n"
+      "2015-Sep-03 03:00:00 EET -> 4\n"
+      "2015-Sep-03 04:00:00 EET -> 4\n";
+
+
+
+  if (expected_result != test_result)
+    TEST_FAILED("Amean-function test failed. Result should be:\n" + expected_result + "\n not \n" +
+                test_result);
+
+  TEST_PASSED();
+}
+
 
 void meandir_t()
 {
@@ -1462,6 +1552,7 @@ class tests : public tframe::tests
     TEST(min_t);
     TEST(max_t);
     TEST(mean_t);
+	TEST(amean_t);	
     TEST(median_t);
     TEST(sum_t);
     TEST(integ_t);
