@@ -28,6 +28,7 @@ namespace TimeSeries
 {
 namespace Aggregator
 {
+
 class StatCalculator
 {
  private:
@@ -217,6 +218,7 @@ TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
       int agg_index_start(agg_indexes[i].first);
       int agg_index_end(agg_indexes[i].second);
 
+
       if (agg_index_start < 0 || agg_index_end < 0)
       {
         ret->emplace_back(TimedValue(ts[i].time, None()));
@@ -229,9 +231,7 @@ TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
       {
         const TimedValue &tv = ts.at(k);
         if (include_value(tv, func))
-        {
           statcalculator(tv);
-        }
       }
       ret->emplace_back(TimedValue(ts[i].time, statcalculator.getStatValue(func, true)));
     }
@@ -259,7 +259,13 @@ double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeig
     switch (func.id())
     {
       case FunctionId::Mean:
-        return stat.mean();
+		return  stat.mean();
+      case FunctionId::Amean:
+	  {
+		// No weights, just arithmetic mean
+		stat.useWeights(false);
+		return  stat.mean();
+	  }
       case FunctionId::Maximum:
         return stat.max();
       case FunctionId::Minimum:
@@ -306,6 +312,7 @@ std::string StatCalculator::getStringStatValue(const DataFunction &func) const
     switch (fid)
     {
       case FunctionId::Mean:
+      case FunctionId::Amean:
       case FunctionId::StandardDeviation:
       case FunctionId::Percentage:
       case FunctionId::Change:

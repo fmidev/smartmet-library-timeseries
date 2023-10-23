@@ -515,11 +515,10 @@ double Stat::mean(const boost::posix_time::ptime& startTime /*= not_a_date_time 
       return mean;
     }
 
-    accumulator_set<double, stats<tag::mean>, double> acc;
+    accumulator_set<double, stats<tag::weighted_mean>, double> acc;
     for (const DataItem& item : subvector)
-    {
       acc(item.value, weight = (itsWeights ? item.weight : 1.0));
-    }
+
     return boost::accumulators::mean(acc);
   }
   catch (...)
