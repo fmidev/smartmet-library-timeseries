@@ -322,6 +322,7 @@ std::string location_parameter(const Spine::LocationPtr& loc,
 {
   try
   {
+    const int latlon_precision = std::max(5, precision);
     if (!loc)
       return valueformatter.missing();
 
@@ -390,21 +391,21 @@ std::string location_parameter(const Spine::LocationPtr& loc,
       }
       case kFmiLatitude:
       {
-        return valueformatter.format(loc->latitude, precision);
+        return valueformatter.format(loc->latitude, latlon_precision);
       }
       case kFmiLongitude:
       {
-        return valueformatter.format(loc->longitude, precision);
+        return valueformatter.format(loc->longitude, latlon_precision);
       }
       case kFmiLatLon:
       {
-        return (valueformatter.format(loc->latitude, precision) + ", " +
-                valueformatter.format(loc->longitude, precision));
+        return (valueformatter.format(loc->latitude, latlon_precision) + ", " +
+                valueformatter.format(loc->longitude, latlon_precision));
       }
       case kFmiLonLat:
       {
-        return (valueformatter.format(loc->longitude, precision) + ", " +
-                valueformatter.format(loc->latitude, precision));
+        return (valueformatter.format(loc->longitude, latlon_precision) + ", " +
+                valueformatter.format(loc->latitude, latlon_precision));
       }
       case kFmiPopulation:
       {
