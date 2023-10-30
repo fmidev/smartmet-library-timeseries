@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.10.20
+Version: 23.10.26
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Oct 26 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.26-1.fmi
+- Added stationtype in list of special parameters (BRAINSTORM-2756)
+
 * Fri Oct 20 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.10.20-1.fmi
 - Added amean_t function (BRAINSTORM-2575)
 

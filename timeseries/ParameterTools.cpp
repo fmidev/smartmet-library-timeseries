@@ -85,6 +85,7 @@ const std::map<std::string, Parameter::Type> special_parameter_map = {
     {"cloudceiling", Parameter::Type::DataDerived},
     //{ "stationary", Parameter::Type::DataIndependent },
     {STATION_ELEVATION_PARAM, Parameter::Type::DataIndependent},
+    {STATIONTYPE_PARAM, Parameter::Type::DataIndependent},
     {STATIONLAT_PARAM, Parameter::Type::DataIndependent},
     {STATIONLATITUDE_PARAM, Parameter::Type::DataIndependent},
     {STATIONLON_PARAM, Parameter::Type::DataIndependent},
