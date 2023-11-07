@@ -23,45 +23,45 @@ TS::TimeSeries generate_observation_timeseries()
 {
   using namespace SmartMet;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   auto pool = boost::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(10)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)), zone),
       1.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(15)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)), zone),
       2.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(48)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)), zone),
       3.5));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23) + bp::minutes(8)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)), zone),
       4.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23) + bp::minutes(52)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(52)), zone),
       5.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24) + bp::minutes(9)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)), zone),
       5.5));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24) + bp::minutes(53)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)), zone),
       3.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 2.5));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 2.5));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25) + bp::minutes(50)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)), zone),
       -1.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), TS::None()));
 
   return timeseries;
 }
@@ -71,45 +71,45 @@ TS::TimeSeries generate_direction_timeseries()
 {
   using namespace SmartMet;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   auto pool = boost::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(10)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)), zone),
       340.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(15)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)), zone),
       350.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22) + bp::minutes(48)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)), zone),
       355.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23) + bp::minutes(8)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)), zone),
       5.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23) + bp::minutes(51)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(51)), zone),
       20.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24) + bp::minutes(9)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)), zone),
       10.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24) + bp::minutes(53)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)), zone),
       355.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 350.));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 350.));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25) + bp::minutes(50)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)), zone),
       340.0));
   timeseries.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), TS::None()));
 
   return timeseries;
 }
@@ -159,16 +159,16 @@ TS::TimeSeries generate_timeseries(bool add_missing_value = false, bool degrees 
 {
   using namespace SmartMet;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   auto pool = boost::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
-  bl::local_date_time t1(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone);
-  bl::local_date_time t2(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone);
-  bl::local_date_time t3(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone);
-  bl::local_date_time t4(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone);
-  bl::local_date_time t5(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone);
+  Fmi::LocalDateTime t1(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone);
+  Fmi::LocalDateTime t2(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone);
+  Fmi::LocalDateTime t3(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone);
+  Fmi::LocalDateTime t4(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone);
+  Fmi::LocalDateTime t5(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone);
 
   if (!degrees)
   {
@@ -200,73 +200,73 @@ TS::TimeSeriesGroup generate_timeseries_group()
 {
   using namespace SmartMet;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   auto pool = boost::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries_helsinki(pool);
 
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 1.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 1.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 6.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 6.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 11.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 11.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 16.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 16.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 21.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 21.0));
 
   TS::TimeSeries timeseries_tampere(pool);
 
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 2.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 2.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 7.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 7.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 12.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 12.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 17.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 17.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 22.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 22.0));
 
   TS::TimeSeries timeseries_oulu(pool);
 
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 3.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 3.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 8.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 8.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 13.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 13.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 18.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 18.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 23.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 23.0));
 
   TS::TimeSeries timeseries_kuopio(pool);
 
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 4.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 4.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 9.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 9.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 14.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 14.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 19.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 19.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 24.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 24.0));
 
   TS::TimeSeries timeseries_turku(pool);
 
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 5.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 5.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 10.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 10.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 15.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 15.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 20.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 20.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 25.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 25.0));
 
   TS::LonLatTimeSeries lonlat_ts_helsinki(TS::LonLat(24.9375, 60.1718), timeseries_helsinki);
   TS::LonLatTimeSeries lonlat_ts_tampere(TS::LonLat(23.7667, 61.5000), timeseries_tampere);
@@ -288,73 +288,73 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
 {
   using namespace SmartMet;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   auto pool = boost::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries_helsinki(pool);
 
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 1.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 1.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 6.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 6.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 16.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 16.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 21.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 21.0));
 
   TS::TimeSeries timeseries_tampere(pool);
 
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 2.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 2.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 7.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 7.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 17.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 17.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), TS::None()));
   timeseries_tampere.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 22.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 22.0));
 
   TS::TimeSeries timeseries_oulu(pool);
 
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 3.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 3.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 8.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 8.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 13.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 13.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 18.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 18.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 23.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 23.0));
 
   TS::TimeSeries timeseries_kuopio(pool);
 
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 4.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 4.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 9.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 9.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 14.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 14.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 19.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 19.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 24.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 24.0));
 
   TS::TimeSeries timeseries_turku(pool);
 
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone), 5.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 5.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone), 10.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 10.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone), 15.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 15.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone), 20.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 20.0));
   timeseries_turku.push_back(TS::TimedValue(
-      bl::local_date_time(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone), 25.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 25.0));
 
   TS::LonLatTimeSeries lonlat_ts_helsinki(TS::LonLat(24.9375, 60.1718), timeseries_helsinki);
   TS::LonLatTimeSeries lonlat_ts_tampere(TS::LonLat(23.7667, 61.5000), timeseries_tampere);
@@ -647,11 +647,11 @@ void nearest_t()
 {
   using namespace TS;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   TimeSeries timeseries = generate_observation_timeseries();
 
-  // Replace None with the nearest valid value within +n/-n minutes
+  // Replace None with the nearest valid value within +n/-n Fmi::Minutes
   DataFunction pf(FunctionId::Nearest, FunctionType::TimeFunction);
   pf.setAggregationIntervalAhead(8);
   pf.setAggregationIntervalBehind(8);
@@ -711,11 +711,11 @@ void interpolate_t()
 {
   using namespace TS;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   TimeSeries timeseries = generate_observation_timeseries();
 
-  // Replace None with the interpolated value using valid values within +n/-n minutes
+  // Replace None with the interpolated value using valid values within +n/-n Fmi::Minutes
   DataFunction pf(FunctionId::Interpolate, FunctionType::TimeFunction);
   pf.setAggregationIntervalAhead(10);
   pf.setAggregationIntervalBehind(10);
@@ -775,11 +775,11 @@ void interpolatedir_t()
 {
   using namespace TS;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
 
   TimeSeries timeseries = generate_direction_timeseries();
 
-  // Replace None with the interpolated value using valid values within +n/-n minutes
+  // Replace None with the interpolated value using valid values within +n/-n Fmi::Minutes
   DataFunction pf(FunctionId::Interpolate, FunctionType::TimeFunction);
   pf.setAggregationIntervalAhead(10);
   pf.setAggregationIntervalBehind(10);

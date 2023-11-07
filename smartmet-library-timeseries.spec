@@ -23,7 +23,7 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 23.9.6
-BuildRequires: smartmet-library-macgyver-devel >= 23.10.10
+BuildRequires: smartmet-library-macgyver-devel >= 23.11.8
 BuildRequires: smartmet-library-newbase-devel >= 23.10.11
 BuildRequires: smartmet-library-spine-devel >= 23.10.20
 %if %{with tests}
@@ -51,7 +51,7 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 23.10.10
+Requires: smartmet-library-macgyver-devel >= 23.11.8
 Requires: smartmet-library-newbase-devel >= 23.10.11
 Requires: smartmet-library-spine-devel >= 23.10.20
 Requires: %{SPECNAME} = %{version}-%{release}

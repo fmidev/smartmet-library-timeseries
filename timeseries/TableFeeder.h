@@ -41,7 +41,7 @@ class TableFeeder
               const Fmi::ValueFormatter& valueformatter,
               const std::vector<int>& precisions,
               boost::shared_ptr<Fmi::TimeFormatter> timeformatter,
-              boost::optional<boost::local_time::time_zone_ptr> timezoneptr,
+              boost::optional<Fmi::TimeZonePtr> timezoneptr,
               unsigned int currentcolumn = 0)
       : itsValueFormatter(valueformatter),
         itsPrecisions(precisions),

@@ -33,7 +33,7 @@ const int default_timestep = 60;
  */
 // ----------------------------------------------------------------------
 
-TimeSeriesGeneratorOptions::TimeSeriesGeneratorOptions(const boost::posix_time::ptime& now)
+TimeSeriesGeneratorOptions::TimeSeriesGeneratorOptions(const Fmi::DateTime& now)
     : startTime(now), endTime(now), dataTimes(new TimeList::element_type())
 {
 }
@@ -323,7 +323,7 @@ void parse_startstep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Req
     int timestep = (options.timeStep ? *options.timeStep : default_timestep);
 
     options.startTime +=
-        boost::posix_time::minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
+        Fmi::Minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
   }
 }
 
@@ -355,12 +355,12 @@ void parse_endtime(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Reque
     if (!options.timeStep)
       options.timeStep = default_timestep;
     options.endTime =
-        options.startTime + boost::posix_time::minutes(*options.timeStep * *options.timeSteps);
+        options.startTime + Fmi::Minutes(*options.timeStep * *options.timeSteps);
   }
   else
   {
     options.endTimeUTC = options.startTimeUTC;
-    options.endTime = options.startTime + boost::posix_time::hours(24);
+    options.endTime = options.startTime + Fmi::Hours(24);
   }
 }
 
@@ -377,8 +377,8 @@ TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq)
 {
   try
   {
-    boost::posix_time::ptime now = optional_time(theReq.getParameter("now"),
-                                                 boost::posix_time::second_clock::universal_time());
+    Fmi::DateTime now = optional_time(theReq.getParameter("now"),
+                                                 Fmi::SecondClock::universal_time());
 
     TimeSeriesGeneratorOptions options(now);
 
@@ -410,7 +410,7 @@ TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq)
 
     // endtime must be handled last since it may depend on starttime,
     // timestep and timesteps options. The default is to set the end
-    // time to the start time plus 24 hours.
+    // time to the start time plus 24 Fmi::SecondClock.
 
     parse_endtime(options, theReq);
 

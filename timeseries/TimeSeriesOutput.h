@@ -39,7 +39,7 @@ class OStreamVisitor : public boost::static_visitor<>
   void operator()(double d) const;
   void operator()(int i) const;
   void operator()(const Spine::LonLat &lonlat) const;
-  void operator()(const boost::local_time::local_date_time &ldt) const;
+  void operator()(const Fmi::LocalDateTime &ldt) const;
 
   // Set LonLat - value formatting
   OStreamVisitor &operator<<(Spine::LonLatFormat newformat);
@@ -67,7 +67,7 @@ class StringVisitor : public boost::static_visitor<std::string>
   std::string operator()(double d) const;
   std::string operator()(int i) const;
   std::string operator()(const Spine::LonLat &lonlat) const;
-  std::string operator()(const boost::local_time::local_date_time &ldt) const;
+  std::string operator()(const Fmi::LocalDateTime &ldt) const;
 };
 
 }  // namespace TimeSeries

@@ -8,7 +8,7 @@
 
 #include "TimeSeriesGeneratorOptions.h"
 
-#include <boost/date_time/local_time/local_time.hpp>
+#include <macgyver/LocalDateTime.h>
 #include <list>
 #include <string>
 
@@ -18,10 +18,10 @@ namespace TimeSeries
 {
 namespace TimeSeriesGenerator
 {
-using LocalTimeList = std::list<boost::local_time::local_date_time>;
+using LocalTimeList = std::list<Fmi::LocalDateTime>;
 
 LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
-                       const boost::local_time::time_zone_ptr& theZone);
+                       const Fmi::TimeZonePtr& theZone);
 
 }  // namespace TimeSeriesGenerator
 }  // namespace TimeSeries

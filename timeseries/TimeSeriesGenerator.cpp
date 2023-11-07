@@ -28,17 +28,17 @@ const int default_timestep = 60;
  */
 // ----------------------------------------------------------------------
 
-void generate_fixedtimes_until_endtime(std::set<bl::local_date_time>& theTimes,
+void generate_fixedtimes_until_endtime(std::set<Fmi::LocalDateTime>& theTimes,
                                        const TimeSeriesGeneratorOptions& theOptions,
-                                       const bl::local_date_time& theStartTime,
-                                       const bl::local_date_time& theEndTime,
-                                       const bl::time_zone_ptr& theZone)
+                                       const Fmi::LocalDateTime& theStartTime,
+                                       const Fmi::LocalDateTime& theEndTime,
+                                       const Fmi::TimeZonePtr& theZone)
 {
   try
   {
     bl::local_time_period period(theStartTime, theEndTime);
 
-    bg::date today = theStartTime.local_time().date();
+    Fmi::Date today = theStartTime.local_time().date();
     bg::day_iterator day(today, 1);
 
     while (true)
@@ -48,8 +48,8 @@ void generate_fixedtimes_until_endtime(std::set<bl::local_date_time>& theTimes,
         unsigned int hh = hhmm / 100;
         unsigned int mm = hhmm % 100;
 
-        bl::local_date_time d =
-            Fmi::TimeParser::make_time(*day, bp::hours(hh) + bp::minutes(mm), theZone);
+        Fmi::LocalDateTime d =
+            Fmi::TimeParser::make_time(*day, Fmi::Hours(hh) + Fmi::Minutes(mm), theZone);
 
         if (d.is_not_a_date_time())
           continue;
@@ -75,17 +75,17 @@ void generate_fixedtimes_until_endtime(std::set<bl::local_date_time>& theTimes,
  */
 // ----------------------------------------------------------------------
 
-void generate_fixedtimes_for_number_of_steps(std::set<bl::local_date_time>& theTimes,
+void generate_fixedtimes_for_number_of_steps(std::set<Fmi::LocalDateTime>& theTimes,
                                              const TimeSeriesGeneratorOptions& theOptions,
-                                             const bl::local_date_time& theStartTime,
-                                             const bl::local_date_time& theEndTime,
-                                             const bl::time_zone_ptr& theZone)
+                                             const Fmi::LocalDateTime& theStartTime,
+                                             const Fmi::LocalDateTime& theEndTime,
+                                             const Fmi::TimeZonePtr& theZone)
 {
   try
   {
     bl::local_time_period period(theStartTime, theEndTime);
 
-    bg::date today = theStartTime.local_time().date();
+    Fmi::Date today = theStartTime.local_time().date();
     bg::day_iterator day(today, 1);
 
     while (true)
@@ -95,8 +95,8 @@ void generate_fixedtimes_for_number_of_steps(std::set<bl::local_date_time>& theT
         unsigned int hh = hhmm / 100;
         unsigned int mm = hhmm % 100;
 
-        bl::local_date_time d =
-            Fmi::TimeParser::make_time(*day, bp::hours(hh) + bp::minutes(mm), theZone);
+        Fmi::LocalDateTime d =
+            Fmi::TimeParser::make_time(*day, Fmi::Hours(hh) + Fmi::Minutes(mm), theZone);
 
         if (d.is_not_a_date_time())
           continue;
@@ -122,11 +122,11 @@ void generate_fixedtimes_for_number_of_steps(std::set<bl::local_date_time>& theT
  */
 // ----------------------------------------------------------------------
 
-void generate_fixedtimes(std::set<bl::local_date_time>& theTimes,
+void generate_fixedtimes(std::set<Fmi::LocalDateTime>& theTimes,
                          const TimeSeriesGeneratorOptions& theOptions,
-                         const bl::local_date_time& theStartTime,
-                         const bl::local_date_time& theEndTime,
-                         const bl::time_zone_ptr& theZone)
+                         const Fmi::LocalDateTime& theStartTime,
+                         const Fmi::LocalDateTime& theEndTime,
+                         const Fmi::TimeZonePtr& theZone)
 {
   try
   {
@@ -153,11 +153,11 @@ void generate_fixedtimes(std::set<bl::local_date_time>& theTimes,
  */
 // ----------------------------------------------------------------------
 
-void generate_timesteps(std::set<bl::local_date_time>& theTimes,
+void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
                         const TimeSeriesGeneratorOptions& theOptions,
-                        const bl::local_date_time& theStartTime,
-                        const bl::local_date_time& theEndTime,
-                        const bl::time_zone_ptr& theZone)
+                        const Fmi::LocalDateTime& theStartTime,
+                        const Fmi::LocalDateTime& theEndTime,
+                        const Fmi::TimeZonePtr& theZone)
 {
   try
   {
@@ -176,7 +176,7 @@ void generate_timesteps(std::set<bl::local_date_time>& theTimes,
 
     bl::local_time_period period(theStartTime, theEndTime);
 
-    bg::date day = theStartTime.local_time().date();
+    Fmi::Date day = theStartTime.local_time().date();
 
     int mins = 0;
 
@@ -188,7 +188,7 @@ void generate_timesteps(std::set<bl::local_date_time>& theTimes,
         day += bg::days(1);
       }
 
-      bl::local_date_time t = Fmi::TimeParser::make_time(day, bp::minutes(mins), theZone);
+      Fmi::LocalDateTime t = Fmi::TimeParser::make_time(day, Fmi::Minutes(mins), theZone);
 
       // In the first case we can test after the insert if
       // we should break based on the number of times, in
@@ -226,11 +226,11 @@ void generate_timesteps(std::set<bl::local_date_time>& theTimes,
  */
 // ----------------------------------------------------------------------
 
-void generate_datatimes_climatology(std::set<bl::local_date_time>& theTimes,
+void generate_datatimes_climatology(std::set<Fmi::LocalDateTime>& theTimes,
                                     const TimeSeriesGeneratorOptions& theOptions,
-                                    const bl::local_date_time& theStartTime,
-                                    const bl::local_date_time& theEndTime,
-                                    const bl::time_zone_ptr& theZone)
+                                    const Fmi::LocalDateTime& theStartTime,
+                                    const Fmi::LocalDateTime& theEndTime,
+                                    const Fmi::TimeZonePtr& theZone)
 {
   try
   {
@@ -244,7 +244,7 @@ void generate_datatimes_climatology(std::set<bl::local_date_time>& theTimes,
     for (short unsigned int year = startyear; year <= endyear; ++year)
     {
       // Handle all climatology times
-      for (const bp::ptime& t : *theOptions.getDataTimes())
+      for (const Fmi::DateTime& t : *theOptions.getDataTimes())
       {
         // Done if a max number of timesteps was requested
         if (theOptions.timeSteps && theTimes.size() >= *theOptions.timeSteps)
@@ -252,8 +252,8 @@ void generate_datatimes_climatology(std::set<bl::local_date_time>& theTimes,
 
         try
         {
-          bp::ptime t2(bg::date(year, t.date().month(), t.date().day()), t.time_of_day());
-          bl::local_date_time lt(t2, theZone);
+          Fmi::DateTime t2(Fmi::Date(year, t.date().month(), t.date().day()), t.time_of_day());
+          Fmi::LocalDateTime lt(t2, theZone);
           // Done if beyond the requested end time
           if (lt > theEndTime)
             break;
@@ -280,11 +280,11 @@ void generate_datatimes_climatology(std::set<bl::local_date_time>& theTimes,
  */
 // ----------------------------------------------------------------------
 
-void generate_datatimes_normal(std::set<bl::local_date_time>& theTimes,
+void generate_datatimes_normal(std::set<Fmi::LocalDateTime>& theTimes,
                                const TimeSeriesGeneratorOptions& theOptions,
-                               const bl::local_date_time& theStartTime,
-                               const bl::local_date_time& theEndTime,
-                               const bl::time_zone_ptr& theZone)
+                               const Fmi::LocalDateTime& theStartTime,
+                               const Fmi::LocalDateTime& theEndTime,
+                               const Fmi::TimeZonePtr& theZone)
 {
   try
   {
@@ -297,9 +297,9 @@ void generate_datatimes_normal(std::set<bl::local_date_time>& theTimes,
     // Normal data - no need to fiddle with years
     if (use_timesteps)
     {
-      for (const bp::ptime& t : *theOptions.getDataTimes())
+      for (const Fmi::DateTime& t : *theOptions.getDataTimes())
       {
-        bl::local_date_time lt(t, theZone);
+        Fmi::LocalDateTime lt(t, theZone);
         if (lt >= theStartTime && theTimes.size() < *theOptions.timeSteps)
           theTimes.insert(lt);
         if (theTimes.size() >= *theOptions.timeSteps)
@@ -308,9 +308,9 @@ void generate_datatimes_normal(std::set<bl::local_date_time>& theTimes,
     }
     else
     {
-      for (const bp::ptime& t : *theOptions.getDataTimes())
+      for (const Fmi::DateTime& t : *theOptions.getDataTimes())
       {
-        bl::local_date_time lt(t, theZone);
+        Fmi::LocalDateTime lt(t, theZone);
 
         if (period.contains(lt) || lt == theEndTime)
           theTimes.insert(lt);
@@ -329,11 +329,11 @@ void generate_datatimes_normal(std::set<bl::local_date_time>& theTimes,
  */
 // ----------------------------------------------------------------------
 
-void generate_datatimes(std::set<bl::local_date_time>& theTimes,
+void generate_datatimes(std::set<Fmi::LocalDateTime>& theTimes,
                         const TimeSeriesGeneratorOptions& theOptions,
-                        const bl::local_date_time& theStartTime,
-                        const bl::local_date_time& theEndTime,
-                        const bl::time_zone_ptr& theZone)
+                        const Fmi::LocalDateTime& theStartTime,
+                        const Fmi::LocalDateTime& theEndTime,
+                        const Fmi::TimeZonePtr& theZone)
 {
   try
   {
@@ -354,11 +354,11 @@ void generate_datatimes(std::set<bl::local_date_time>& theTimes,
  */
 // ----------------------------------------------------------------------
 
-void generate_graphtimes(std::set<bl::local_date_time>& theTimes,
+void generate_graphtimes(std::set<Fmi::LocalDateTime>& theTimes,
                          const TimeSeriesGeneratorOptions& theOptions,
-                         const bl::local_date_time& theStartTime,
-                         const bl::local_date_time& theEndTime,
-                         const bl::time_zone_ptr& theZone)
+                         const Fmi::LocalDateTime& theStartTime,
+                         const Fmi::LocalDateTime& theEndTime,
+                         const Fmi::TimeZonePtr& theZone)
 {
   try
   {
@@ -370,8 +370,8 @@ void generate_graphtimes(std::set<bl::local_date_time>& theTimes,
     long extraseconds = theStartTime.local_time().time_of_day().total_seconds() % 3600;
     if (extraseconds > 0)
     {
-      bl::local_date_time t1(theStartTime);
-      t1 += bp::seconds(3600 - extraseconds);
+      Fmi::LocalDateTime t1(theStartTime);
+      t1 += Fmi::Seconds(3600 - extraseconds);
       theTimes.insert(t1);
     }
 
@@ -392,14 +392,14 @@ void generate_graphtimes(std::set<bl::local_date_time>& theTimes,
 // ----------------------------------------------------------------------
 
 LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
-                       const boost::local_time::time_zone_ptr& theZone)
+                       const Fmi::TimeZonePtr& theZone)
 {
   try
   {
     // Determine start and end times
 
-    bl::local_date_time starttime(bl::not_a_date_time);
-    bl::local_date_time endtime(bl::not_a_date_time);
+    Fmi::LocalDateTime starttime(bl::not_a_date_time);
+    Fmi::LocalDateTime endtime(bl::not_a_date_time);
 
     // Adjust to given timezone if input was not UTC. Note that if start and end times
     // are omitted, we use the data times for climatology data just like for normal data.
@@ -408,29 +408,29 @@ LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
     {
       if (theOptions.getDataTimes()->empty())
         return {};
-      starttime = bl::local_date_time(theOptions.getDataTimes()->front(), theZone);
+      starttime = Fmi::LocalDateTime(theOptions.getDataTimes()->front(), theZone);
     }
     else if (!theOptions.startTimeUTC)
       starttime = Fmi::TimeParser::make_time(
           theOptions.startTime.date(), theOptions.startTime.time_of_day(), theZone);
     else
-      starttime = bl::local_date_time(theOptions.startTime, theZone);
+      starttime = Fmi::LocalDateTime(theOptions.startTime, theZone);
 
     if (theOptions.endTimeData)
     {
       if (theOptions.getDataTimes()->empty())
         return {};
-      endtime = bl::local_date_time(theOptions.getDataTimes()->back(), theZone);
+      endtime = Fmi::LocalDateTime(theOptions.getDataTimes()->back(), theZone);
     }
     else if (!theOptions.endTimeUTC)
       endtime = Fmi::TimeParser::make_time(
           theOptions.endTime.date(), theOptions.endTime.time_of_day(), theZone);
     else
-      endtime = bl::local_date_time(theOptions.endTime, theZone);
+      endtime = Fmi::LocalDateTime(theOptions.endTime, theZone);
 
     // Start generating a set of unique local times
 
-    std::set<bl::local_date_time> times;
+    std::set<Fmi::LocalDateTime> times;
 
     switch (theOptions.mode)
     {

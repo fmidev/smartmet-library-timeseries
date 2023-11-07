@@ -35,8 +35,8 @@ std::string location_parameter(const Spine::LocationPtr& loc,
                                const std::string& crs = "EPSG:4326");
 
 TS::Value time_parameter(const std::string& paramname,
-                         const boost::local_time::local_date_time& ldt,
-                         const boost::posix_time::ptime& now,
+                         const Fmi::LocalDateTime& ldt,
+                         const Fmi::DateTime& now,
                          const Spine::Location& loc,
                          const std::string& timezone,
                          const Fmi::TimeZones& timezones,

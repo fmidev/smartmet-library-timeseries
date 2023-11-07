@@ -12,8 +12,8 @@ std::ostream& operator<<(std::ostream& os, const LocalTimePool& localTimePool)
   return os;
 }
 
-const boost::local_time::local_date_time& LocalTimePool::create(
-    const boost::posix_time::ptime& t, const boost::local_time::time_zone_ptr& tz)
+const Fmi::LocalDateTime& LocalTimePool::create(
+    const Fmi::DateTime& t, const Fmi::TimeZonePtr& tz)
 {
   auto key = Fmi::hash_value(t);
   Fmi::hash_combine(key, Fmi::hash_value(tz));
@@ -25,7 +25,7 @@ const boost::local_time::local_date_time& LocalTimePool::create(
     return pos->second;
 
   // Note: iterators may be invalidated by a rehash caused by this, but references are not
-  auto pos_bool = localtimes.emplace(key, boost::local_time::local_date_time(t, tz));
+  auto pos_bool = localtimes.emplace(key, Fmi::LocalDateTime(t, tz));
 
   assert(pos_bool.second == true);
   return pos_bool.first->second;

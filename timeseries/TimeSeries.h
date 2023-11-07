@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <boost/date_time/local_time/local_time.hpp>
 #include <boost/variant.hpp>
+#include <macgyver/LocalDateTime.h>
 #include <spine/LonLat.h>
 #include <spine/None.h>
 #include <string>
@@ -29,7 +29,7 @@ using Value_ = boost::variant<Spine::None,
                               double,
                               int,
                               Spine::LonLat,
-                              boost::local_time::local_date_time>;
+                              Fmi::LocalDateTime>;
 
 struct Value : public Value_
 {
@@ -56,7 +56,7 @@ struct Value : public Value_
 
   inline Value(const Spine::LonLat& x) : Value_(x) {}
 
-  inline Value(const boost::local_time::local_date_time& x) : Value_(x) {}
+  inline Value(const Fmi::LocalDateTime& x) : Value_(x) {}
 
   inline Value(const Value&) = default;
 
@@ -71,38 +71,38 @@ struct Value : public Value_
 class LocalTimePool
 {
  public:
-  const boost::local_time::local_date_time& create(const boost::posix_time::ptime& t,
-                                                   const boost::local_time::time_zone_ptr& tz);
+  const Fmi::LocalDateTime& create(const Fmi::DateTime& t,
+                                                   const Fmi::TimeZonePtr& tz);
   size_t size() const;
   void print(std::ostream& os) const;
 
  private:
-  std::unordered_map<std::size_t, boost::local_time::local_date_time> localtimes;
+  std::unordered_map<std::size_t, Fmi::LocalDateTime> localtimes;
 };
 
 using LocalTimePoolPtr = boost::shared_ptr<LocalTimePool>;
 
 struct TimedValue
 {
-  TimedValue(const boost::local_time::local_date_time& timestamp, const Value& val)
-      : time(const_cast<boost::local_time::local_date_time&>(timestamp)), value(val)
+  TimedValue(const Fmi::LocalDateTime& timestamp, const Value& val)
+      : time(const_cast<Fmi::LocalDateTime&>(timestamp)), value(val)
   {
   }
   TimedValue(const TimedValue& tv)
-      : time(const_cast<boost::local_time::local_date_time&>(tv.time)), value(tv.value)
+      : time(const_cast<Fmi::LocalDateTime&>(tv.time)), value(tv.value)
   {
   }
   TimedValue& operator=(const TimedValue& tv)
   {
     if (this != &tv)
     {
-      time = const_cast<boost::local_time::local_date_time&>(tv.time);
+      time = const_cast<Fmi::LocalDateTime&>(tv.time);
       value = tv.value;
     }
     return *this;
   }
 
-  boost::local_time::local_date_time& time;
+  Fmi::LocalDateTime& time;
   Value value;
 };
 

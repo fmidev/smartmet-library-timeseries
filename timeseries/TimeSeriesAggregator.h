@@ -22,7 +22,7 @@ TimeSeriesPtr aggregate(const TimeSeries& ts, const DataFunctions& pf);
 TimeSeriesGroupPtr aggregate(const TimeSeriesGroup& ts_group, const DataFunctions& pf);
 TimedValue time_aggregate(const TimeSeries& ts,
                           const DataFunction& func,
-                          const boost::local_time::local_date_time& timestep);
+                          const Fmi::LocalDateTime& timestep);
 
 }  // namespace Aggregator
 }  // namespace TimeSeries

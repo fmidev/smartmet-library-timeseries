@@ -37,7 +37,7 @@ void TimeSeriesGeneratorCache::resize(std::size_t theSize) const
 
 TimeSeriesGeneratorCache::TimeList TimeSeriesGeneratorCache::generate(
     const TimeSeriesGeneratorOptions& theOptions,
-    const boost::local_time::time_zone_ptr& theZone) const
+    const Fmi::TimeZonePtr& theZone) const
 {
   try
   {

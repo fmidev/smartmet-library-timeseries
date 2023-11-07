@@ -24,10 +24,10 @@ Spine::TableVisitor& operator<<(Spine::TableVisitor& tf, const Value& val)
       LonLat coord = *(boost::get<LonLat>(&val));
       tf << coord;
     }
-    else if (boost::get<boost::local_time::local_date_time>(&val) != nullptr)
+    else if (boost::get<Fmi::LocalDateTime>(&val) != nullptr)
     {
-      boost::local_time::local_date_time ldt =
-          *(boost::get<boost::local_time::local_date_time>(&val));
+      Fmi::LocalDateTime ldt =
+          *(boost::get<Fmi::LocalDateTime>(&val));
       tf << ldt;
     }
 

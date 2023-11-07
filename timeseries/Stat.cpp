@@ -105,8 +105,8 @@ double interpolate_value(bool normal,
 }
 
 time_period extract_subvector_timeperiod(const DataVector& data,
-                                         const boost::posix_time::ptime& startTime,
-                                         const boost::posix_time::ptime& endTime)
+                                         const Fmi::DateTime& startTime,
+                                         const Fmi::DateTime& endTime)
 {
   auto firstTimestamp =
       ((startTime == not_a_date_time || startTime < data[0].time) ? data[0].time : startTime);
@@ -137,8 +137,8 @@ void extract_subvector_weighted_segment(DataVector& subvector,
 
     // value changes halfway of timestep, so we have to handle first half and second half of
     // separately
-    boost::posix_time::ptime halfway_time(timestep_period.begin() +
-                                          seconds(timestep_period.length().total_seconds() / 2));
+    Fmi::DateTime halfway_time(timestep_period.begin() +
+                                          Fmi::Seconds(timestep_period.length().total_seconds() / 2));
     if (intersection_period.contains(halfway_time))
     {
       time_period first_part_period(intersection_period.begin(), halfway_time + microseconds(1));
@@ -162,8 +162,8 @@ void extract_subvector_weighted_segment(DataVector& subvector,
 
 bool extract_subvector(const DataVector& data,
                        DataVector& subvector,
-                       const boost::posix_time::ptime& startTime,
-                       const boost::posix_time::ptime& endTime,
+                       const Fmi::DateTime& startTime,
+                       const Fmi::DateTime& endTime,
                        double itsMissingValue,
                        bool itsWeights)
 {
@@ -321,7 +321,7 @@ void Stat::addData(double theValue)
   }
 }
 
-void Stat::addData(const boost::local_time::local_date_time& theTime, double theValue)
+void Stat::addData(const Fmi::LocalDateTime& theTime, double theValue)
 {
   try
   {
@@ -334,7 +334,7 @@ void Stat::addData(const boost::local_time::local_date_time& theTime, double the
   }
 }
 
-void Stat::addData(const boost::posix_time::ptime& theTime, double theValue)
+void Stat::addData(const Fmi::DateTime& theTime, double theValue)
 {
   try
   {
@@ -386,9 +386,9 @@ void Stat::clear()
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
-// time in seconds is used as a weight
-double Stat::integ(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                   const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+// time in Fmi::Seconds is used as a weight
+double Stat::integ(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                   const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -419,8 +419,8 @@ double Stat::integ(const boost::posix_time::ptime& startTime /*= not_a_date_time
 }
 
 // weight is alwaus 1.0
-double Stat::sum(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                 const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::sum(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                 const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -450,8 +450,8 @@ double Stat::sum(const boost::posix_time::ptime& startTime /*= not_a_date_time *
   }
 }
 
-double Stat::min(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                 const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::min(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                 const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -471,8 +471,8 @@ double Stat::min(const boost::posix_time::ptime& startTime /*= not_a_date_time *
   }
 }
 
-double Stat::mean(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                  const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::mean(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                  const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -527,8 +527,8 @@ double Stat::mean(const boost::posix_time::ptime& startTime /*= not_a_date_time 
   }
 }
 
-double Stat::max(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                 const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::max(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                 const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -548,8 +548,8 @@ double Stat::max(const boost::posix_time::ptime& startTime /*= not_a_date_time *
   }
 }
 
-double Stat::change(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                    const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::change(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                    const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -593,8 +593,8 @@ double Stat::change(const boost::posix_time::ptime& startTime /*= not_a_date_tim
   }
 }
 
-double Stat::trend(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                   const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::trend(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                   const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -648,8 +648,8 @@ double Stat::trend(const boost::posix_time::ptime& startTime /*= not_a_date_time
 
 unsigned int Stat::count(double lowerLimit,
                          double upperLimit,
-                         const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                         const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+                         const Fmi::DateTime& startTime /*= not_a_date_time */,
+                         const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -678,8 +678,8 @@ unsigned int Stat::count(double lowerLimit,
 
 double Stat::percentage(double lowerLimit,
                         double upperLimit,
-                        const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                        const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+                        const Fmi::DateTime& startTime /*= not_a_date_time */,
+                        const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -714,8 +714,8 @@ double Stat::percentage(double lowerLimit,
   }
 }
 
-double Stat::median(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                    const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::median(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                    const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -762,8 +762,8 @@ double Stat::median(const boost::posix_time::ptime& startTime /*= not_a_date_tim
   }
 }
 
-double Stat::variance(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                      const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::variance(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                      const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -790,8 +790,8 @@ double Stat::variance(const boost::posix_time::ptime& startTime /*= not_a_date_t
   }
 }
 
-double Stat::stddev(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                    const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::stddev(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                    const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -809,8 +809,8 @@ double Stat::stddev(const boost::posix_time::ptime& startTime /*= not_a_date_tim
   }
 }
 
-double Stat::stddev_dir(const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                        const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::stddev_dir(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                        const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -865,9 +865,9 @@ double Stat::stddev_dir(const boost::posix_time::ptime& startTime /*= not_a_date
   }
 }
 
-double Stat::nearest(const boost::posix_time::ptime& timestep,
-                     const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                     const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::nearest(const Fmi::DateTime& timestep,
+                     const Fmi::DateTime& startTime /*= not_a_date_time */,
+                     const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -907,9 +907,9 @@ double Stat::nearest(const boost::posix_time::ptime& timestep,
 }
 
 // Do linear inter-/extrapolation
-double Stat::interpolate(const boost::posix_time::ptime& timestep,
-                         const boost::posix_time::ptime& startTime /*= not_a_date_time */,
-                         const boost::posix_time::ptime& endTime /*= not_a_date_time */) const
+double Stat::interpolate(const Fmi::DateTime& timestep,
+                         const Fmi::DateTime& startTime /*= not_a_date_time */,
+                         const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {
   try
   {
@@ -952,8 +952,8 @@ double Stat::interpolate(const boost::posix_time::ptime& timestep,
     if (indicator_vector.size() < 2)
       return itsMissingValue;
 
-    boost::posix_time::ptime first_time = boost::posix_time::not_a_date_time;
-    boost::posix_time::ptime second_time = boost::posix_time::not_a_date_time;
+    Fmi::DateTime first_time = boost::posix_time::not_a_date_time;
+    Fmi::DateTime second_time = boost::posix_time::not_a_date_time;
     double first_value = itsMissingValue;
     double second_value = itsMissingValue;
     double time_diff_to_timestep_sec = 0.0;
@@ -1005,8 +1005,8 @@ double Stat::interpolate(const boost::posix_time::ptime& timestep,
 }
 
 bool Stat::get_subvector(DataVector& subvector,
-                         const boost::posix_time::ptime& startTime /*= not_a_date_time*/,
-                         const boost::posix_time::ptime& endTime /*= not_a_date_time*/,
+                         const Fmi::DateTime& startTime /*= not_a_date_time*/,
+                         const Fmi::DateTime& endTime /*= not_a_date_time*/,
                          bool useWeights /*= true*/) const
 {
   try
@@ -1061,18 +1061,18 @@ void Stat::calculate_weights()
       {
         if (i == 0)
         {
-          time_duration dur(itsData[i + 1].time - itsData[i].time);
+          Fmi::TimeDuration dur(itsData[i + 1].time - itsData[i].time);
           itsData[i].weight = dur.total_seconds() * 0.5;
         }
         else if (i == itsData.size() - 1)
         {
-          time_duration dur(itsData[i].time - itsData[i - 1].time);
+          Fmi::TimeDuration dur(itsData[i].time - itsData[i - 1].time);
           itsData[i].weight = dur.total_seconds() * 0.5;
         }
         else
         {
-          time_duration dur_prev(itsData[i].time - itsData[i - 1].time);
-          time_duration dur_next(itsData[i + 1].time - itsData[i].time);
+          Fmi::TimeDuration dur_prev(itsData[i].time - itsData[i - 1].time);
+          Fmi::TimeDuration dur_next(itsData[i + 1].time - itsData[i].time);
           itsData[i].weight = (dur_prev.total_seconds() * 0.5) + (dur_next.total_seconds() * 0.5);
         }
       }

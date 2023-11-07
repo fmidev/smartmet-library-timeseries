@@ -27,10 +27,10 @@ std::ostream& operator<<(std::ostream& os, const Value& val)
       LonLat coord = *(boost::get<LonLat>(&val));
       os << coord.lon << ", " << coord.lat;
     }
-    else if (boost::get<boost::local_time::local_date_time>(&val) != nullptr)
+    else if (boost::get<Fmi::LocalDateTime>(&val) != nullptr)
     {
-      boost::local_time::local_date_time ldt =
-          *(boost::get<boost::local_time::local_date_time>(&val));
+      Fmi::LocalDateTime ldt =
+          *(boost::get<Fmi::LocalDateTime>(&val));
       os << ldt;
     }
     else if (boost::get<None>(&val) != nullptr)
@@ -160,7 +160,7 @@ std::string StringVisitor::operator()(const LonLat& lonlat) const
   }
 }
 
-std::string StringVisitor::operator()(const boost::local_time::local_date_time& ldt) const
+std::string StringVisitor::operator()(const Fmi::LocalDateTime& ldt) const
 {
   try
   {
@@ -234,7 +234,7 @@ void OStreamVisitor::operator()(const LonLat& lonlat) const
   }
 }
 
-void OStreamVisitor::operator()(const boost::local_time::local_date_time& ldt) const
+void OStreamVisitor::operator()(const Fmi::LocalDateTime& ldt) const
 {
   try
   {

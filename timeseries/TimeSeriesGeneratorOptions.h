@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -27,17 +27,17 @@ struct TimeSeriesGeneratorOptions
   {
     DataTimes,   // timesteps in querydata
     GraphTimes,  // above plus "now"
-    FixedTimes,  // fixed hours etc
+    FixedTimes,  // fixed Fmi::SecondClock etc
     TimeSteps    // fixed timestep
   };
 
   // Timesteps established from the outside
-  using TimeList = boost::shared_ptr<std::list<boost::posix_time::ptime>>;
+  using TimeList = boost::shared_ptr<std::list<Fmi::DateTime>>;
 
   // Methods
 
   TimeSeriesGeneratorOptions(
-      const boost::posix_time::ptime& now = boost::posix_time::second_clock::universal_time());
+      const Fmi::DateTime& now = Fmi::SecondClock::universal_time());
 
   std::size_t hash_value() const;
 
@@ -49,12 +49,12 @@ struct TimeSeriesGeneratorOptions
   const TimeList& getDataTimes() const;
 
   Mode mode = Mode::TimeSteps;              // algorithm selection
-  boost::posix_time::ptime startTime;       // start time
-  boost::posix_time::ptime endTime;         // end time
+  Fmi::DateTime startTime;       // start time
+  Fmi::DateTime endTime;         // end time
   bool startTimeUTC = true;                 // timestamps can be interpreted to be in
   bool endTimeUTC = true;                   // UTC time or in some specific time zone
   boost::optional<unsigned int> timeSteps;  // number of time steps
-  boost::optional<unsigned int> timeStep;   // Mode:TimeSteps, timestep in minutes
+  boost::optional<unsigned int> timeStep;   // Mode:TimeSteps, timestep in Fmi::Minutes
   std::set<unsigned int> timeList;          // Mode:FixedTimes,  integers of form HHMM
  private:
   TimeList dataTimes;  // Mode:DataTimes, Fixed times set from outside

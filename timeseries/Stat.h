@@ -5,7 +5,7 @@
  * Stat class implements statistical functions.
  * Data can be passed in a constructor call or in addData, SetData functions.
  * Both plain double values and double-timestamp pairs are accepted as input.
- * Timestap can be either boost::local_time::local_date_time or boost::posix_time::ptime.
+ * Timestap can be either Fmi::LocalDateTime or Fmi::DateTime.
  * If valid value-timestamp pairs are passed weighted version of statistical function is called
  * unless explicitly denied by calling useWeights(false) function before.
  * Exception is sum and integ-functions. In integ-function weights are always used.
@@ -23,8 +23,8 @@
 #pragma once
 
 #include <boost/date_time/local_time/local_time.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <macgyver/LocalDateTime.h>
+#include <macgyver/DateTime.h>
 #include <limits>
 
 namespace SmartMet
@@ -37,9 +37,9 @@ using boost::posix_time::not_a_date_time;
 
 struct DataItem
 {
-  DataItem(boost::posix_time::ptime t, double v, double w = 1.0) : time(t), value(v), weight(w) {}
+  DataItem(Fmi::DateTime t, double v, double w = 1.0) : time(t), value(v), weight(w) {}
 
-  boost::posix_time::ptime time{not_a_date_time};
+  Fmi::DateTime time{not_a_date_time};
   double value = std::numeric_limits<double>::quiet_NaN();
   double weight = 1.0;
 };
@@ -47,9 +47,9 @@ struct DataItem
 std::ostream& operator<<(std::ostream& os, const DataItem& item);
 
 using DataVector = std::vector<DataItem>;
-using TimeValue = std::pair<boost::posix_time::ptime, double>;
+using TimeValue = std::pair<Fmi::DateTime, double>;
 using TimeValueVector = std::vector<TimeValue>;
-using LocalTimeValue = std::pair<boost::local_time::local_date_time, double>;
+using LocalTimeValue = std::pair<Fmi::LocalDateTime, double>;
 using LocalTimeValueVector = std::vector<LocalTimeValue>;
 
 class Stat
@@ -67,8 +67,8 @@ class Stat
 
   void setData(const DataVector& theValues);
   void addData(double theValue);
-  void addData(const boost::local_time::local_date_time& theTime, double theValue);
-  void addData(const boost::posix_time::ptime& theTime, double theValue);
+  void addData(const Fmi::LocalDateTime& theTime, double theValue);
+  void addData(const Fmi::DateTime& theTime, double theValue);
   void addData(const std::vector<double>& theValues);
   void addData(const DataItem& theValue);
   void setMissingValue(double theMissingValue) { itsMissingValue = theMissingValue; }
@@ -76,47 +76,47 @@ class Stat
   void useDegrees(bool theDegrees = true) { itsDegrees = theDegrees; }
   void clear();
 
-  double integ(const boost::posix_time::ptime& startTime = not_a_date_time,
-               const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double sum(const boost::posix_time::ptime& startTime = not_a_date_time,
-             const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double min(const boost::posix_time::ptime& startTime = not_a_date_time,
-             const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double mean(const boost::posix_time::ptime& startTime = not_a_date_time,
-              const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double max(const boost::posix_time::ptime& startTime = not_a_date_time,
-             const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double change(const boost::posix_time::ptime& startTime = not_a_date_time,
-                const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double trend(const boost::posix_time::ptime& startTime = not_a_date_time,
-               const boost::posix_time::ptime& endTime = not_a_date_time) const;
+  double integ(const Fmi::DateTime& startTime = not_a_date_time,
+               const Fmi::DateTime& endTime = not_a_date_time) const;
+  double sum(const Fmi::DateTime& startTime = not_a_date_time,
+             const Fmi::DateTime& endTime = not_a_date_time) const;
+  double min(const Fmi::DateTime& startTime = not_a_date_time,
+             const Fmi::DateTime& endTime = not_a_date_time) const;
+  double mean(const Fmi::DateTime& startTime = not_a_date_time,
+              const Fmi::DateTime& endTime = not_a_date_time) const;
+  double max(const Fmi::DateTime& startTime = not_a_date_time,
+             const Fmi::DateTime& endTime = not_a_date_time) const;
+  double change(const Fmi::DateTime& startTime = not_a_date_time,
+                const Fmi::DateTime& endTime = not_a_date_time) const;
+  double trend(const Fmi::DateTime& startTime = not_a_date_time,
+               const Fmi::DateTime& endTime = not_a_date_time) const;
   unsigned int count(double lowerLimit,
                      double upperLimit,
-                     const boost::posix_time::ptime& startTime = not_a_date_time,
-                     const boost::posix_time::ptime& endTime = not_a_date_time) const;
+                     const Fmi::DateTime& startTime = not_a_date_time,
+                     const Fmi::DateTime& endTime = not_a_date_time) const;
   double percentage(double lowerLimit,
                     double upperLimit,
-                    const boost::posix_time::ptime& startTime = not_a_date_time,
-                    const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double median(const boost::posix_time::ptime& startTime = not_a_date_time,
-                const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double variance(const boost::posix_time::ptime& startTime = not_a_date_time,
-                  const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double stddev(const boost::posix_time::ptime& startTime = not_a_date_time,
-                const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double nearest(const boost::posix_time::ptime& timestep,
-                 const boost::posix_time::ptime& startTime = not_a_date_time,
-                 const boost::posix_time::ptime& endTime = not_a_date_time) const;
-  double interpolate(const boost::posix_time::ptime& timestep,
-                     const boost::posix_time::ptime& startTime = not_a_date_time,
-                     const boost::posix_time::ptime& endTime = not_a_date_time) const;
+                    const Fmi::DateTime& startTime = not_a_date_time,
+                    const Fmi::DateTime& endTime = not_a_date_time) const;
+  double median(const Fmi::DateTime& startTime = not_a_date_time,
+                const Fmi::DateTime& endTime = not_a_date_time) const;
+  double variance(const Fmi::DateTime& startTime = not_a_date_time,
+                  const Fmi::DateTime& endTime = not_a_date_time) const;
+  double stddev(const Fmi::DateTime& startTime = not_a_date_time,
+                const Fmi::DateTime& endTime = not_a_date_time) const;
+  double nearest(const Fmi::DateTime& timestep,
+                 const Fmi::DateTime& startTime = not_a_date_time,
+                 const Fmi::DateTime& endTime = not_a_date_time) const;
+  double interpolate(const Fmi::DateTime& timestep,
+                     const Fmi::DateTime& startTime = not_a_date_time,
+                     const Fmi::DateTime& endTime = not_a_date_time) const;
 
  private:
-  double stddev_dir(const boost::posix_time::ptime& startTime = not_a_date_time,
-                    const boost::posix_time::ptime& endTime = not_a_date_time) const;
+  double stddev_dir(const Fmi::DateTime& startTime = not_a_date_time,
+                    const Fmi::DateTime& endTime = not_a_date_time) const;
   bool get_subvector(DataVector& subvector,
-                     const boost::posix_time::ptime& startTime = not_a_date_time,
-                     const boost::posix_time::ptime& endTime = not_a_date_time,
+                     const Fmi::DateTime& startTime = not_a_date_time,
+                     const Fmi::DateTime& endTime = not_a_date_time,
                      bool useWeights = true) const;
   void calculate_weights();
   bool invalid_timestamps() const;

@@ -174,7 +174,7 @@ const std::map<std::string, FmiParameterName> location_parameter_map = {
  */
 // ----------------------------------------------------------------------
 
-std::string format_date(const boost::local_time::local_date_time& ldt,
+std::string format_date(const Fmi::LocalDateTime& ldt,
                         const std::locale& llocale,
                         const std::string& fmt)
 {
@@ -450,8 +450,8 @@ bool is_time_parameter(std::string paramname)
 // ----------------------------------------------------------------------
 
 Value time_parameter(const std::string& paramname,
-                     const boost::local_time::local_date_time& ldt,
-                     const boost::posix_time::ptime& now,
+                     const Fmi::LocalDateTime& ldt,
+                     const Fmi::DateTime& now,
                      const Spine::Location& loc,
                      const std::string& timezone,
                      const Fmi::TimeZones& timezones,
@@ -459,7 +459,7 @@ Value time_parameter(const std::string& paramname,
                      const Fmi::TimeFormatter& timeformatter,
                      const std::string& timestring)
 {
-  using boost::local_time::local_date_time;
+  using Fmi::LocalDateTime;
 
   try
   {
@@ -474,14 +474,14 @@ Value time_parameter(const std::string& paramname,
       {
         case kFmiTime:
         {
-          boost::local_time::time_zone_ptr tz = timezones.time_zone_from_string(timezone);
-          ret = timeformatter.format(local_date_time(ldt.utc_time(), tz));
+          Fmi::TimeZonePtr tz = timezones.time_zone_from_string(timezone);
+          ret = timeformatter.format(Fmi::LocalDateTime(ldt.utc_time(), tz));
           break;
         }
         case kFmiOriginTime:
         {
-          boost::local_time::time_zone_ptr tz = timezones.time_zone_from_string(timezone);
-          local_date_time ldt_now(now, tz);
+          Fmi::TimeZonePtr tz = timezones.time_zone_from_string(timezone);
+          Fmi::LocalDateTime ldt_now(now, tz);
           ret = timeformatter.format(ldt_now);
           break;
         }
@@ -497,9 +497,9 @@ Value time_parameter(const std::string& paramname,
         }
         case kFmiLocalTime:
         {
-          boost::local_time::time_zone_ptr localtz = timezones.time_zone_from_string(loc.timezone);
-          boost::posix_time::ptime utc = ldt.utc_time();
-          boost::local_time::local_date_time localt(utc, localtz);
+          Fmi::TimeZonePtr localtz = timezones.time_zone_from_string(loc.timezone);
+          Fmi::DateTime utc = ldt.utc_time();
+          Fmi::LocalDateTime localt(utc, localtz);
           ret = timeformatter.format(localt);
           break;
         }
@@ -510,8 +510,8 @@ Value time_parameter(const std::string& paramname,
         }
         case kFmiEpochTime:
         {
-          boost::posix_time::ptime time_t_epoch(boost::gregorian::date(1970, 1, 1));
-          boost::posix_time::time_duration diff = ldt.utc_time() - time_t_epoch;
+          Fmi::DateTime time_t_epoch(Fmi::Date(1970, 1, 1));
+          Fmi::TimeDuration diff = ldt.utc_time() - time_t_epoch;
           ret = Fmi::to_string(diff.total_seconds());
           break;
         }

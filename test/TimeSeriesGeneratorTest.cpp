@@ -23,7 +23,7 @@ Fmi::TimeZones timezones;
 std::string tostr(const TS::TimeSeriesGenerator::LocalTimeList& tlist)
 {
   std::ostringstream out;
-  BOOST_FOREACH (const bl::local_date_time& t, tlist)
+  BOOST_FOREACH (const Fmi::LocalDateTime& t, tlist)
   {
     out << t << '\n';
   }
@@ -45,7 +45,7 @@ void fixedtimes_utc()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::FixedTimes;
-  opt.startTime = bp::ptime(bg::date(2012, 11, 13), bp::hours(5));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Hours(5));
   opt.startTimeUTC = false;
   opt.timeSteps = 4;
   opt.timeList.insert(300);
@@ -71,7 +71,7 @@ void fixedtimes_helsinki()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::FixedTimes;
-  opt.startTime = bp::ptime(bg::date(2012, 11, 13), bp::hours(5));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Hours(5));
   opt.startTimeUTC = false;
   opt.timeSteps = 4;
   opt.timeList.insert(300);
@@ -97,7 +97,7 @@ void fixedtimes_tosummertime()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::FixedTimes;
-  opt.startTime = bp::ptime(bg::date(2012, 3, 24), bp::hours(0));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 3, 24), Fmi::Hours(0));
   opt.startTimeUTC = false;
   opt.timeSteps = 11;
   opt.timeList.insert(200);
@@ -131,7 +131,7 @@ void fixedtimes_towintertime()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::FixedTimes;
-  opt.startTime = bp::ptime(bg::date(2012, 10, 27), bp::hours(0));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 10, 27), Fmi::Hours(0));
   opt.startTimeUTC = false;
   opt.timeSteps = 11;
   opt.timeList.insert(200);
@@ -171,9 +171,9 @@ void timesteps_utc()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
-  opt.startTime = bp::ptime(bg::date(2012, 11, 13), bp::hours(5));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Hours(5));
   opt.startTimeUTC = false;
-  opt.endTime = opt.startTime + bp::hours(24);
+  opt.endTime = opt.startTime + Fmi::Hours(24);
   opt.timeStep = 180;
   opt.timeSteps = 4;
   std::string result =
@@ -196,9 +196,9 @@ void timesteps_helsinki()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
-  opt.startTime = bp::ptime(bg::date(2012, 11, 13), bp::hours(5));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Hours(5));
   opt.startTimeUTC = false;
-  opt.endTime = opt.startTime + bp::hours(24);
+  opt.endTime = opt.startTime + Fmi::Hours(24);
   opt.timeStep = 180;
   opt.timeSteps = 4;
   std::string result =
@@ -221,9 +221,9 @@ void timesteps_tosummertime()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
-  opt.startTime = bp::ptime(bg::date(2012, 3, 25), bp::hours(0));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 3, 25), Fmi::Hours(0));
   opt.startTimeUTC = false;
-  opt.endTime = opt.startTime + bp::hours(48);
+  opt.endTime = opt.startTime + Fmi::Hours(48);
   opt.timeSteps = 8;
   opt.timeStep = 60;
   std::string result =
@@ -250,9 +250,9 @@ void timesteps_towintertime()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
-  opt.startTime = bp::ptime(bg::date(2012, 10, 28), bp::hours(0));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 10, 28), Fmi::Hours(0));
   opt.startTimeUTC = false;
-  opt.endTime = opt.startTime + bp::hours(48);
+  opt.endTime = opt.startTime + Fmi::Hours(48);
   opt.timeSteps = 8;
   opt.timeStep = 60;
   std::string result =
@@ -279,9 +279,9 @@ void timesteps_all()
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
-  opt.startTime = bp::ptime(bg::date(2012, 11, 13), bp::hours(5));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Hours(5));
   opt.startTimeUTC = false;
-  opt.endTime = opt.startTime + bp::hours(24);
+  opt.endTime = opt.startTime + Fmi::Hours(24);
   opt.timeStep = 0;
   opt.timeSteps = 4;  // meaningless
   std::string result =
@@ -302,14 +302,14 @@ void datatimes()
 
   auto tlist = boost::make_shared<TimeSeriesGeneratorOptions::TimeList::element_type>();
 
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 28), bp::hours(12)));
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 29), bp::hours(12)));
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 30), bp::hours(12)));
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 31), bp::hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 28), Fmi::Hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 29), Fmi::Hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 30), Fmi::Hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 31), Fmi::Hours(12)));
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::DataTimes;
-  opt.startTime = bp::ptime(bg::date(2012, 10, 28), bp::hours(0));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 10, 28), Fmi::Hours(0));
   opt.startTimeUTC = false;
   opt.setDataTimes(tlist, false);
   opt.timeSteps = 2;
@@ -332,16 +332,16 @@ void datatimes_climatology()
 
   auto tlist = boost::make_shared<TimeSeriesGeneratorOptions::TimeList::element_type>();
 
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 28), bp::hours(12)));
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 29), bp::hours(12)));
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 30), bp::hours(12)));
-  tlist->push_back(bp::ptime(bg::date(2012, 10, 31), bp::hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 28), Fmi::Hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 29), Fmi::Hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 30), Fmi::Hours(12)));
+  tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 31), Fmi::Hours(12)));
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::DataTimes;
-  opt.startTime = bp::ptime(bg::date(2011, 10, 29), bp::hours(0));
+  opt.startTime = Fmi::DateTime(Fmi::Date(2011, 10, 29), Fmi::Hours(0));
   opt.startTimeUTC = false;
-  opt.endTime = bp::ptime(bg::date(2013, 10, 29), bp::hours(0));
+  opt.endTime = Fmi::DateTime(Fmi::Date(2013, 10, 29), Fmi::Hours(0));
   opt.endTimeUTC = false;
   opt.setDataTimes(tlist, true);
 
@@ -373,7 +373,7 @@ void epochtime()
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
   opt.startTime = Fmi::TimeParser::parse(starttime);
   opt.startTimeUTC = Fmi::TimeParser::looks_utc(starttime);
-  opt.endTime = opt.startTime + bp::hours(24);
+  opt.endTime = opt.startTime + Fmi::Hours(24);
   opt.timeStep = 60;
   opt.timeSteps = 4;
 
@@ -420,7 +420,7 @@ void offset()
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
   opt.startTime = Fmi::TimeParser::parse(starttime);
   opt.startTimeUTC = Fmi::TimeParser::looks_utc(starttime);
-  opt.endTime = opt.startTime + bp::hours(24);
+  opt.endTime = opt.startTime + Fmi::Hours(24);
   opt.timeStep = 60;
   opt.timeSteps = 2;
 
@@ -429,11 +429,11 @@ void offset()
   if (series.size() != 2)
     TEST_FAILED("Expected two times in the result");
 
-  auto diff = boost::posix_time::second_clock::universal_time() - series.front().utc_time();
+  auto diff = Fmi::SecondClock::universal_time() - series.front().utc_time();
 
   // We expect to get the current time rounded down to the exact hour
 
-  if (diff < boost::posix_time::minutes(0) || diff > boost::posix_time::minutes(60))
+  if (diff < Fmi::Minutes(0) || diff > Fmi::Minutes(60))
     TEST_FAILED("Too large time difference to current time: " + Fmi::to_simple_string(diff));
 
   TEST_PASSED();

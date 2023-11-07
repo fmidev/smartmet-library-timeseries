@@ -22,7 +22,7 @@ class TimeSeriesGeneratorCache
   void resize(std::size_t theSize) const;
 
   TimeList generate(const TimeSeriesGeneratorOptions& theOptions,
-                    const boost::local_time::time_zone_ptr& theZone) const;
+                    const Fmi::TimeZonePtr& theZone) const;
 
   Fmi::Cache::CacheStats getCacheStats() const { return itsCache.statistics(); }
 

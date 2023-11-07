@@ -40,16 +40,16 @@ class StatCalculator
 
   double getDoubleStatValue(const DataFunction &func, bool useWeights) const;
   std::string getStringStatValue(const DataFunction &func) const;
-  boost::local_time::local_date_time getLocalDateTimeStatValue(const DataFunction &func) const;
+  Fmi::LocalDateTime getLocalDateTimeStatValue(const DataFunction &func) const;
   LonLat getLonLatStatValue(const DataFunction &func) const;
 
-  boost::optional<boost::local_time::local_date_time> itsTimestep;
+  boost::optional<Fmi::LocalDateTime> itsTimestep;
 
  public:
   StatCalculator(LocalTimePoolPtr time_pool) : itsTimeSeries(time_pool) {}
   void operator()(const TimedValue &tv);
   Value getStatValue(const DataFunction &func, bool useWeights) const;
-  void setTimestep(const boost::local_time::local_date_time &timestep) { itsTimestep = timestep; }
+  void setTimestep(const Fmi::LocalDateTime &timestep) { itsTimestep = timestep; }
 };
 
 namespace
@@ -160,7 +160,7 @@ TimeSeries area_aggregate(const TimeSeriesGroup &ts_group, const DataFunction &f
       }
       // take timestamps from first location (they are same for all locations
       // inside area)
-      const boost::local_time::local_date_time &timestamp = ts_group[0].timeseries[i].time;
+      const Fmi::LocalDateTime &timestamp = ts_group[0].timeseries[i].time;
 
       ret.emplace_back(TimedValue(timestamp, statcalculator.getStatValue(func, false)));
     }
@@ -176,7 +176,7 @@ TimeSeries area_aggregate(const TimeSeriesGroup &ts_group, const DataFunction &f
 // Aggregate only to one timestep
 TimedValue time_aggregate(const TimeSeries &ts,
                           const DataFunction &func,
-                          const boost::local_time::local_date_time &timestep)
+                          const Fmi::LocalDateTime &timestep)
 {
   try
   {
@@ -380,7 +380,7 @@ std::string StatCalculator::getStringStatValue(const DataFunction &func) const
   }
 }
 
-boost::local_time::local_date_time StatCalculator::getLocalDateTimeStatValue(
+Fmi::LocalDateTime StatCalculator::getLocalDateTimeStatValue(
     const DataFunction &func) const
 {
   try
@@ -388,14 +388,14 @@ boost::local_time::local_date_time StatCalculator::getLocalDateTimeStatValue(
     FunctionId fid(func.id());
 
     if (fid == FunctionId::Maximum)
-      return boost::get<boost::local_time::local_date_time>(
+      return boost::get<Fmi::LocalDateTime>(
           itsTimeSeries[itsTimeSeries.size() - 1].value);
 
     if (fid == FunctionId::Minimum)
-      return boost::get<boost::local_time::local_date_time>(itsTimeSeries[0].value);
+      return boost::get<Fmi::LocalDateTime>(itsTimeSeries[0].value);
 
     if (fid == FunctionId::Median)
-      return boost::get<boost::local_time::local_date_time>(
+      return boost::get<Fmi::LocalDateTime>(
           itsTimeSeries[itsTimeSeries.size() / 2].value);
 
     std::stringstream ss;
@@ -530,7 +530,7 @@ Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) co
           ret = getStringStatValue(func);
         }
       }
-      else if (boost::get<boost::local_time::local_date_time>(&value))
+      else if (boost::get<Fmi::LocalDateTime>(&value))
       {
         ret = getLocalDateTimeStatValue(func);
       }
