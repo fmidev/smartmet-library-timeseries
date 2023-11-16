@@ -13,11 +13,12 @@ namespace TimeSeries
 {
 struct RequestLimits
 {
-  std::size_t maxlocations{0};
-  std::size_t maxparameters{0};
-  std::size_t maxtimes{0};
-  std::size_t maxlevels{0};
-  std::size_t maxelements{0};
+  std::size_t maxlocations = 0;
+  std::size_t maxparameters = 0;
+  std::size_t maxtimes = 0;
+  std::size_t maxlevels = 0;
+  std::size_t maxelements = 0;
+  double maxradius = 0;
 };
 
 enum class RequestLimitMember
