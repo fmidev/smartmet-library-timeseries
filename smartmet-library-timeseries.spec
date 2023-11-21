@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.11.16
+Version: 23.11.21
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -24,7 +24,7 @@ BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 23.9.6
 BuildRequires: smartmet-library-macgyver-devel >= 23.11.8
-BuildRequires: smartmet-library-newbase-devel >= 23.11.14
+BuildRequires: smartmet-library-newbase-devel >= 23.11.21
 BuildRequires: smartmet-library-spine-devel >= 23.10.20
 %if %{with tests}
 BuildRequires: smartmet-library-regression
@@ -52,7 +52,7 @@ Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
 Requires: smartmet-library-macgyver-devel >= 23.11.8
-Requires: smartmet-library-newbase-devel >= 23.11.14
+Requires: smartmet-library-newbase-devel >= 23.11.21
 Requires: smartmet-library-spine-devel >= 23.10.20
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue Nov 21 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.11.21-1.fmi
+- Fixed the "sdev" to return sample standard deviation instead of population standard deviation
+
 * Thu Nov 16 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.11.16-1.fmi
 - Added maxradius request limit
 
