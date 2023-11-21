@@ -593,21 +593,21 @@ void variance()
   double variance = stat.variance();
 
   // #1 raw variances
-  if (precision(variance, 5) != 2.0)
+  if (precision(variance, 5) != 2.5)
   {
     std::stringstream ss;
     ss << "Variance of {2.0, 1.0, 5.0, 3.0, 4.0} is 2, not " << variance;
     TEST_FAILED(ss.str());
   }
 
-  // #2 raw varince between 14:00-17:00
+  // #2 raw variance between 14:00-17:00
   variance = stat.variance(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
                            boost::posix_time::time_from_string("2013-12-02 17:00:00"));
 
-  if (precision(variance, 5) != 2.88889)
+  if (precision(variance, 5) != 4.33333)
   {
     std::stringstream ss;
-    ss << "Varince of {2.0, 1.0, 5.0} is 2.88889, not " << variance;
+    ss << "Variance of {2.0, 1.0, 5.0} is 4.33333, not " << variance;
     TEST_FAILED(ss.str());
   }
 
@@ -623,10 +623,10 @@ void stddev()
   double stddev = stat.stddev();
 
   // #1 raw standard deviation
-  if (stddev != sqrt(2))
+  if (precision(stddev, 5) != 1.58114)
   {
     std::stringstream ss;
-    ss << "Standard deviation of {2.0, 1.0, 5.0, 3.0, 4.0} is 1.41421, not " << stddev;
+    ss << "Standard deviation of {2.0, 1.0, 5.0, 3.0, 4.0} is 1.58114, not " << stddev;
     TEST_FAILED(ss.str());
   }
 
@@ -634,10 +634,10 @@ void stddev()
   stddev = stat.stddev(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
                        boost::posix_time::time_from_string("2013-12-02 17:00:00"));
 
-  if (stddev != sqrt((pow(5.0 / 3.0, 2.0) + pow(2.0 / 3.0, 2.0) + pow(7.0 / 3.0, 2.0)) / 3.0))
+  if (stddev != sqrt((pow(5.0 / 3.0, 2.0) + pow(2.0 / 3.0, 2.0) + pow(7.0 / 3.0, 2.0)) / 2.0))
   {
     std::stringstream ss;
-    ss << "Standard deviation of {2.0, 1.0, 5.0} is 1.69967, not " << stddev;
+    ss << "Standard deviation of {2.0, 1.0, 5.0} is 2.08167, not " << stddev;
     TEST_FAILED(ss.str());
   }
 
@@ -675,10 +675,10 @@ void degrees()
   // #3 Standard deviation
   value = stat.stddev();
 
-  if (value != 50)
+  if (precision(value, 4) != 70.7107)
   {
     std::stringstream ss;
-    ss << "Standard deviation of 90° and 350° is 50° , not " << value << "°";
+    ss << "Standard deviation of 90° and 350° is 70.7107° , not " << value << "°";
     TEST_FAILED(ss.str());
   }
 

@@ -31,34 +31,42 @@ TS::TimeSeries generate_observation_timeseries()
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)),
+                         zone),
       1.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)),
+                         zone),
       2.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)),
+                         zone),
       3.5));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)),
+                         zone),
       4.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(52)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(52)),
+                         zone),
       5.0));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)),
+                         zone),
       5.5));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)),
+                         zone),
       3.0));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 2.5));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)),
+                         zone),
       -1.0));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), TS::None()));
@@ -79,34 +87,42 @@ TS::TimeSeries generate_direction_timeseries()
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)),
+                         zone),
       340.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)),
+                         zone),
       350.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)),
+                         zone),
       355.0));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)),
+                         zone),
       5.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(51)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(51)),
+                         zone),
       20.0));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)),
+                         zone),
       10.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)),
+                         zone),
       355.0));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 350.));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)), zone),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)),
+                         zone),
       340.0));
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), TS::None()));
@@ -114,7 +130,8 @@ TS::TimeSeries generate_direction_timeseries()
   return timeseries;
 }
 
-TS::TimeSeries generate_timeseries_with_diverse_values(bool add_missing_value = false, bool degrees = false)
+TS::TimeSeries generate_timeseries_with_diverse_values(bool add_missing_value = false,
+                                                       bool degrees = false)
 {
   using namespace SmartMet;
 
@@ -479,10 +496,11 @@ TS::TimeSeriesPtr execute_time_aggregation_function(TS::FunctionId fid,
   return aggregated_timeseries;
 }
 
-TS::TimeSeriesPtr execute_time_aggregation_function_with_diverse_values(TS::FunctionId fid,
-																		unsigned int aggIntervalBehind,
-																		unsigned int aggIntervalAhead,
-																		bool add_missing_value = false)
+TS::TimeSeriesPtr execute_time_aggregation_function_with_diverse_values(
+    TS::FunctionId fid,
+    unsigned int aggIntervalBehind,
+    unsigned int aggIntervalAhead,
+    bool add_missing_value = false)
 {
   using namespace TS;
   TimeSeries timeseries(generate_timeseries_with_diverse_values(add_missing_value));
@@ -497,7 +515,6 @@ TS::TimeSeriesPtr execute_time_aggregation_function_with_diverse_values(TS::Func
 
   return aggregated_timeseries;
 }
-
 
 TS::TimeSeriesGroupPtr execute_area_aggregation_function(TS::FunctionId fid)
 {
@@ -936,9 +953,10 @@ void mean_t()
 void amean_t()
 {
   std::string test_result =
-	("mean:\n" + to_string(*execute_time_aggregation_function_with_diverse_values(TS::FunctionId::Mean, 60, 60)));
-  test_result.append
-	("amean:\n" + to_string(*execute_time_aggregation_function_with_diverse_values(TS::FunctionId::Amean, 60, 60)));
+      ("mean:\n" + to_string(*execute_time_aggregation_function_with_diverse_values(
+                       TS::FunctionId::Mean, 60, 60)));
+  test_result.append("amean:\n" + to_string(*execute_time_aggregation_function_with_diverse_values(
+                                      TS::FunctionId::Amean, 60, 60)));
 
   std::string expected_result =
       "mean:\n"
@@ -954,15 +972,12 @@ void amean_t()
       "2015-Sep-03 03:00:00 EET -> 4\n"
       "2015-Sep-03 04:00:00 EET -> 4\n";
 
-
-
   if (expected_result != test_result)
     TEST_FAILED("Amean-function test failed. Result should be:\n" + expected_result + "\n not \n" +
                 test_result);
 
   TEST_PASSED();
 }
-
 
 void meandir_t()
 {
@@ -1127,10 +1142,10 @@ void stddev_t()
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 0.5\n"
-      "2015-Sep-03 02:00:00 EET -> 0.707107\n"
-      "2015-Sep-03 03:00:00 EET -> 0.957427\n"
-      "2015-Sep-03 04:00:00 EET -> 1.22474\n";
+      "2015-Sep-03 01:00:00 EET -> 0.707107\n"
+      "2015-Sep-03 02:00:00 EET -> 0.816497\n"
+      "2015-Sep-03 03:00:00 EET -> 1.04881\n"
+      "2015-Sep-03 04:00:00 EET -> 1.30931\n";
 
   if (expected_result != test_result)
     TEST_FAILED("StandardDeviation-function test failed. Expected result should be:\n" +
@@ -1146,10 +1161,10 @@ void stddevdir_t()
 
   std::string expected_result =
       "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 5\n"
-      "2015-Sep-03 02:00:00 EET -> 5.44862\n"
-      "2015-Sep-03 03:00:00 EET -> 7.5\n"
-      "2015-Sep-03 04:00:00 EET -> 9.27025\n";
+      "2015-Sep-03 01:00:00 EET -> 7.07107\n"
+      "2015-Sep-03 02:00:00 EET -> 6.29153\n"
+      "2015-Sep-03 03:00:00 EET -> 8.21584\n"
+      "2015-Sep-03 04:00:00 EET -> 9.91031\n";
 
   if (expected_result != test_result)
     TEST_FAILED("StandardDeviationDir-function test failed. Expected result should be:\n" +
@@ -1390,11 +1405,11 @@ void stddev_a()
       to_string(*execute_area_aggregation_function(TS::FunctionId::StandardDeviation));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1.41421\n"
-      "2015-Sep-03 01:00:00 EET -> 1.41421\n"
-      "2015-Sep-03 02:00:00 EET -> 1.41421\n"
-      "2015-Sep-03 03:00:00 EET -> 1.41421\n"
-      "2015-Sep-03 04:00:00 EET -> 1.41421\n";
+      "2015-Sep-03 00:00:00 EET -> 1.58114\n"
+      "2015-Sep-03 01:00:00 EET -> 1.58114\n"
+      "2015-Sep-03 02:00:00 EET -> 1.58114\n"
+      "2015-Sep-03 03:00:00 EET -> 1.58114\n"
+      "2015-Sep-03 04:00:00 EET -> 1.58114\n";
 
   if (test_result != expected_result)
     TEST_FAILED("StandardDeviation-function test for area failed. Result should be:\n" +
@@ -1552,7 +1567,7 @@ class tests : public tframe::tests
     TEST(min_t);
     TEST(max_t);
     TEST(mean_t);
-	TEST(amean_t);	
+    TEST(amean_t);
     TEST(median_t);
     TEST(sum_t);
     TEST(integ_t);

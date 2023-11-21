@@ -138,7 +138,7 @@ void extract_subvector_weighted_segment(DataVector& subvector,
     // value changes halfway of timestep, so we have to handle first half and second half of
     // separately
     Fmi::DateTime halfway_time(timestep_period.begin() +
-                                          Fmi::Seconds(timestep_period.length().total_seconds() / 2));
+                               Fmi::Seconds(timestep_period.length().total_seconds() / 2));
     if (intersection_period.contains(halfway_time))
     {
       time_period first_part_period(intersection_period.begin(), halfway_time + microseconds(1));
@@ -782,7 +782,11 @@ double Stat::variance(const Fmi::DateTime& startTime /*= not_a_date_time */,
       acc(item.value, weight = (itsWeights ? item.weight : 1.0));
     }
 
-    return boost::accumulators::variance(acc);
+    auto var = boost::accumulators::variance(acc);
+    auto n = subvector.size();
+    if (n < 2)
+      return 0;
+    return var * n / (n - 1);
   }
   catch (...)
   {
@@ -808,6 +812,18 @@ double Stat::stddev(const Fmi::DateTime& startTime /*= not_a_date_time */,
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+
+/*
+ * The modular standard deviation is calculated using the Mitsuta algorithm
+ * for wind direction standard deviations.
+ *
+ * Reference: Mori, Y., 1986.<br>
+ * <em>Evaluation of Several Single-Pass Estimators of the StandardDeviation and
+ *     the Standard Deviation of Wind Direction.</em><br>
+ * J Climate Appl. Metro., 25, 1387-1397.
+ *
+ * Some information can also be found with Google (Mitsuta wind direction).
+ */
 
 double Stat::stddev_dir(const Fmi::DateTime& startTime /*= not_a_date_time */,
                         const Fmi::DateTime& endTime /*= not_a_date_time */) const
@@ -853,11 +869,12 @@ double Stat::stddev_dir(const Fmi::DateTime& startTime /*= not_a_date_time */,
         previousDirection = dir;
       }
     }
-    double tmp = squaredSum - sum * sum / subvector.size();
-    if (tmp < 0)
+    auto n = subvector.size();
+    double tmp = squaredSum - sum * sum / n;  // population variance
+    if (tmp < 0 || n < 2)
       return 0.0;
 
-    return sqrt(tmp / subvector.size());
+    return sqrt(tmp / (n - 1));  // sample standard deviation
   }
   catch (...)
   {
