@@ -193,6 +193,31 @@ const TimeSeriesGeneratorOptions::TimeList& TimeSeriesGeneratorOptions::getDataT
   return dataTimes;
 }
 
+// Parse day option
+
+void parse_day(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+{
+  if (theReq.getParameter("day"))
+  {
+    // We leave this intentionally out so you can pick certain days with a timestep.
+    // Only using hour/time will set things up for picking fixed times only.
+    // options.mode = TimeSeriesGeneratorOptions::FixedTimes;
+
+    const std::string daylist = required_string(theReq.getParameter("day"), "");
+
+    std::vector<std::string> parts;
+    boost::algorithm::split(parts, daylist, boost::algorithm::is_any_of(","));
+    for (const std::string& part : parts)
+    {
+      int day = Fmi::stoi(part);
+      if (day < 1 || day > 31)
+        throw Fmi::Exception(BCP, "Invalid day selection '" + part + "'!");
+
+      options.days.insert(day);
+    }
+  }
+}
+
 // Parse hour option
 
 void parse_hour(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
@@ -322,8 +347,7 @@ void parse_startstep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Req
 
     int timestep = (options.timeStep ? *options.timeStep : default_timestep);
 
-    options.startTime +=
-        Fmi::Minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
+    options.startTime += Fmi::Minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
   }
 }
 
@@ -354,8 +378,7 @@ void parse_endtime(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Reque
     // one
     if (!options.timeStep)
       options.timeStep = default_timestep;
-    options.endTime =
-        options.startTime + Fmi::Minutes(*options.timeStep * *options.timeSteps);
+    options.endTime = options.startTime + Fmi::Minutes(*options.timeStep * *options.timeSteps);
   }
   else
   {
@@ -377,8 +400,8 @@ TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq)
 {
   try
   {
-    Fmi::DateTime now = optional_time(theReq.getParameter("now"),
-                                                 Fmi::SecondClock::universal_time());
+    Fmi::DateTime now =
+        optional_time(theReq.getParameter("now"), Fmi::SecondClock::universal_time());
 
     TimeSeriesGeneratorOptions options(now);
 
@@ -387,6 +410,7 @@ TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq)
 
     parse_hour(options, theReq);
     parse_time(options, theReq);
+    parse_day(options, theReq);
 
     // Timestep should be parsed last so we can check if the defaults have been changed
 

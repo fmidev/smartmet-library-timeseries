@@ -54,6 +54,10 @@ void generate_fixedtimes_until_endtime(std::set<Fmi::LocalDateTime>& theTimes,
         if (d.is_not_a_date_time())
           continue;
 
+        if (!theOptions.days.empty())
+          if (theOptions.days.find(day->day()) == theOptions.days.end())
+            continue;
+
         if (period.contains(d) || d == theEndTime)
           theTimes.insert(d);
         if (*day > theEndTime.local_time().date())
@@ -100,6 +104,10 @@ void generate_fixedtimes_for_number_of_steps(std::set<Fmi::LocalDateTime>& theTi
 
         if (d.is_not_a_date_time())
           continue;
+
+        if (!theOptions.days.empty())
+          if (theOptions.days.find(day->day()) == theOptions.days.end())
+            continue;
 
         if (d >= theStartTime)
           theTimes.insert(d);
@@ -190,6 +198,16 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
 
       Fmi::LocalDateTime t = Fmi::TimeParser::make_time(day, Fmi::Minutes(mins), theZone);
 
+      if (t > theEndTime)
+        break;
+
+      if (!theOptions.days.empty())
+        if (theOptions.days.find(day.day()) == theOptions.days.end())
+        {
+          mins += timestep;
+          continue;
+        }
+
       // In the first case we can test after the insert if
       // we should break based on the number of times, in
       // the latter case we must validate the time first
@@ -207,8 +225,6 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
       {
         if (!t.is_not_a_date_time() && (period.contains(t) || t == theEndTime))
           theTimes.insert(t);
-        if (t > theEndTime)
-          break;
       }
 
       mins += timestep;
@@ -258,6 +274,10 @@ void generate_datatimes_climatology(std::set<Fmi::LocalDateTime>& theTimes,
           if (lt > theEndTime)
             break;
 
+          if (!theOptions.days.empty())
+            if (theOptions.days.find(lt.date().day()) == theOptions.days.end())
+              continue;
+
           if (period.contains(lt) || lt == theEndTime)
             theTimes.insert(lt);
         }
@@ -300,6 +320,11 @@ void generate_datatimes_normal(std::set<Fmi::LocalDateTime>& theTimes,
       for (const Fmi::DateTime& t : *theOptions.getDataTimes())
       {
         Fmi::LocalDateTime lt(t, theZone);
+
+        if (!theOptions.days.empty())
+          if (theOptions.days.find(lt.date().day()) == theOptions.days.end())
+            continue;
+
         if (lt >= theStartTime && theTimes.size() < *theOptions.timeSteps)
           theTimes.insert(lt);
         if (theTimes.size() >= *theOptions.timeSteps)
@@ -311,6 +336,10 @@ void generate_datatimes_normal(std::set<Fmi::LocalDateTime>& theTimes,
       for (const Fmi::DateTime& t : *theOptions.getDataTimes())
       {
         Fmi::LocalDateTime lt(t, theZone);
+
+        if (!theOptions.days.empty())
+          if (theOptions.days.find(lt.date().day()) == theOptions.days.end())
+            continue;
 
         if (period.contains(lt) || lt == theEndTime)
           theTimes.insert(lt);

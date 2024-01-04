@@ -159,6 +159,33 @@ void fixedtimes_towintertime()
   TEST_PASSED();
 }
 
+void fixedtimes_day()
+{
+  using namespace SmartMet::TimeSeries;
+
+  TimeSeriesGeneratorOptions opt;
+  opt.mode = TimeSeriesGeneratorOptions::Mode::FixedTimes;
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Hours(5));
+  opt.startTimeUTC = false;
+  opt.timeSteps = 4;
+  opt.timeList.insert(300);
+  opt.timeList.insert(1300);
+  opt.timeList.insert(1700);
+  opt.days.insert(14);
+  std::string result =
+      "2012-Nov-14 03:00:00 UTC\n"
+      "2012-Nov-14 13:00:00 UTC\n"
+      "2012-Nov-14 17:00:00 UTC\n"
+      "2012-Dec-14 03:00:00 UTC\n";
+
+  auto tz = timezones.time_zone_from_string("UTC");
+  std::string ret = tostr(TimeSeriesGenerator::generate(opt, tz));
+  if (ret != result)
+    TEST_FAILED("Failed to pass a simple UTC day test:\n" + ret + " <>\n" + result);
+
+  TEST_PASSED();
+}
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Test the timesteps mode
@@ -326,6 +353,32 @@ void datatimes()
   TEST_PASSED();
 }
 
+void timesteps_day()
+{
+  using namespace SmartMet::TimeSeries;
+
+  TimeSeriesGeneratorOptions opt;
+  opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
+  opt.startTime = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Hours(5));
+  opt.startTimeUTC = false;
+  opt.endTime = opt.startTime + Fmi::Hours(48);
+  opt.timeStep = 180;
+  opt.timeSteps = 4;
+  opt.days.insert(14);
+  std::string result =
+      "2012-Nov-14 00:00:00 UTC\n"
+      "2012-Nov-14 03:00:00 UTC\n"
+      "2012-Nov-14 06:00:00 UTC\n"
+      "2012-Nov-14 09:00:00 UTC\n";
+
+  auto tz = timezones.time_zone_from_string("UTC");
+  std::string ret = tostr(TimeSeriesGenerator::generate(opt, tz));
+  if (ret != result)
+    TEST_FAILED("Failed to pass a simple UTC day test:\n" + ret + " <>\n" + result);
+
+  TEST_PASSED();
+}
+
 void datatimes_climatology()
 {
   using namespace SmartMet::TimeSeries;
@@ -454,11 +507,13 @@ class tests : public tframe::tests
     TEST(fixedtimes_helsinki);
     TEST(fixedtimes_towintertime);
     TEST(fixedtimes_tosummertime);
+    TEST(fixedtimes_day);
     TEST(timesteps_utc);
     TEST(timesteps_helsinki);
     TEST(timesteps_tosummertime);
     TEST(timesteps_towintertime);
     TEST(timesteps_all);
+    TEST(timesteps_day);
     TEST(epochtime);
     TEST(offset);
     TEST(datatimes);

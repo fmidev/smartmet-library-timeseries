@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <macgyver/DateTime.h>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
+#include <macgyver/DateTime.h>
 
 #include <list>
 #include <ostream>
@@ -36,8 +36,7 @@ struct TimeSeriesGeneratorOptions
 
   // Methods
 
-  TimeSeriesGeneratorOptions(
-      const Fmi::DateTime& now = Fmi::SecondClock::universal_time());
+  TimeSeriesGeneratorOptions(const Fmi::DateTime& now = Fmi::SecondClock::universal_time());
 
   std::size_t hash_value() const;
 
@@ -49,13 +48,15 @@ struct TimeSeriesGeneratorOptions
   const TimeList& getDataTimes() const;
 
   Mode mode = Mode::TimeSteps;              // algorithm selection
-  Fmi::DateTime startTime;       // start time
-  Fmi::DateTime endTime;         // end time
+  Fmi::DateTime startTime;                  // start time
+  Fmi::DateTime endTime;                    // end time
   bool startTimeUTC = true;                 // timestamps can be interpreted to be in
   bool endTimeUTC = true;                   // UTC time or in some specific time zone
   boost::optional<unsigned int> timeSteps;  // number of time steps
   boost::optional<unsigned int> timeStep;   // Mode:TimeSteps, timestep in Fmi::Minutes
   std::set<unsigned int> timeList;          // Mode:FixedTimes,  integers of form HHMM
+  std::set<unsigned int> days;
+
  private:
   TimeList dataTimes;  // Mode:DataTimes, Fixed times set from outside
  public:
