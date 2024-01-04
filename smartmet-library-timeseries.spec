@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 23.11.21
+Version: 24.1.4
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -23,16 +23,16 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 23.9.6
-BuildRequires: smartmet-library-macgyver-devel >= 23.11.8
+BuildRequires: smartmet-library-macgyver-devel >= 23.11.21
 BuildRequires: smartmet-library-newbase-devel >= 23.11.21
-BuildRequires: smartmet-library-spine-devel >= 23.10.20
+BuildRequires: smartmet-library-spine-devel >= 23.12.5
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 23.10.20
+Requires: smartmet-library-spine >= 23.12.5
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,9 +51,9 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 23.11.8
+Requires: smartmet-library-macgyver-devel >= 23.11.21
 Requires: smartmet-library-newbase-devel >= 23.11.21
-Requires: smartmet-library-spine-devel >= 23.10.20
+Requires: smartmet-library-spine-devel >= 23.12.5
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Jan  4 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.1.4-1.fmi
+- Added option 'day' for timeseries generation (BRAINSTORM-2826)
+
 * Tue Nov 21 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.11.21-1.fmi
 - Fixed the "sdev" to return sample standard deviation instead of population standard deviation
 
