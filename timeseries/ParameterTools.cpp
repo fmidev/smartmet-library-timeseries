@@ -38,7 +38,13 @@ const std::set<std::string> location_parameters = {DEM_PARAM,
                                                    REGION_PARAM,
                                                    COUNTRY_PARAM,
                                                    ELEVATION_PARAM,
-                                                   POPULATION_PARAM};
+                                                   POPULATION_PARAM,
+
+                                                   FMISID_PARAM,
+                                                   STATIONLAT_PARAM,
+                                                   STATIONLATITUDE_PARAM,
+                                                   STATIONLON_PARAM,
+                                                   STATIONLONGITUDE_PARAM};
 
 const std::map<std::string, Parameter::Type> special_parameter_map = {
     {"cloudiness8th", Parameter::Type::DataDerived},
@@ -166,7 +172,12 @@ const std::map<std::string, FmiParameterName> location_parameter_map = {
     {LONLAT_PARAM, kFmiLonLat},
     {POPULATION_PARAM, kFmiPopulation},
     {ELEVATION_PARAM, kFmiElevation},
-    {STATION_ELEVATION_PARAM, kFmiElevation}};
+    {STATION_ELEVATION_PARAM, kFmiElevation},
+    {FMISID_PARAM, kFmiFMISID},
+    {STATIONLONGITUDE_PARAM, kFmiStationLongitude},
+    {STATIONLATITUDE_PARAM, kFmiStationLatitude},
+    {STATIONLON_PARAM, kFmiStationLongitude},
+    {STATIONLAT_PARAM, kFmiStationLatitude}};
 
 // ----------------------------------------------------------------------
 /*!
@@ -416,12 +427,27 @@ std::string location_parameter(const Spine::LocationPtr& loc,
       {
         return valueformatter.format(loc->elevation, precision);
       }
-      default:
+      case kFmiFMISID:
       {
+        if (loc->fmisid)
+          return Fmi::to_string(*loc->fmisid);
+        return valueformatter.missing();
       }
+      case kFmiStationLongitude:
+      {
+        if (loc->fmisid)
+          return valueformatter.format(loc->longitude, latlon_precision);
+        return valueformatter.missing();
+      }
+      case kFmiStationLatitude:
+      {
+        if (loc->fmisid)
+          return valueformatter.format(loc->latitude, latlon_precision);
+        return valueformatter.missing();
+      }
+      default:
+        throw Fmi::Exception(BCP, "Unknown location parameter: '" + paramName + "'");
     }
-
-    throw Fmi::Exception(BCP, "Unknown location parameter: '" + paramName + "'");
   }
   catch (...)
   {
