@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.1.26
+Version: 24.1.30
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -81,6 +81,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue Jan 30 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> 24.1.30-1.fmi
+- Repackaged due to newbase ABI changes
+
 * Fri Jan 26 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.1.26-1.fmi
 - Added station metadata related parameters to list of location independent parameters
 
