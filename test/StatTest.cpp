@@ -12,7 +12,12 @@
 
 using std::string;
 using namespace SmartMet::TimeSeries::Stat;
-using namespace boost::posix_time;
+using Fmi::date_time::time_from_string;
+
+namespace
+{
+    constexpr auto not_a_date_time = Fmi::date_time::Base::NOT_A_DATE_TIME;
+}
 
 // Protection against conflicts with global functions
 namespace StatTest
@@ -154,8 +159,8 @@ void sum()
   }
 
   // sum in the middle of time series, note! starttime between timesteps
-  sum = stat.sum(boost::posix_time::time_from_string("2013-12-02 14:05:00"),
-                 boost::posix_time::time_from_string("2013-12-02 20:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 14:05:00"),
+                 time_from_string("2013-12-02 20:00:00"));
   if (sum != 9)
   {
     std::stringstream ss;
@@ -164,8 +169,8 @@ void sum()
   }
 
   // sum in the middle of time series, note! endtime between timesteps
-  sum = stat.sum(boost::posix_time::time_from_string("2013-12-02 15:00:00"),
-                 boost::posix_time::time_from_string("2013-12-02 21:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 15:00:00"),
+                 time_from_string("2013-12-02 21:00:00"));
   if (sum != 9)
   {
     std::stringstream ss;
@@ -174,8 +179,8 @@ void sum()
   }
 
   // just one timestamp
-  sum = stat.sum(boost::posix_time::time_from_string("2013-12-02 15:00:00"),
-                 boost::posix_time::time_from_string("2013-12-02 15:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 15:00:00"),
+                 time_from_string("2013-12-02 15:00:00"));
   if (sum != 1)
   {
     std::stringstream ss;
@@ -184,8 +189,8 @@ void sum()
   }
 
   // sum from the start till 17:00
-  sum = stat.sum(boost::posix_time::not_a_date_time,
-                 boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+  sum = stat.sum(not_a_date_time,
+                 time_from_string("2013-12-02 17:00:00"));
   if (sum != 8)
   {
     std::stringstream ss;
@@ -194,8 +199,8 @@ void sum()
   }
 
   // sum from 15:00 to the end of time series
-  sum = stat.sum(boost::posix_time::time_from_string("2013-12-02 15:00:00"),
-                 boost::posix_time::not_a_date_time);
+  sum = stat.sum(time_from_string("2013-12-02 15:00:00"),
+                 not_a_date_time);
 
   if (sum != 13)
   {
@@ -205,8 +210,8 @@ void sum()
   }
 
   // starttime later than endtime
-  sum = stat.sum(boost::posix_time::time_from_string("2013-12-02 17:00:00"),
-                 boost::posix_time::time_from_string("2013-12-02 15:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 17:00:00"),
+                 time_from_string("2013-12-02 15:00:00"));
   if (!std::isnan(sum))
   {
     std::stringstream ss;
@@ -300,8 +305,8 @@ void change()
   }
 
   // change between 15:00 and 20:00
-  change = stat.change(boost::posix_time::time_from_string("2013-12-02 15:00:00"),
-                       boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+  change = stat.change(time_from_string("2013-12-02 15:00:00"),
+                       time_from_string("2013-12-02 17:00:00"));
   if (change != 4)
   {
     std::stringstream ss;
@@ -310,8 +315,8 @@ void change()
   }
 
   // change from start till 17:00
-  change = stat.change(boost::posix_time::not_a_date_time,
-                       boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+  change = stat.change(not_a_date_time,
+                       time_from_string("2013-12-02 17:00:00"));
   if (change != 3)
   {
     std::stringstream ss;
@@ -320,8 +325,8 @@ void change()
   }
 
   // change from 20:00 to the end
-  change = stat.change(boost::posix_time::time_from_string("2013-12-02 20:00:00"),
-                       boost::posix_time::not_a_date_time);
+  change = stat.change(time_from_string("2013-12-02 20:00:00"),
+                       not_a_date_time);
 
   if (change != 1)
   {
@@ -348,8 +353,8 @@ void trend()
   }
 
   // trend from start till 20
-  trend = stat.trend(boost::posix_time::not_a_date_time,
-                     boost::posix_time::time_from_string("2013-12-02 20:00:00"));
+  trend = stat.trend(not_a_date_time,
+                     time_from_string("2013-12-02 20:00:00"));
 
   if (trend != -((1.0 / 3.0) * 100.0))
   {
@@ -359,8 +364,8 @@ void trend()
   }
 
   // trend from 20:00 to the end
-  trend = stat.trend(boost::posix_time::time_from_string("2013-12-02 20:00:00"),
-                     boost::posix_time::not_a_date_time);
+  trend = stat.trend(time_from_string("2013-12-02 20:00:00"),
+                     not_a_date_time);
 
   if (trend != 100.0)
   {
@@ -389,8 +394,8 @@ void count()
   // count from start till 17:00
   count = stat.count(std::numeric_limits<double>::min(),
                      std::numeric_limits<double>::max(),
-                     boost::posix_time::not_a_date_time,
-                     boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+                     not_a_date_time,
+                     time_from_string("2013-12-02 17:00:00"));
   if (count != 3)
   {
     std::stringstream ss;
@@ -401,8 +406,8 @@ void count()
   // count from 20:00 to the end
   count = stat.count(std::numeric_limits<double>::min(),
                      std::numeric_limits<double>::max(),
-                     boost::posix_time::time_from_string("2013-12-02 20:00:00"),
-                     boost::posix_time::not_a_date_time);
+                     time_from_string("2013-12-02 20:00:00"),
+                     not_a_date_time);
 
   if (count != 2)
   {
@@ -427,8 +432,8 @@ void count()
   // [2.9, 4.1]
   count = stat.count(2.9,
                      4.1,
-                     boost::posix_time::time_from_string("2013-12-02 15:00:00"),
-                     boost::posix_time::time_from_string("2013-12-02 20:00:00"));
+                     time_from_string("2013-12-02 15:00:00"),
+                     time_from_string("2013-12-02 20:00:00"));
 
   if (count != 1)
   {
@@ -464,8 +469,8 @@ void percentage()
   // is between 3.5 and 5.5
   percentage = stat.percentage(3.5,
                                5.5,
-                               boost::posix_time::time_from_string("2013-12-02 17:00:00"),
-                               boost::posix_time::time_from_string("2013-12-02 22:00:00"));
+                               time_from_string("2013-12-02 17:00:00"),
+                               time_from_string("2013-12-02 22:00:00"));
 
   if (percentage != 50.0)
   {
@@ -496,8 +501,8 @@ void percentage()
   // between 3.5 and 5.5
   percentage = stat.percentage(3.5,
                                5.5,
-                               boost::posix_time::time_from_string("2013-12-02 17:00:00"),
-                               boost::posix_time::time_from_string("2013-12-02 22:00:00"));
+                               time_from_string("2013-12-02 17:00:00"),
+                               time_from_string("2013-12-02 22:00:00"));
 
   if (percentage != ((2.0 / 3.0) * 100.0))
   {
@@ -526,8 +531,8 @@ void median()
   }
 
   // #2 weighted median between 14:00-17:00
-  median = stat.median(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
-                       boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+  median = stat.median(time_from_string("2013-12-02 14:00:00"),
+                       time_from_string("2013-12-02 17:00:00"));
 
   if (median != 1.5)
   {
@@ -537,8 +542,8 @@ void median()
   }
 
   // #3 weighted median between 14:00-20:00
-  median = stat.median(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
-                       boost::posix_time::time_from_string("2013-12-02 20:00:00"));
+  median = stat.median(time_from_string("2013-12-02 14:00:00"),
+                       time_from_string("2013-12-02 20:00:00"));
 
   if (median != 3)
   {
@@ -560,8 +565,8 @@ void median()
 
   stat.useWeights(false);
   // #5 raw median between 14:00-17:00
-  median = stat.median(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
-                       boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+  median = stat.median(time_from_string("2013-12-02 14:00:00"),
+                       time_from_string("2013-12-02 17:00:00"));
 
   if (median != 2)
   {
@@ -571,8 +576,8 @@ void median()
   }
 
   // #6 raw median between 14:00-20:00
-  median = stat.median(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
-                       boost::posix_time::time_from_string("2013-12-02 20:00:00"));
+  median = stat.median(time_from_string("2013-12-02 14:00:00"),
+                       time_from_string("2013-12-02 20:00:00"));
 
   if (median != 2.5)
   {
@@ -601,8 +606,8 @@ void variance()
   }
 
   // #2 raw variance between 14:00-17:00
-  variance = stat.variance(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
-                           boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+  variance = stat.variance(time_from_string("2013-12-02 14:00:00"),
+                           time_from_string("2013-12-02 17:00:00"));
 
   if (precision(variance, 5) != 4.33333)
   {
@@ -631,8 +636,8 @@ void stddev()
   }
 
   // #2 raw standard deviation between 14:00-17:00
-  stddev = stat.stddev(boost::posix_time::time_from_string("2013-12-02 14:00:00"),
-                       boost::posix_time::time_from_string("2013-12-02 17:00:00"));
+  stddev = stat.stddev(time_from_string("2013-12-02 14:00:00"),
+                       time_from_string("2013-12-02 17:00:00"));
 
   if (stddev != sqrt((pow(5.0 / 3.0, 2.0) + pow(2.0 / 3.0, 2.0) + pow(7.0 / 3.0, 2.0)) / 2.0))
   {
@@ -709,49 +714,49 @@ void nearest()
   Stat stat(get_data_vector_t());
 
   // Before timeseries nearest is the first timestep
-  double value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 13:00:00"));
+  double value = stat.nearest(time_from_string("2013-12-02 13:00:00"));
 
   if (value != 2.0)
     TEST_FAILED("Nearest value should be 2.0");
 
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 16:00:00"));
+  value = stat.nearest(time_from_string("2013-12-02 16:00:00"));
 
   if (value != 1.0)
     TEST_FAILED("Nearest value should be 1.0");
 
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 16:00:01"));
+  value = stat.nearest(time_from_string("2013-12-02 16:00:01"));
 
   if (value != 5.0)
     TEST_FAILED("Nearest value should be 5.0");
 
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 15:59:59"));
+  value = stat.nearest(time_from_string("2013-12-02 15:59:59"));
 
   if (value != 1.0)
     TEST_FAILED("Nearest value should be 1.0");
 
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 18:00:00"));
+  value = stat.nearest(time_from_string("2013-12-02 18:00:00"));
 
   if (value != 5.0)
     TEST_FAILED("Nearest value should be 5.0");
 
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 19:00:00"));
+  value = stat.nearest(time_from_string("2013-12-02 19:00:00"));
 
   if (value != 3.0)
     TEST_FAILED("Nearest value should be 3.0");
 
   // Exact timestep found  in timeseries
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 20:00:00"));
+  value = stat.nearest(time_from_string("2013-12-02 20:00:00"));
 
   if (value != 3.0)
     TEST_FAILED("Nearest value should be 3.0");
 
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 21:30:00"));
+  value = stat.nearest(time_from_string("2013-12-02 21:30:00"));
 
   if (value != 4.0)
     TEST_FAILED("Nearest value should be 4.0");
 
   // After the timeseries nearest is the last timestep
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-03 00:30:00"));
+  value = stat.nearest(time_from_string("2013-12-03 00:30:00"));
 
   if (value != 4.0)
     TEST_FAILED("Nearest value should be 4.0");
@@ -764,49 +769,49 @@ void interpolate()
   Stat stat(get_data_vector_t());
 
   // Before timeseries -> extrapolate to the past
-  double value = stat.interpolate(boost::posix_time::time_from_string("2013-12-02 10:30:00"));
+  double value = stat.interpolate(time_from_string("2013-12-02 10:30:00"));
 
   if (value != 5.5)
     TEST_FAILED("Interpolated value should be 5.5");
 
-  value = stat.interpolate(boost::posix_time::time_from_string("2013-12-02 13:00:00"));
+  value = stat.interpolate(time_from_string("2013-12-02 13:00:00"));
 
   if (value != 3.0)
     TEST_FAILED("Interpolated value should be 3.0");
 
   // Exact timestep found  in timeseries
-  value = stat.interpolate(boost::posix_time::time_from_string("2013-12-02 15:00:00"));
+  value = stat.interpolate(time_from_string("2013-12-02 15:00:00"));
 
   if (value != 1.0)
     TEST_FAILED("Interpolated value should be 1.0");
 
   // Interpolation between values
-  value = stat.interpolate(boost::posix_time::time_from_string("2013-12-02 17:10:00"));
+  value = stat.interpolate(time_from_string("2013-12-02 17:10:00"));
   value = precision(value, 2);
 
   if (value != 4.89)
     TEST_FAILED("Interpolated value should be 4.89");
 
-  value = stat.interpolate(boost::posix_time::time_from_string("2013-12-02 18:00:00"));
+  value = stat.interpolate(time_from_string("2013-12-02 18:00:00"));
   value = precision(value, 2);
 
   if (value != 4.33)
     TEST_FAILED("Interpolated value should be 4.33");
 
-  value = stat.interpolate(boost::posix_time::time_from_string("2013-12-02 19:30:00"));
+  value = stat.interpolate(time_from_string("2013-12-02 19:30:00"));
   value = precision(value, 2);
 
   if (value != 3.33)
     TEST_FAILED("Interpolated value should be 3.33");
 
   // After timeseries -> extrapolate to the future
-  value = stat.interpolate(boost::posix_time::time_from_string("2013-12-02 22:30:00"));
+  value = stat.interpolate(time_from_string("2013-12-02 22:30:00"));
   value = precision(value, 2);
 
   if (value != 4.25)
     TEST_FAILED("Interpolated value should be 4.25");
 
-  value = stat.interpolate(boost::posix_time::time_from_string("2013-12-03 02:00:00"));
+  value = stat.interpolate(time_from_string("2013-12-03 02:00:00"));
   value = precision(value, 2);
 
   if (value != 6.0)
@@ -819,15 +824,15 @@ void missing_value()
 {
   Stat stat;
 
-  stat.addData(boost::posix_time::time_from_string("2013-12-02 14:00:00"), 1);
-  stat.addData(boost::posix_time::time_from_string("2013-12-02 15:00:00"), 2);
-  stat.addData(boost::posix_time::time_from_string("2013-12-02 17:00:00"), 3);
+  stat.addData(time_from_string("2013-12-02 14:00:00"), 1);
+  stat.addData(time_from_string("2013-12-02 15:00:00"), 2);
+  stat.addData(time_from_string("2013-12-02 17:00:00"), 3);
 
   // #1 startTime after endTime, default missing value is NaN
   double value = stat.percentage(1,
                                  10,
-                                 boost::posix_time::time_from_string("2013-12-02 17:00:00"),
-                                 boost::posix_time::time_from_string("2013-12-02 14:00:00"));
+                                 time_from_string("2013-12-02 17:00:00"),
+                                 time_from_string("2013-12-02 14:00:00"));
 
   if (!std::isnan(value))
   {

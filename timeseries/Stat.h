@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <boost/date_time/local_time/local_time.hpp>
 #include <macgyver/LocalDateTime.h>
 #include <macgyver/DateTime.h>
 #include <limits>
@@ -33,13 +32,11 @@ namespace TimeSeries
 {
 namespace Stat
 {
-using boost::posix_time::not_a_date_time;
-
 struct DataItem
 {
   DataItem(Fmi::DateTime t, double v, double w = 1.0) : time(t), value(v), weight(w) {}
 
-  Fmi::DateTime time{not_a_date_time};
+    Fmi::DateTime time{Fmi::DateTime::NOT_A_DATE_TIME};
   double value = std::numeric_limits<double>::quiet_NaN();
   double weight = 1.0;
 };
@@ -76,47 +73,47 @@ class Stat
   void useDegrees(bool theDegrees = true) { itsDegrees = theDegrees; }
   void clear();
 
-  double integ(const Fmi::DateTime& startTime = not_a_date_time,
-               const Fmi::DateTime& endTime = not_a_date_time) const;
-  double sum(const Fmi::DateTime& startTime = not_a_date_time,
-             const Fmi::DateTime& endTime = not_a_date_time) const;
-  double min(const Fmi::DateTime& startTime = not_a_date_time,
-             const Fmi::DateTime& endTime = not_a_date_time) const;
-  double mean(const Fmi::DateTime& startTime = not_a_date_time,
-              const Fmi::DateTime& endTime = not_a_date_time) const;
-  double max(const Fmi::DateTime& startTime = not_a_date_time,
-             const Fmi::DateTime& endTime = not_a_date_time) const;
-  double change(const Fmi::DateTime& startTime = not_a_date_time,
-                const Fmi::DateTime& endTime = not_a_date_time) const;
-  double trend(const Fmi::DateTime& startTime = not_a_date_time,
-               const Fmi::DateTime& endTime = not_a_date_time) const;
+  double integ(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+               const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double sum(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+             const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double min(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+             const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double mean(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+              const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double max(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+             const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double change(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double trend(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+               const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   unsigned int count(double lowerLimit,
                      double upperLimit,
-                     const Fmi::DateTime& startTime = not_a_date_time,
-                     const Fmi::DateTime& endTime = not_a_date_time) const;
+                     const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                     const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   double percentage(double lowerLimit,
                     double upperLimit,
-                    const Fmi::DateTime& startTime = not_a_date_time,
-                    const Fmi::DateTime& endTime = not_a_date_time) const;
-  double median(const Fmi::DateTime& startTime = not_a_date_time,
-                const Fmi::DateTime& endTime = not_a_date_time) const;
-  double variance(const Fmi::DateTime& startTime = not_a_date_time,
-                  const Fmi::DateTime& endTime = not_a_date_time) const;
-  double stddev(const Fmi::DateTime& startTime = not_a_date_time,
-                const Fmi::DateTime& endTime = not_a_date_time) const;
+                    const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                    const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double median(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double variance(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                  const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double stddev(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   double nearest(const Fmi::DateTime& timestep,
-                 const Fmi::DateTime& startTime = not_a_date_time,
-                 const Fmi::DateTime& endTime = not_a_date_time) const;
+                 const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                 const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   double interpolate(const Fmi::DateTime& timestep,
-                     const Fmi::DateTime& startTime = not_a_date_time,
-                     const Fmi::DateTime& endTime = not_a_date_time) const;
+                     const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                     const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
 
  private:
-  double stddev_dir(const Fmi::DateTime& startTime = not_a_date_time,
-                    const Fmi::DateTime& endTime = not_a_date_time) const;
+  double stddev_dir(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                    const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   bool get_subvector(DataVector& subvector,
-                     const Fmi::DateTime& startTime = not_a_date_time,
-                     const Fmi::DateTime& endTime = not_a_date_time,
+                     const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                     const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME,
                      bool useWeights = true) const;
   void calculate_weights();
   bool invalid_timestamps() const;

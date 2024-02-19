@@ -1,7 +1,6 @@
 #pragma once
 
 #include "TimeSeries.h"
-#include <boost/date_time/local_time/local_time.hpp>
 #include <macgyver/ValueFormatter.h>
 #include <spine/LonLat.h>
 

@@ -5,15 +5,12 @@
 // ======================================================================
 
 #include "TimeSeriesInclude.h"
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/local_time/local_time.hpp>
+#include <memory>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 #include <regression/tframe.h>
 
-namespace bp = boost::posix_time;
-namespace bg = boost::gregorian;
-namespace bl = boost::local_time;
+const char *tz_eet_name = "EET";
 
 // Protection against namespace tests
 namespace TimeSeriesAggregatorTest
@@ -23,9 +20,9 @@ TS::TimeSeries generate_observation_timeseries()
 {
   using namespace SmartMet;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = boost::make_shared<TS::LocalTimePool>();
+  auto pool = std::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
   timeseries.push_back(TS::TimedValue(
@@ -79,9 +76,9 @@ TS::TimeSeries generate_direction_timeseries()
 {
   using namespace SmartMet;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = boost::make_shared<TS::LocalTimePool>();
+  auto pool = std::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
   timeseries.push_back(TS::TimedValue(
@@ -135,16 +132,16 @@ TS::TimeSeries generate_timeseries_with_diverse_values(bool add_missing_value = 
 {
   using namespace SmartMet;
 
-  bl::time_zone_ptr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = boost::make_shared<TS::LocalTimePool>();
+  auto pool = std::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
-  bl::local_date_time t1(bp::ptime(bg::date(2015, 3, 2), bp::hours(22)), zone);
-  bl::local_date_time t2(bp::ptime(bg::date(2015, 3, 2), bp::hours(23)), zone);
-  bl::local_date_time t3(bp::ptime(bg::date(2015, 3, 2), bp::hours(24)), zone);
-  bl::local_date_time t4(bp::ptime(bg::date(2015, 3, 2), bp::hours(25)), zone);
-  bl::local_date_time t5(bp::ptime(bg::date(2015, 3, 2), bp::hours(26)), zone);
+  Fmi::LocalDateTime t1(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone);
+  Fmi::LocalDateTime t2(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone);
+  Fmi::LocalDateTime t3(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone);
+  Fmi::LocalDateTime t4(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone);
+  Fmi::LocalDateTime t5(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone);
 
   if (!degrees)
   {
@@ -176,9 +173,9 @@ TS::TimeSeries generate_timeseries(bool add_missing_value = false, bool degrees 
 {
   using namespace SmartMet;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = boost::make_shared<TS::LocalTimePool>();
+  auto pool = std::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
   Fmi::LocalDateTime t1(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone);
@@ -217,9 +214,9 @@ TS::TimeSeriesGroup generate_timeseries_group()
 {
   using namespace SmartMet;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = boost::make_shared<TS::LocalTimePool>();
+  auto pool = std::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries_helsinki(pool);
 
   timeseries_helsinki.push_back(TS::TimedValue(
@@ -305,9 +302,9 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
 {
   using namespace SmartMet;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = boost::make_shared<TS::LocalTimePool>();
+  auto pool = std::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries_helsinki(pool);
 
   timeseries_helsinki.push_back(TS::TimedValue(
@@ -664,7 +661,7 @@ void nearest_t()
 {
   using namespace TS;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
   TimeSeries timeseries = generate_observation_timeseries();
 
@@ -728,7 +725,7 @@ void interpolate_t()
 {
   using namespace TS;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
   TimeSeries timeseries = generate_observation_timeseries();
 
@@ -792,7 +789,7 @@ void interpolatedir_t()
 {
   using namespace TS;
 
-  Fmi::TimeZonePtr zone(new bl::posix_time_zone("EET+2"));
+  Fmi::TimeZonePtr zone(tz_eet_name);
 
   TimeSeries timeseries = generate_direction_timeseries();
 

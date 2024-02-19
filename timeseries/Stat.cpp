@@ -10,8 +10,6 @@
 #include <numeric>
 #include <stdexcept>
 
-using namespace boost::posix_time;
-
 namespace SmartMet
 {
 namespace TimeSeries
@@ -21,12 +19,15 @@ namespace Stat
 #define MODULO_VALUE_360 360.0
 using DataIterator = DataVector::iterator;
 using DataConstIterator = DataVector::const_iterator;
+using Fmi::date_time::Microseconds;
 
 using namespace boost::accumulators;
 using namespace std;
 
 namespace
 {
+constexpr auto not_a_date_time = Fmi::DateTime::NOT_A_DATE_TIME;
+
 bool comp_value(const DataItem& data1, const DataItem& data2)
 {
   try
@@ -104,7 +105,7 @@ double interpolate_value(bool normal,
   return interpolate_mod_360(first_value, second_value, time_diff_sec, time_diff_to_timestep_sec);
 }
 
-time_period extract_subvector_timeperiod(const DataVector& data,
+Fmi::TimePeriod extract_subvector_timeperiod(const DataVector& data,
                                          const Fmi::DateTime& startTime,
                                          const Fmi::DateTime& endTime)
 {
@@ -114,24 +115,24 @@ time_period extract_subvector_timeperiod(const DataVector& data,
                             ? data[data.size() - 1].time
                             : endTime);
 
-  return {firstTimestamp, lastTimestamp + microseconds(1)};
+  return {firstTimestamp, lastTimestamp + Fmi::Microseconds(1)};
 }
 
 void extract_subvector_weighted_segment(DataVector& subvector,
-                                        const time_period& query_period,
+                                        const Fmi::TimePeriod& query_period,
                                         const DataItem& item1,
                                         const DataItem& item2)
 {
   // iterate through the data vector and sort out periods and corresponding weights
 
   // period between two timesteps
-  time_period timestep_period(item1.time, item2.time + microseconds(1));
+    Fmi::TimePeriod timestep_period(item1.time, item2.time + Fmi::Microseconds(1));
   // if timestep period is inside the queried period handle it
 
   if (query_period.intersects(timestep_period))
   {
     // first find out intersecting period
-    time_period intersection_period(query_period.intersection(timestep_period));
+    Fmi::TimePeriod intersection_period(query_period.intersection(timestep_period));
     if (intersection_period.length().total_seconds() == 0)
       return;
 
@@ -141,8 +142,8 @@ void extract_subvector_weighted_segment(DataVector& subvector,
                                Fmi::Seconds(timestep_period.length().total_seconds() / 2));
     if (intersection_period.contains(halfway_time))
     {
-      time_period first_part_period(intersection_period.begin(), halfway_time + microseconds(1));
-      time_period second_part_period(halfway_time, intersection_period.end());
+      Fmi::TimePeriod first_part_period(intersection_period.begin(), halfway_time + Microseconds(1));
+      Fmi::TimePeriod second_part_period(halfway_time, intersection_period.end());
       subvector.push_back(
           DataItem(item1.time, item1.value, first_part_period.length().total_seconds()));
       subvector.push_back(
@@ -969,8 +970,8 @@ double Stat::interpolate(const Fmi::DateTime& timestep,
     if (indicator_vector.size() < 2)
       return itsMissingValue;
 
-    Fmi::DateTime first_time = boost::posix_time::not_a_date_time;
-    Fmi::DateTime second_time = boost::posix_time::not_a_date_time;
+    Fmi::DateTime first_time = Fmi::DateTime::NOT_A_DATE_TIME;
+    Fmi::DateTime second_time = Fmi::DateTime::NOT_A_DATE_TIME;
     double first_value = itsMissingValue;
     double second_value = itsMissingValue;
     double time_diff_to_timestep_sec = 0.0;

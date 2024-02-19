@@ -8,10 +8,6 @@
 #include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
 
-namespace bp = boost::posix_time;
-namespace bg = boost::gregorian;
-namespace bl = boost::local_time;
-
 namespace SmartMet
 {
 namespace TimeSeries
@@ -36,10 +32,9 @@ void generate_fixedtimes_until_endtime(std::set<Fmi::LocalDateTime>& theTimes,
 {
   try
   {
-    bl::local_time_period period(theStartTime, theEndTime);
+    Fmi::LocalTimePeriod period(theStartTime, theEndTime);
 
-    Fmi::Date today = theStartTime.local_time().date();
-    bg::day_iterator day(today, 1);
+    Fmi::Date day(theStartTime.local_time().date());
 
     while (true)
     {
@@ -49,18 +44,18 @@ void generate_fixedtimes_until_endtime(std::set<Fmi::LocalDateTime>& theTimes,
         unsigned int mm = hhmm % 100;
 
         Fmi::LocalDateTime d =
-            Fmi::TimeParser::make_time(*day, Fmi::Hours(hh) + Fmi::Minutes(mm), theZone);
+            Fmi::TimeParser::make_time(day, Fmi::Hours(hh) + Fmi::Minutes(mm), theZone);
 
         if (d.is_not_a_date_time())
           continue;
 
         if (!theOptions.days.empty())
-          if (theOptions.days.find(day->day()) == theOptions.days.end())
+          if (theOptions.days.find(day.day()) == theOptions.days.end())
             continue;
 
         if (period.contains(d) || d == theEndTime)
           theTimes.insert(d);
-        if (*day > theEndTime.local_time().date())
+        if (day > theEndTime.local_time().date())
           return;
       }
 
@@ -87,10 +82,9 @@ void generate_fixedtimes_for_number_of_steps(std::set<Fmi::LocalDateTime>& theTi
 {
   try
   {
-    bl::local_time_period period(theStartTime, theEndTime);
+    Fmi::LocalTimePeriod period(theStartTime, theEndTime);
 
-    Fmi::Date today = theStartTime.local_time().date();
-    bg::day_iterator day(today, 1);
+    Fmi::Date day(theStartTime.local_time().date());
 
     while (true)
     {
@@ -100,13 +94,13 @@ void generate_fixedtimes_for_number_of_steps(std::set<Fmi::LocalDateTime>& theTi
         unsigned int mm = hhmm % 100;
 
         Fmi::LocalDateTime d =
-            Fmi::TimeParser::make_time(*day, Fmi::Hours(hh) + Fmi::Minutes(mm), theZone);
+            Fmi::TimeParser::make_time(day, Fmi::Hours(hh) + Fmi::Minutes(mm), theZone);
 
         if (d.is_not_a_date_time())
           continue;
 
         if (!theOptions.days.empty())
-          if (theOptions.days.find(day->day()) == theOptions.days.end())
+          if (theOptions.days.find(day.day()) == theOptions.days.end())
             continue;
 
         if (d >= theStartTime)
@@ -182,9 +176,8 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
 
     // Normal case: timeStep > 0
 
-    bl::local_time_period period(theStartTime, theEndTime);
-
-    Fmi::Date day = theStartTime.local_time().date();
+    Fmi::LocalTimePeriod period(theStartTime, theEndTime);
+    Fmi::Date day(theStartTime.local_time().date());
 
     int mins = 0;
 
@@ -193,7 +186,7 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
       if (mins >= 24 * 60)
       {
         mins -= 24 * 60;
-        day += bg::days(1);
+        day ++;
       }
 
       Fmi::LocalDateTime t = Fmi::TimeParser::make_time(day, Fmi::Minutes(mins), theZone);
@@ -250,7 +243,7 @@ void generate_datatimes_climatology(std::set<Fmi::LocalDateTime>& theTimes,
 {
   try
   {
-    bl::local_time_period period(theStartTime, theEndTime);
+    Fmi::LocalTimePeriod period(theStartTime, theEndTime);
 
     // Climatology - must change years accordingly
     short unsigned int startyear = theStartTime.date().year();
@@ -308,7 +301,7 @@ void generate_datatimes_normal(std::set<Fmi::LocalDateTime>& theTimes,
 {
   try
   {
-    bl::local_time_period period(theStartTime, theEndTime);
+    Fmi::LocalTimePeriod period(theStartTime, theEndTime);
 
     // The timesteps available in the data itself
 
@@ -427,8 +420,8 @@ LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
   {
     // Determine start and end times
 
-    Fmi::LocalDateTime starttime(bl::not_a_date_time);
-    Fmi::LocalDateTime endtime(bl::not_a_date_time);
+    Fmi::LocalDateTime starttime(Fmi::LocalDateTime::NOT_A_DATE_TIME);
+    Fmi::LocalDateTime endtime(Fmi::LocalDateTime::NOT_A_DATE_TIME);
 
     // Adjust to given timezone if input was not UTC. Note that if start and end times
     // are omitted, we use the data times for climatology data just like for normal data.

@@ -10,6 +10,7 @@
 #include <macgyver/LocalDateTime.h>
 #include <spine/LonLat.h>
 #include <spine/None.h>
+#include <memory>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
@@ -80,7 +81,7 @@ class LocalTimePool
   std::unordered_map<std::size_t, Fmi::LocalDateTime> localtimes;
 };
 
-using LocalTimePoolPtr = boost::shared_ptr<LocalTimePool>;
+using LocalTimePoolPtr = std::shared_ptr<LocalTimePool>;
 
 struct TimedValue
 {

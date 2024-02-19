@@ -12,13 +12,13 @@
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
+#include <boost/cast.hpp>
 
 using namespace std;
-using namespace boost::posix_time;
-using namespace boost::gregorian;
-using namespace boost::local_time;
 using SmartMet::Spine::LonLat;
 using SmartMet::Spine::None;
+
+using time_duration = Fmi::TimeDuration;
 
 // #define MYDEBUG 1
 
@@ -185,10 +185,10 @@ TimedValue time_aggregate(const TimeSeries &ts,
     statcalculator.setTimestep(timestep);
 
     auto start_time =
-        (timestep.utc_time() - boost::posix_time::minutes(func.getAggregationIntervalBehind()));
+        (timestep.utc_time() - Fmi::Minutes(func.getAggregationIntervalBehind()));
     auto end_time =
-        (timestep.utc_time() + boost::posix_time::minutes(func.getAggregationIntervalAhead()));
-    boost::posix_time::time_period aggregation_period(start_time, end_time);
+        (timestep.utc_time() + Fmi::Minutes(func.getAggregationIntervalAhead()));
+    Fmi::TimePeriod aggregation_period(start_time, end_time);
 
     for (std::size_t i = 0; i < ts.size(); i++)
     {
