@@ -729,7 +729,7 @@ void nearest()
   if (value != 1.0)
     TEST_FAILED("Nearest value should be 1.0");
 
-  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 18::00:00"));
+  value = stat.nearest(boost::posix_time::time_from_string("2013-12-02 18:00:00"));
 
   if (value != 5.0)
     TEST_FAILED("Nearest value should be 5.0");
