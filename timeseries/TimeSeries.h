@@ -113,7 +113,6 @@ class TimeSeries : public TimedValueVector
  public:
   TimeSeries(LocalTimePoolPtr time_pool);
   TimeSeries(const TimeSeries&) = default;
-  void emplace_back(const TimedValue& tv);
   void push_back(const TimedValue& tv);
   TimedValueVector::iterator insert(TimedValueVector::iterator pos, const TimedValue& tv);
   void insert(TimedValueVector::iterator pos,
