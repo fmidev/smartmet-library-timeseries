@@ -173,7 +173,8 @@ TimeSeries area_aggregate(const TimeSeriesGroup &ts_group, const DataFunction &f
   }
 }
 
-// Aggregate only to one timestep
+// Aggregate only to one timestep (UNUSED FUNCTION)
+#if 0
 TimedValue time_aggregate(const TimeSeries &ts,
                           const DataFunction &func,
                           const Fmi::LocalDateTime &timestep)
@@ -204,6 +205,7 @@ TimedValue time_aggregate(const TimeSeries &ts,
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+#endif  
 
 TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
 {
