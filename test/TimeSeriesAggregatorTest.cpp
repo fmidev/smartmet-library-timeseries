@@ -29,47 +29,47 @@ TS::TimeSeries generate_observation_timeseries()
   TS::TimeSeries timeseries(pool);
 
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22) + Fmi::Minutes(10)),
                          zone),
       1.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22) + Fmi::Minutes(15)),
                          zone),
       2.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22) + Fmi::Minutes(48)),
                          zone),
       3.5));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23) + Fmi::Minutes(8)),
                          zone),
       4.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(52)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23) + Fmi::Minutes(52)),
                          zone),
       5.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24) + Fmi::Minutes(9)),
                          zone),
       5.5));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24) + Fmi::Minutes(53)),
                          zone),
       3.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 2.5));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 2.5));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25) + Fmi::Minutes(50)),
                          zone),
       -1.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), TS::None()));
 
   return timeseries;
 }
@@ -85,47 +85,47 @@ TS::TimeSeries generate_direction_timeseries()
   TS::TimeSeries timeseries(pool);
 
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(10)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22) + Fmi::Minutes(10)),
                          zone),
       340.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(15)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22) + Fmi::Minutes(15)),
                          zone),
       350.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22) + Fmi::Minutes(48)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22) + Fmi::Minutes(48)),
                          zone),
       355.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(8)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23) + Fmi::Minutes(8)),
                          zone),
       5.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23) + Fmi::Minutes(51)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23) + Fmi::Minutes(51)),
                          zone),
       20.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(9)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24) + Fmi::Minutes(9)),
                          zone),
       10.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24) + Fmi::Minutes(53)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24) + Fmi::Minutes(53)),
                          zone),
       355.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 350.));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 350.));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25) + Fmi::Minutes(50)),
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25) + Fmi::Minutes(50)),
                          zone),
       340.0));
   timeseries.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), TS::None()));
 
   return timeseries;
 }
@@ -140,11 +140,11 @@ TS::TimeSeries generate_timeseries_with_diverse_values(bool add_missing_value = 
   auto pool = boost::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
-  bl::local_date_time t1(bp::ptime(bg::date(2015, 9, 2), bp::hours(22)), zone);
-  bl::local_date_time t2(bp::ptime(bg::date(2015, 9, 2), bp::hours(23)), zone);
-  bl::local_date_time t3(bp::ptime(bg::date(2015, 9, 2), bp::hours(24)), zone);
-  bl::local_date_time t4(bp::ptime(bg::date(2015, 9, 2), bp::hours(25)), zone);
-  bl::local_date_time t5(bp::ptime(bg::date(2015, 9, 2), bp::hours(26)), zone);
+  bl::local_date_time t1(bp::ptime(bg::date(2015, 3, 2), bp::hours(22)), zone);
+  bl::local_date_time t2(bp::ptime(bg::date(2015, 3, 2), bp::hours(23)), zone);
+  bl::local_date_time t3(bp::ptime(bg::date(2015, 3, 2), bp::hours(24)), zone);
+  bl::local_date_time t4(bp::ptime(bg::date(2015, 3, 2), bp::hours(25)), zone);
+  bl::local_date_time t5(bp::ptime(bg::date(2015, 3, 2), bp::hours(26)), zone);
 
   if (!degrees)
   {
@@ -181,11 +181,11 @@ TS::TimeSeries generate_timeseries(bool add_missing_value = false, bool degrees 
   auto pool = boost::make_shared<TS::LocalTimePool>();
   TS::TimeSeries timeseries(pool);
 
-  Fmi::LocalDateTime t1(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone);
-  Fmi::LocalDateTime t2(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone);
-  Fmi::LocalDateTime t3(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone);
-  Fmi::LocalDateTime t4(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone);
-  Fmi::LocalDateTime t5(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone);
+  Fmi::LocalDateTime t1(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone);
+  Fmi::LocalDateTime t2(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone);
+  Fmi::LocalDateTime t3(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone);
+  Fmi::LocalDateTime t4(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone);
+  Fmi::LocalDateTime t5(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone);
 
   if (!degrees)
   {
@@ -223,67 +223,67 @@ TS::TimeSeriesGroup generate_timeseries_group()
   TS::TimeSeries timeseries_helsinki(pool);
 
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 1.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 1.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 6.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 6.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 11.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 11.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 16.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 16.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 21.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 21.0));
 
   TS::TimeSeries timeseries_tampere(pool);
 
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 2.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 2.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 7.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 7.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 12.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 12.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 17.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 17.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 22.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 22.0));
 
   TS::TimeSeries timeseries_oulu(pool);
 
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 3.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 3.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 8.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 8.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 13.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 13.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 18.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 18.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 23.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 23.0));
 
   TS::TimeSeries timeseries_kuopio(pool);
 
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 4.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 4.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 9.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 9.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 14.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 14.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 19.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 19.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 24.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 24.0));
 
   TS::TimeSeries timeseries_turku(pool);
 
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 5.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 5.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 10.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 10.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 15.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 15.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 20.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 20.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 25.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 25.0));
 
   TS::LonLatTimeSeries lonlat_ts_helsinki(TS::LonLat(24.9375, 60.1718), timeseries_helsinki);
   TS::LonLatTimeSeries lonlat_ts_tampere(TS::LonLat(23.7667, 61.5000), timeseries_tampere);
@@ -311,67 +311,67 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
   TS::TimeSeries timeseries_helsinki(pool);
 
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 1.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 1.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 6.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 6.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), TS::None()));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 16.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 16.0));
   timeseries_helsinki.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 21.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 21.0));
 
   TS::TimeSeries timeseries_tampere(pool);
 
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 2.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 2.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 7.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 7.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 17.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 17.0));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), TS::None()));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), TS::None()));
   timeseries_tampere.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 22.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 22.0));
 
   TS::TimeSeries timeseries_oulu(pool);
 
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 3.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 3.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 8.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 8.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 13.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 13.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 18.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 18.0));
   timeseries_oulu.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 23.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 23.0));
 
   TS::TimeSeries timeseries_kuopio(pool);
 
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 4.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 4.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 9.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 9.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 14.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 14.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 19.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 19.0));
   timeseries_kuopio.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 24.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 24.0));
 
   TS::TimeSeries timeseries_turku(pool);
 
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(22)), zone), 5.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 5.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(23)), zone), 10.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone), 10.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(24)), zone), 15.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(24)), zone), 15.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(25)), zone), 20.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(25)), zone), 20.0));
   timeseries_turku.push_back(TS::TimedValue(
-      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 9, 2), Fmi::Hours(26)), zone), 25.0));
+      Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 25.0));
 
   TS::LonLatTimeSeries lonlat_ts_helsinki(TS::LonLat(24.9375, 60.1718), timeseries_helsinki);
   TS::LonLatTimeSeries lonlat_ts_tampere(TS::LonLat(23.7667, 61.5000), timeseries_tampere);
@@ -678,19 +678,19 @@ void nearest_t()
   std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> nan\n"
-      "2015-Sep-03 00:10:00 EET -> 1\n"
-      "2015-Sep-03 00:15:00 EET -> 2\n"
-      "2015-Sep-03 00:48:00 EET -> 3.5\n"
-      "2015-Sep-03 01:00:00 EET -> 4\n"
-      "2015-Sep-03 01:08:00 EET -> 4\n"
-      "2015-Sep-03 01:52:00 EET -> 5\n"
-      "2015-Sep-03 02:00:00 EET -> 5\n"
-      "2015-Sep-03 02:09:00 EET -> 5.5\n"
-      "2015-Sep-03 02:53:00 EET -> 3\n"
-      "2015-Sep-03 03:00:00 EET -> 2.5\n"
-      "2015-Sep-03 03:50:00 EET -> -1\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> nan\n"
+      "2015-Mar-03 00:10:00 EET -> 1\n"
+      "2015-Mar-03 00:15:00 EET -> 2\n"
+      "2015-Mar-03 00:48:00 EET -> 3.5\n"
+      "2015-Mar-03 01:00:00 EET -> 4\n"
+      "2015-Mar-03 01:08:00 EET -> 4\n"
+      "2015-Mar-03 01:52:00 EET -> 5\n"
+      "2015-Mar-03 02:00:00 EET -> 5\n"
+      "2015-Mar-03 02:09:00 EET -> 5.5\n"
+      "2015-Mar-03 02:53:00 EET -> 3\n"
+      "2015-Mar-03 03:00:00 EET -> 2.5\n"
+      "2015-Mar-03 03:50:00 EET -> -1\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Nearest-function test (8 min) failed. Result should be:\n" + expected_result +
@@ -703,19 +703,19 @@ void nearest_t()
   test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
 
   expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 00:10:00 EET -> 1\n"
-      "2015-Sep-03 00:15:00 EET -> 2\n"
-      "2015-Sep-03 00:48:00 EET -> 3.5\n"
-      "2015-Sep-03 01:00:00 EET -> 4\n"
-      "2015-Sep-03 01:08:00 EET -> 4\n"
-      "2015-Sep-03 01:52:00 EET -> 5\n"
-      "2015-Sep-03 02:00:00 EET -> 5\n"
-      "2015-Sep-03 02:09:00 EET -> 5.5\n"
-      "2015-Sep-03 02:53:00 EET -> 3\n"
-      "2015-Sep-03 03:00:00 EET -> 2.5\n"
-      "2015-Sep-03 03:50:00 EET -> -1\n"
-      "2015-Sep-03 04:00:00 EET -> -1\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 00:10:00 EET -> 1\n"
+      "2015-Mar-03 00:15:00 EET -> 2\n"
+      "2015-Mar-03 00:48:00 EET -> 3.5\n"
+      "2015-Mar-03 01:00:00 EET -> 4\n"
+      "2015-Mar-03 01:08:00 EET -> 4\n"
+      "2015-Mar-03 01:52:00 EET -> 5\n"
+      "2015-Mar-03 02:00:00 EET -> 5\n"
+      "2015-Mar-03 02:09:00 EET -> 5.5\n"
+      "2015-Mar-03 02:53:00 EET -> 3\n"
+      "2015-Mar-03 03:00:00 EET -> 2.5\n"
+      "2015-Mar-03 03:50:00 EET -> -1\n"
+      "2015-Mar-03 04:00:00 EET -> -1\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Nearest-function test (10 min) failed. Result should be:\n" + expected_result +
@@ -742,19 +742,19 @@ void interpolate_t()
   std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> nan\n"
-      "2015-Sep-03 00:10:00 EET -> 1\n"
-      "2015-Sep-03 00:15:00 EET -> 2\n"
-      "2015-Sep-03 00:48:00 EET -> 3.5\n"
-      "2015-Sep-03 01:00:00 EET -> nan\n"
-      "2015-Sep-03 01:08:00 EET -> 4\n"
-      "2015-Sep-03 01:52:00 EET -> 5\n"
-      "2015-Sep-03 02:00:00 EET -> 5.23529\n"
-      "2015-Sep-03 02:09:00 EET -> 5.5\n"
-      "2015-Sep-03 02:53:00 EET -> 3\n"
-      "2015-Sep-03 03:00:00 EET -> 2.5\n"
-      "2015-Sep-03 03:50:00 EET -> -1\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> nan\n"
+      "2015-Mar-03 00:10:00 EET -> 1\n"
+      "2015-Mar-03 00:15:00 EET -> 2\n"
+      "2015-Mar-03 00:48:00 EET -> 3.5\n"
+      "2015-Mar-03 01:00:00 EET -> nan\n"
+      "2015-Mar-03 01:08:00 EET -> 4\n"
+      "2015-Mar-03 01:52:00 EET -> 5\n"
+      "2015-Mar-03 02:00:00 EET -> 5.23529\n"
+      "2015-Mar-03 02:09:00 EET -> 5.5\n"
+      "2015-Mar-03 02:53:00 EET -> 3\n"
+      "2015-Mar-03 03:00:00 EET -> 2.5\n"
+      "2015-Mar-03 03:50:00 EET -> -1\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Interpolate-function test (10 min) failed. Result should be:\n" + expected_result +
@@ -767,19 +767,19 @@ void interpolate_t()
   test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
 
   expected_result =
-      "2015-Sep-03 00:00:00 EET -> -1\n"
-      "2015-Sep-03 00:10:00 EET -> 1\n"
-      "2015-Sep-03 00:15:00 EET -> 2\n"
-      "2015-Sep-03 00:48:00 EET -> 3.5\n"
-      "2015-Sep-03 01:00:00 EET -> 3.8\n"
-      "2015-Sep-03 01:08:00 EET -> 4\n"
-      "2015-Sep-03 01:52:00 EET -> 5\n"
-      "2015-Sep-03 02:00:00 EET -> 5.23529\n"
-      "2015-Sep-03 02:09:00 EET -> 5.5\n"
-      "2015-Sep-03 02:53:00 EET -> 3\n"
-      "2015-Sep-03 03:00:00 EET -> 2.5\n"
-      "2015-Sep-03 03:50:00 EET -> -1\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> -1\n"
+      "2015-Mar-03 00:10:00 EET -> 1\n"
+      "2015-Mar-03 00:15:00 EET -> 2\n"
+      "2015-Mar-03 00:48:00 EET -> 3.5\n"
+      "2015-Mar-03 01:00:00 EET -> 3.8\n"
+      "2015-Mar-03 01:08:00 EET -> 4\n"
+      "2015-Mar-03 01:52:00 EET -> 5\n"
+      "2015-Mar-03 02:00:00 EET -> 5.23529\n"
+      "2015-Mar-03 02:09:00 EET -> 5.5\n"
+      "2015-Mar-03 02:53:00 EET -> 3\n"
+      "2015-Mar-03 03:00:00 EET -> 2.5\n"
+      "2015-Mar-03 03:50:00 EET -> -1\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Interpolate-function test (15 min) failed. Result should be:\n" + expected_result +
@@ -807,19 +807,19 @@ void interpolatedir_t()
   std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> nan\n"
-      "2015-Sep-03 00:10:00 EET -> 340\n"
-      "2015-Sep-03 00:15:00 EET -> 350\n"
-      "2015-Sep-03 00:48:00 EET -> 355\n"
-      "2015-Sep-03 01:00:00 EET -> nan\n"
-      "2015-Sep-03 01:08:00 EET -> 5\n"
-      "2015-Sep-03 01:51:00 EET -> 20\n"
-      "2015-Sep-03 02:00:00 EET -> 15\n"
-      "2015-Sep-03 02:09:00 EET -> 10\n"
-      "2015-Sep-03 02:53:00 EET -> 355\n"
-      "2015-Sep-03 03:00:00 EET -> 350\n"
-      "2015-Sep-03 03:50:00 EET -> 340\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> nan\n"
+      "2015-Mar-03 00:10:00 EET -> 340\n"
+      "2015-Mar-03 00:15:00 EET -> 350\n"
+      "2015-Mar-03 00:48:00 EET -> 355\n"
+      "2015-Mar-03 01:00:00 EET -> nan\n"
+      "2015-Mar-03 01:08:00 EET -> 5\n"
+      "2015-Mar-03 01:51:00 EET -> 20\n"
+      "2015-Mar-03 02:00:00 EET -> 15\n"
+      "2015-Mar-03 02:09:00 EET -> 10\n"
+      "2015-Mar-03 02:53:00 EET -> 355\n"
+      "2015-Mar-03 03:00:00 EET -> 350\n"
+      "2015-Mar-03 03:50:00 EET -> 340\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (expected_result != test_result)
     TEST_FAILED("InterpolateDir-function test (10 min) failed. Result should be:\n" +
@@ -832,19 +832,19 @@ void interpolatedir_t()
   test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
 
   expected_result =
-      "2015-Sep-03 00:00:00 EET -> 320\n"
-      "2015-Sep-03 00:10:00 EET -> 340\n"
-      "2015-Sep-03 00:15:00 EET -> 350\n"
-      "2015-Sep-03 00:48:00 EET -> 355\n"
-      "2015-Sep-03 01:00:00 EET -> 1\n"
-      "2015-Sep-03 01:08:00 EET -> 5\n"
-      "2015-Sep-03 01:51:00 EET -> 20\n"
-      "2015-Sep-03 02:00:00 EET -> 15\n"
-      "2015-Sep-03 02:09:00 EET -> 10\n"
-      "2015-Sep-03 02:53:00 EET -> 355\n"
-      "2015-Sep-03 03:00:00 EET -> 350\n"
-      "2015-Sep-03 03:50:00 EET -> 340\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> 320\n"
+      "2015-Mar-03 00:10:00 EET -> 340\n"
+      "2015-Mar-03 00:15:00 EET -> 350\n"
+      "2015-Mar-03 00:48:00 EET -> 355\n"
+      "2015-Mar-03 01:00:00 EET -> 1\n"
+      "2015-Mar-03 01:08:00 EET -> 5\n"
+      "2015-Mar-03 01:51:00 EET -> 20\n"
+      "2015-Mar-03 02:00:00 EET -> 15\n"
+      "2015-Mar-03 02:09:00 EET -> 10\n"
+      "2015-Mar-03 02:53:00 EET -> 355\n"
+      "2015-Mar-03 03:00:00 EET -> 350\n"
+      "2015-Mar-03 03:50:00 EET -> 340\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (expected_result != test_result)
     TEST_FAILED("InterpolatDir-function test (15 min) failed. Result should be:\n" +
@@ -859,11 +859,11 @@ void min_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Minimum, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 1\n"
-      "2015-Sep-03 02:00:00 EET -> 1\n"
-      "2015-Sep-03 03:00:00 EET -> 2\n"
-      "2015-Sep-03 04:00:00 EET -> 3\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 1\n"
+      "2015-Mar-03 02:00:00 EET -> 1\n"
+      "2015-Mar-03 03:00:00 EET -> 2\n"
+      "2015-Mar-03 04:00:00 EET -> 3\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Minimum-function test failed. Result should be:\n" + expected_result +
@@ -879,11 +879,11 @@ void min_t_with_range()
       *execute_time_aggregation_function_with_range(TS::FunctionId::Minimum, 120, 0, 2.0, 3.0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> nan\n"
-      "2015-Sep-03 01:00:00 EET -> 2\n"
-      "2015-Sep-03 02:00:00 EET -> 2\n"
-      "2015-Sep-03 03:00:00 EET -> 2\n"
-      "2015-Sep-03 04:00:00 EET -> 3\n";
+      "2015-Mar-03 00:00:00 EET -> nan\n"
+      "2015-Mar-03 01:00:00 EET -> 2\n"
+      "2015-Mar-03 02:00:00 EET -> 2\n"
+      "2015-Mar-03 03:00:00 EET -> 2\n"
+      "2015-Mar-03 04:00:00 EET -> 3\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Minimum-function with range test failed. Result should be:\n" + expected_result +
@@ -898,11 +898,11 @@ void max_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Maximum, 0, 120));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 3\n"
-      "2015-Sep-03 01:00:00 EET -> 4\n"
-      "2015-Sep-03 02:00:00 EET -> 5\n"
-      "2015-Sep-03 03:00:00 EET -> 5\n"
-      "2015-Sep-03 04:00:00 EET -> 5\n";
+      "2015-Mar-03 00:00:00 EET -> 3\n"
+      "2015-Mar-03 01:00:00 EET -> 4\n"
+      "2015-Mar-03 02:00:00 EET -> 5\n"
+      "2015-Mar-03 03:00:00 EET -> 5\n"
+      "2015-Mar-03 04:00:00 EET -> 5\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Max-function test failed. Result should be:\n" + expected_result + "\n not \n" +
@@ -918,11 +918,11 @@ void max_t_with_range()
       *execute_time_aggregation_function_with_range(TS::FunctionId::Maximum, 0, 120, 3, 4));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 3\n"
-      "2015-Sep-03 01:00:00 EET -> 4\n"
-      "2015-Sep-03 02:00:00 EET -> 4\n"
-      "2015-Sep-03 03:00:00 EET -> 4\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> 3\n"
+      "2015-Mar-03 01:00:00 EET -> 4\n"
+      "2015-Mar-03 02:00:00 EET -> 4\n"
+      "2015-Mar-03 03:00:00 EET -> 4\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Max-function with range test failed. Result should be:\n" + expected_result +
@@ -937,11 +937,11 @@ void mean_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Mean, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 1.5\n"
-      "2015-Sep-03 02:00:00 EET -> 2\n"
-      "2015-Sep-03 03:00:00 EET -> 3\n"
-      "2015-Sep-03 04:00:00 EET -> 4\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 1.5\n"
+      "2015-Mar-03 02:00:00 EET -> 2\n"
+      "2015-Mar-03 03:00:00 EET -> 3\n"
+      "2015-Mar-03 04:00:00 EET -> 4\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Mean-function test failed. Result should be:\n" + expected_result + "\n not \n" +
@@ -960,17 +960,17 @@ void amean_t()
 
   std::string expected_result =
       "mean:\n"
-      "2015-Sep-03 00:00:00 EET -> 4\n"
-      "2015-Sep-03 01:00:00 EET -> 4.75\n"
-      "2015-Sep-03 02:00:00 EET -> 5\n"
-      "2015-Sep-03 03:00:00 EET -> 4.25\n"
-      "2015-Sep-03 04:00:00 EET -> 4\n"
+      "2015-Mar-03 00:00:00 EET -> 4\n"
+      "2015-Mar-03 01:00:00 EET -> 4.75\n"
+      "2015-Mar-03 02:00:00 EET -> 5\n"
+      "2015-Mar-03 03:00:00 EET -> 4.25\n"
+      "2015-Mar-03 04:00:00 EET -> 4\n"
       "amean:\n"
-      "2015-Sep-03 00:00:00 EET -> 4\n"
-      "2015-Sep-03 01:00:00 EET -> 4\n"
-      "2015-Sep-03 02:00:00 EET -> 5.33333\n"
-      "2015-Sep-03 03:00:00 EET -> 4\n"
-      "2015-Sep-03 04:00:00 EET -> 4\n";
+      "2015-Mar-03 00:00:00 EET -> 4\n"
+      "2015-Mar-03 01:00:00 EET -> 4\n"
+      "2015-Mar-03 02:00:00 EET -> 5.33333\n"
+      "2015-Mar-03 03:00:00 EET -> 4\n"
+      "2015-Mar-03 04:00:00 EET -> 4\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Amean-function test failed. Result should be:\n" + expected_result + "\n not \n" +
@@ -985,11 +985,11 @@ void meandir_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Mean, 120, 0, false, true));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 340\n"
-      "2015-Sep-03 01:00:00 EET -> 345\n"
-      "2015-Sep-03 02:00:00 EET -> 348.75\n"
-      "2015-Sep-03 03:00:00 EET -> 356.25\n"
-      "2015-Sep-03 04:00:00 EET -> 3.75\n";
+      "2015-Mar-03 00:00:00 EET -> 340\n"
+      "2015-Mar-03 01:00:00 EET -> 345\n"
+      "2015-Mar-03 02:00:00 EET -> 348.75\n"
+      "2015-Mar-03 03:00:00 EET -> 356.25\n"
+      "2015-Mar-03 04:00:00 EET -> 3.75\n";
 
   if (expected_result != test_result)
     TEST_FAILED("MeanDir-function test failed. Result should be:\n" + expected_result +
@@ -1005,11 +1005,11 @@ void mean_t_with_range()
       *execute_time_aggregation_function_with_range(TS::FunctionId::Mean, 120, 0, 2.0, 4.0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> nan\n"
-      "2015-Sep-03 01:00:00 EET -> 2\n"
-      "2015-Sep-03 02:00:00 EET -> 2.5\n"
-      "2015-Sep-03 03:00:00 EET -> 3\n"
-      "2015-Sep-03 04:00:00 EET -> 3.5\n";
+      "2015-Mar-03 00:00:00 EET -> nan\n"
+      "2015-Mar-03 01:00:00 EET -> 2\n"
+      "2015-Mar-03 02:00:00 EET -> 2.5\n"
+      "2015-Mar-03 03:00:00 EET -> 3\n"
+      "2015-Mar-03 04:00:00 EET -> 3.5\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Mean-function with range test failed. Result should be:\n" + expected_result +
@@ -1025,11 +1025,11 @@ void mean_a_t_with_range()
       TS::FunctionId::Mean, TS::FunctionId::Mean, 120, 0, 1.0, 3.0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 1.5\n"
-      "2015-Sep-03 02:00:00 EET -> 2\n"
-      "2015-Sep-03 03:00:00 EET -> 2.5\n"
-      "2015-Sep-03 04:00:00 EET -> 3\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 1.5\n"
+      "2015-Mar-03 02:00:00 EET -> 2\n"
+      "2015-Mar-03 03:00:00 EET -> 2.5\n"
+      "2015-Mar-03 04:00:00 EET -> 3\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Mean area and time function with range test failed. Result should be:\n" +
@@ -1045,11 +1045,11 @@ void mean_t_a_with_range()
       TS::FunctionId::Mean, TS::FunctionId::Mean, 120, 0, 1.0, 3.0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 1.5\n"
-      "2015-Sep-03 02:00:00 EET -> 2\n"
-      "2015-Sep-03 03:00:00 EET -> nan\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 1.5\n"
+      "2015-Mar-03 02:00:00 EET -> 2\n"
+      "2015-Mar-03 03:00:00 EET -> nan\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Mean time and area function with range test failed. Result should be:\n" +
@@ -1064,11 +1064,11 @@ void median_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Median, 240, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 1.5\n"
-      "2015-Sep-03 02:00:00 EET -> 2\n"
-      "2015-Sep-03 03:00:00 EET -> 2.5\n"
-      "2015-Sep-03 04:00:00 EET -> 3\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 1.5\n"
+      "2015-Mar-03 02:00:00 EET -> 2\n"
+      "2015-Mar-03 03:00:00 EET -> 2.5\n"
+      "2015-Mar-03 04:00:00 EET -> 3\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Median-function test failed. Result should be:\n" + expected_result + "\n not \n" +
@@ -1084,11 +1084,11 @@ void median_t_with_range()
       *execute_time_aggregation_function_with_range(TS::FunctionId::Median, 240, 0, 2, 4));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> nan\n"
-      "2015-Sep-03 01:00:00 EET -> 2\n"
-      "2015-Sep-03 02:00:00 EET -> 2.5\n"
-      "2015-Sep-03 03:00:00 EET -> 3\n"
-      "2015-Sep-03 04:00:00 EET -> 3\n";
+      "2015-Mar-03 00:00:00 EET -> nan\n"
+      "2015-Mar-03 01:00:00 EET -> 2\n"
+      "2015-Mar-03 02:00:00 EET -> 2.5\n"
+      "2015-Mar-03 03:00:00 EET -> 3\n"
+      "2015-Mar-03 04:00:00 EET -> 3\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Median-function with range test failed. Result should be:\n" + expected_result +
@@ -1103,11 +1103,11 @@ void sum_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Sum, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 3\n"
-      "2015-Sep-03 02:00:00 EET -> 6\n"
-      "2015-Sep-03 03:00:00 EET -> 9\n"
-      "2015-Sep-03 04:00:00 EET -> 12\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 3\n"
+      "2015-Mar-03 02:00:00 EET -> 6\n"
+      "2015-Mar-03 03:00:00 EET -> 9\n"
+      "2015-Mar-03 04:00:00 EET -> 12\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Sum-function test failed. Expected result should be:\n" + expected_result +
@@ -1122,11 +1122,11 @@ void integ_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Integ, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0.000277778\n"
-      "2015-Sep-03 01:00:00 EET -> 1.5\n"
-      "2015-Sep-03 02:00:00 EET -> 4\n"
-      "2015-Sep-03 03:00:00 EET -> 6\n"
-      "2015-Sep-03 04:00:00 EET -> 8\n";
+      "2015-Mar-03 00:00:00 EET -> 0.000277778\n"
+      "2015-Mar-03 01:00:00 EET -> 1.5\n"
+      "2015-Mar-03 02:00:00 EET -> 4\n"
+      "2015-Mar-03 03:00:00 EET -> 6\n"
+      "2015-Mar-03 04:00:00 EET -> 8\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Integ-function test failed. Expected result should be:\n" + expected_result +
@@ -1141,11 +1141,11 @@ void stddev_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::StandardDeviation, 240, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 0.707107\n"
-      "2015-Sep-03 02:00:00 EET -> 0.816497\n"
-      "2015-Sep-03 03:00:00 EET -> 1.04881\n"
-      "2015-Sep-03 04:00:00 EET -> 1.30931\n";
+      "2015-Mar-03 00:00:00 EET -> 0\n"
+      "2015-Mar-03 01:00:00 EET -> 0.707107\n"
+      "2015-Mar-03 02:00:00 EET -> 0.816497\n"
+      "2015-Mar-03 03:00:00 EET -> 1.04881\n"
+      "2015-Mar-03 04:00:00 EET -> 1.30931\n";
 
   if (expected_result != test_result)
     TEST_FAILED("StandardDeviation-function test failed. Expected result should be:\n" +
@@ -1160,11 +1160,11 @@ void stddevdir_t()
       *execute_time_aggregation_function(TS::FunctionId::StandardDeviation, 240, 0, false, true));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 7.07107\n"
-      "2015-Sep-03 02:00:00 EET -> 6.29153\n"
-      "2015-Sep-03 03:00:00 EET -> 8.21584\n"
-      "2015-Sep-03 04:00:00 EET -> 9.91031\n";
+      "2015-Mar-03 00:00:00 EET -> 0\n"
+      "2015-Mar-03 01:00:00 EET -> 7.07107\n"
+      "2015-Mar-03 02:00:00 EET -> 6.29153\n"
+      "2015-Mar-03 03:00:00 EET -> 8.21584\n"
+      "2015-Mar-03 04:00:00 EET -> 9.91031\n";
 
   if (expected_result != test_result)
     TEST_FAILED("StandardDeviationDir-function test failed. Expected result should be:\n" +
@@ -1179,11 +1179,11 @@ void percentage_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Percentage, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 0\n"
-      "2015-Sep-03 02:00:00 EET -> 25\n"
-      "2015-Sep-03 03:00:00 EET -> 75\n"
-      "2015-Sep-03 04:00:00 EET -> 75\n";
+      "2015-Mar-03 00:00:00 EET -> 0\n"
+      "2015-Mar-03 01:00:00 EET -> 0\n"
+      "2015-Mar-03 02:00:00 EET -> 25\n"
+      "2015-Mar-03 03:00:00 EET -> 75\n"
+      "2015-Mar-03 04:00:00 EET -> 75\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Percentage-function test failed. Expected result should be:\n" + expected_result +
@@ -1199,11 +1199,11 @@ void count_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Count, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 0\n"
-      "2015-Sep-03 02:00:00 EET -> 1\n"
-      "2015-Sep-03 03:00:00 EET -> 2\n"
-      "2015-Sep-03 04:00:00 EET -> 2\n";
+      "2015-Mar-03 00:00:00 EET -> 0\n"
+      "2015-Mar-03 01:00:00 EET -> 0\n"
+      "2015-Mar-03 02:00:00 EET -> 1\n"
+      "2015-Mar-03 03:00:00 EET -> 2\n"
+      "2015-Mar-03 04:00:00 EET -> 2\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Count-function test failed. Expected result should be:\n" + expected_result +
@@ -1218,11 +1218,11 @@ void change_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Change, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 1\n"
-      "2015-Sep-03 02:00:00 EET -> 2\n"
-      "2015-Sep-03 03:00:00 EET -> 2\n"
-      "2015-Sep-03 04:00:00 EET -> 2\n";
+      "2015-Mar-03 00:00:00 EET -> 0\n"
+      "2015-Mar-03 01:00:00 EET -> 1\n"
+      "2015-Mar-03 02:00:00 EET -> 2\n"
+      "2015-Mar-03 03:00:00 EET -> 2\n"
+      "2015-Mar-03 04:00:00 EET -> 2\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Change-function test failed. Expected result should be:\n" + expected_result +
@@ -1237,11 +1237,11 @@ void trend_t()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Trend, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 32700\n"
-      "2015-Sep-03 01:00:00 EET -> 100\n"
-      "2015-Sep-03 02:00:00 EET -> 66.6667\n"
-      "2015-Sep-03 03:00:00 EET -> 66.6667\n"
-      "2015-Sep-03 04:00:00 EET -> 66.6667\n";
+      "2015-Mar-03 00:00:00 EET -> 32700\n"
+      "2015-Mar-03 01:00:00 EET -> 100\n"
+      "2015-Mar-03 02:00:00 EET -> 66.6667\n"
+      "2015-Mar-03 03:00:00 EET -> 66.6667\n"
+      "2015-Mar-03 04:00:00 EET -> 66.6667\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Trend-function test failed. Expected result should be:\n" + expected_result +
@@ -1256,11 +1256,11 @@ void min_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Minimum));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 6\n"
-      "2015-Sep-03 02:00:00 EET -> 11\n"
-      "2015-Sep-03 03:00:00 EET -> 16\n"
-      "2015-Sep-03 04:00:00 EET -> 21\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 6\n"
+      "2015-Mar-03 02:00:00 EET -> 11\n"
+      "2015-Mar-03 03:00:00 EET -> 16\n"
+      "2015-Mar-03 04:00:00 EET -> 21\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Minimum-function test for area failed. Result should be:\n" + expected_result +
@@ -1274,11 +1274,11 @@ void max_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Maximum));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 5\n"
-      "2015-Sep-03 01:00:00 EET -> 10\n"
-      "2015-Sep-03 02:00:00 EET -> 15\n"
-      "2015-Sep-03 03:00:00 EET -> 20\n"
-      "2015-Sep-03 04:00:00 EET -> 25\n";
+      "2015-Mar-03 00:00:00 EET -> 5\n"
+      "2015-Mar-03 01:00:00 EET -> 10\n"
+      "2015-Mar-03 02:00:00 EET -> 15\n"
+      "2015-Mar-03 03:00:00 EET -> 20\n"
+      "2015-Mar-03 04:00:00 EET -> 25\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Maximum-function test for area failed. Result should be:\n" + expected_result +
@@ -1292,11 +1292,11 @@ void max_a_nan()
       to_string(*execute_area_aggregation_function_nans(TS::FunctionId::Maximum));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 5\n"
-      "2015-Sep-03 01:00:00 EET -> 10\n"
-      "2015-Sep-03 02:00:00 EET -> nan\n"
-      "2015-Sep-03 03:00:00 EET -> nan\n"
-      "2015-Sep-03 04:00:00 EET -> 25\n";
+      "2015-Mar-03 00:00:00 EET -> 5\n"
+      "2015-Mar-03 01:00:00 EET -> 10\n"
+      "2015-Mar-03 02:00:00 EET -> nan\n"
+      "2015-Mar-03 03:00:00 EET -> nan\n"
+      "2015-Mar-03 04:00:00 EET -> 25\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Maximum-function test for area failed. Result should be:\n" + expected_result +
@@ -1312,11 +1312,11 @@ void max_a_with_range_nan()
       *execute_area_aggregation_function_with_range_nans(TS::FunctionId::Maximum, 4.0, 22.0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 5\n"
-      "2015-Sep-03 01:00:00 EET -> 10\n"
-      "2015-Sep-03 02:00:00 EET -> nan\n"
-      "2015-Sep-03 03:00:00 EET -> nan\n"
-      "2015-Sep-03 04:00:00 EET -> 22\n";
+      "2015-Mar-03 00:00:00 EET -> 5\n"
+      "2015-Mar-03 01:00:00 EET -> 10\n"
+      "2015-Mar-03 02:00:00 EET -> nan\n"
+      "2015-Mar-03 03:00:00 EET -> nan\n"
+      "2015-Mar-03 04:00:00 EET -> 22\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Maximum-function with range test for area failed. Result should be:\n" +
@@ -1330,11 +1330,11 @@ void mean_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Mean));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 3\n"
-      "2015-Sep-03 01:00:00 EET -> 8\n"
-      "2015-Sep-03 02:00:00 EET -> 13\n"
-      "2015-Sep-03 03:00:00 EET -> 18\n"
-      "2015-Sep-03 04:00:00 EET -> 23\n";
+      "2015-Mar-03 00:00:00 EET -> 3\n"
+      "2015-Mar-03 01:00:00 EET -> 8\n"
+      "2015-Mar-03 02:00:00 EET -> 13\n"
+      "2015-Mar-03 03:00:00 EET -> 18\n"
+      "2015-Mar-03 04:00:00 EET -> 23\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Mean-function test for area failed. Result should be:\n" + expected_result +
@@ -1350,11 +1350,11 @@ void mean_a_with_range()
       to_string(*execute_area_aggregation_function_with_range(TS::FunctionId::Mean, 3.0, 15.0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 4\n"
-      "2015-Sep-03 01:00:00 EET -> 8\n"
-      "2015-Sep-03 02:00:00 EET -> 13\n"
-      "2015-Sep-03 03:00:00 EET -> nan\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> 4\n"
+      "2015-Mar-03 01:00:00 EET -> 8\n"
+      "2015-Mar-03 02:00:00 EET -> 13\n"
+      "2015-Mar-03 03:00:00 EET -> nan\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Mean-function with_range test for area failed. Result should be:\n" +
@@ -1368,11 +1368,11 @@ void median_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Median));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 3\n"
-      "2015-Sep-03 01:00:00 EET -> 8\n"
-      "2015-Sep-03 02:00:00 EET -> 13\n"
-      "2015-Sep-03 03:00:00 EET -> 18\n"
-      "2015-Sep-03 04:00:00 EET -> 23\n";
+      "2015-Mar-03 00:00:00 EET -> 3\n"
+      "2015-Mar-03 01:00:00 EET -> 8\n"
+      "2015-Mar-03 02:00:00 EET -> 13\n"
+      "2015-Mar-03 03:00:00 EET -> 18\n"
+      "2015-Mar-03 04:00:00 EET -> 23\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Medin-function test for area failed. Result should be:\n" + expected_result +
@@ -1386,11 +1386,11 @@ void sum_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Sum));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 15\n"
-      "2015-Sep-03 01:00:00 EET -> 40\n"
-      "2015-Sep-03 02:00:00 EET -> 65\n"
-      "2015-Sep-03 03:00:00 EET -> 90\n"
-      "2015-Sep-03 04:00:00 EET -> 115\n";
+      "2015-Mar-03 00:00:00 EET -> 15\n"
+      "2015-Mar-03 01:00:00 EET -> 40\n"
+      "2015-Mar-03 02:00:00 EET -> 65\n"
+      "2015-Mar-03 03:00:00 EET -> 90\n"
+      "2015-Mar-03 04:00:00 EET -> 115\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Sum-function test for area failed. Result should be:\n" + expected_result +
@@ -1405,11 +1405,11 @@ void stddev_a()
       to_string(*execute_area_aggregation_function(TS::FunctionId::StandardDeviation));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1.58114\n"
-      "2015-Sep-03 01:00:00 EET -> 1.58114\n"
-      "2015-Sep-03 02:00:00 EET -> 1.58114\n"
-      "2015-Sep-03 03:00:00 EET -> 1.58114\n"
-      "2015-Sep-03 04:00:00 EET -> 1.58114\n";
+      "2015-Mar-03 00:00:00 EET -> 1.58114\n"
+      "2015-Mar-03 01:00:00 EET -> 1.58114\n"
+      "2015-Mar-03 02:00:00 EET -> 1.58114\n"
+      "2015-Mar-03 03:00:00 EET -> 1.58114\n"
+      "2015-Mar-03 04:00:00 EET -> 1.58114\n";
 
   if (test_result != expected_result)
     TEST_FAILED("StandardDeviation-function test for area failed. Result should be:\n" +
@@ -1424,11 +1424,11 @@ void percentage_a()
       to_string(*execute_area_aggregation_function(TS::FunctionId::Percentage));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 0\n"
-      "2015-Sep-03 02:00:00 EET -> 40\n"
-      "2015-Sep-03 03:00:00 EET -> 100\n"
-      "2015-Sep-03 04:00:00 EET -> 40\n";
+      "2015-Mar-03 00:00:00 EET -> 0\n"
+      "2015-Mar-03 01:00:00 EET -> 0\n"
+      "2015-Mar-03 02:00:00 EET -> 40\n"
+      "2015-Mar-03 03:00:00 EET -> 100\n"
+      "2015-Mar-03 04:00:00 EET -> 40\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Percentage-function test for area failed. Expected result should be:\n" +
@@ -1442,11 +1442,11 @@ void count_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Count));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 0\n"
-      "2015-Sep-03 01:00:00 EET -> 0\n"
-      "2015-Sep-03 02:00:00 EET -> 2\n"
-      "2015-Sep-03 03:00:00 EET -> 5\n"
-      "2015-Sep-03 04:00:00 EET -> 2\n";
+      "2015-Mar-03 00:00:00 EET -> 0\n"
+      "2015-Mar-03 01:00:00 EET -> 0\n"
+      "2015-Mar-03 02:00:00 EET -> 2\n"
+      "2015-Mar-03 03:00:00 EET -> 5\n"
+      "2015-Mar-03 04:00:00 EET -> 2\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Count-function test for area failed. Expected result should be:\n" +
@@ -1460,11 +1460,11 @@ void change_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Change));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 4\n"
-      "2015-Sep-03 01:00:00 EET -> 4\n"
-      "2015-Sep-03 02:00:00 EET -> 4\n"
-      "2015-Sep-03 03:00:00 EET -> 4\n"
-      "2015-Sep-03 04:00:00 EET -> 4\n";
+      "2015-Mar-03 00:00:00 EET -> 4\n"
+      "2015-Mar-03 01:00:00 EET -> 4\n"
+      "2015-Mar-03 02:00:00 EET -> 4\n"
+      "2015-Mar-03 03:00:00 EET -> 4\n"
+      "2015-Mar-03 04:00:00 EET -> 4\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Change-function test for area failed. Expected result should be:\n" +
@@ -1478,11 +1478,11 @@ void trend_a()
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Trend));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 100\n"
-      "2015-Sep-03 01:00:00 EET -> 100\n"
-      "2015-Sep-03 02:00:00 EET -> 100\n"
-      "2015-Sep-03 03:00:00 EET -> 100\n"
-      "2015-Sep-03 04:00:00 EET -> 100\n";
+      "2015-Mar-03 00:00:00 EET -> 100\n"
+      "2015-Mar-03 01:00:00 EET -> 100\n"
+      "2015-Mar-03 02:00:00 EET -> 100\n"
+      "2015-Mar-03 03:00:00 EET -> 100\n"
+      "2015-Mar-03 04:00:00 EET -> 100\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Trend-function test for area failed. Expected result should be:\n" +
@@ -1498,11 +1498,11 @@ void min_max_ta()
       TS::FunctionId::Minimum, TS::FunctionId::Maximum, 120, 0));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 5\n"
-      "2015-Sep-03 01:00:00 EET -> 5\n"
-      "2015-Sep-03 02:00:00 EET -> 5\n"
-      "2015-Sep-03 03:00:00 EET -> 10\n"
-      "2015-Sep-03 04:00:00 EET -> 15\n";
+      "2015-Mar-03 00:00:00 EET -> 5\n"
+      "2015-Mar-03 01:00:00 EET -> 5\n"
+      "2015-Mar-03 02:00:00 EET -> 5\n"
+      "2015-Mar-03 03:00:00 EET -> 10\n"
+      "2015-Mar-03 04:00:00 EET -> 15\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Minimum-Maximum-function test for time and area failed. Result should be:\n" +
@@ -1518,11 +1518,11 @@ void min_max_at()
       TS::FunctionId::Minimum, TS::FunctionId::Maximum, 0, 120));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 11\n"
-      "2015-Sep-03 01:00:00 EET -> 16\n"
-      "2015-Sep-03 02:00:00 EET -> 21\n"
-      "2015-Sep-03 03:00:00 EET -> 21\n"
-      "2015-Sep-03 04:00:00 EET -> 21\n";
+      "2015-Mar-03 00:00:00 EET -> 11\n"
+      "2015-Mar-03 01:00:00 EET -> 16\n"
+      "2015-Mar-03 02:00:00 EET -> 21\n"
+      "2015-Mar-03 03:00:00 EET -> 21\n"
+      "2015-Mar-03 04:00:00 EET -> 21\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Minimum-Maximum-function test for area and time failed. Result should be:\n" +
@@ -1537,11 +1537,11 @@ void min_t_missing_value()
       to_string(*execute_time_aggregation_function(TS::FunctionId::Minimum, 120, 0, true));
 
   std::string expected_result =
-      "2015-Sep-03 00:00:00 EET -> 1\n"
-      "2015-Sep-03 01:00:00 EET -> 1\n"
-      "2015-Sep-03 02:00:00 EET -> 1\n"
-      "2015-Sep-03 03:00:00 EET -> nan\n"
-      "2015-Sep-03 04:00:00 EET -> nan\n";
+      "2015-Mar-03 00:00:00 EET -> 1\n"
+      "2015-Mar-03 01:00:00 EET -> 1\n"
+      "2015-Mar-03 02:00:00 EET -> 1\n"
+      "2015-Mar-03 03:00:00 EET -> nan\n"
+      "2015-Mar-03 04:00:00 EET -> nan\n";
 
   if (test_result != expected_result)
     TEST_FAILED("Minimum-function with missing value test failed. Result should be:\n" +
