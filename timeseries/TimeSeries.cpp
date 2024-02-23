@@ -46,8 +46,8 @@ TimeSeries::TimeSeries(LocalTimePoolPtr time_pool) : local_time_pool(time_pool) 
 
 void TimeSeries::push_back(const TimedValue& tv)
 {
-  TimedValueVector::emplace_back(local_time_pool->create(tv.time.utc_time(), tv.time.zone()),
-                                 tv.value);
+  TimedValueVector::push_back(TimedValue(local_time_pool->create(tv.time.utc_time(), tv.time.zone()),
+					 tv.value));
 }
 
 TimedValueVector::iterator TimeSeries::insert(TimedValueVector::iterator pos, const TimedValue& tv)
