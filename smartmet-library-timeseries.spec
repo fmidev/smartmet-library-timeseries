@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.2.20
-Release: 1%{?dist}.fmi
+Version: 24.2.23
+Release: 3%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -81,6 +81,15 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Feb 23 2024 Mika Heiskanen <mheiskan@rhel8.dev.fmi.fi> - 24.2.23-3.fmi
+- Revert: TimeSeries class inherits publicly from std::vector which forces implementing a strange emplace_back method
+
+* Fri Feb 23 2024 Mika Heiskanen <mheiskan@rhel8.dev.fmi.fi> - 24.2.23-2.fmi
+- Fixed push_back not to use emplace_back
+
+* Fri Feb 23 2024 Mika Heiskanen <mheiskan@rhel8.dev.fmi.fi> - 24.2.23-1.fmi
+- Full repackaging
+
 * Tue Feb 20 2024 Mika Heiskanen <mheiskan@rhel8.dev.fmi.fi> - 24.2.20-1.fmi
 - Fixed misleadingly named emplace_back to push_back (BRAINSTORM-2861)
 
