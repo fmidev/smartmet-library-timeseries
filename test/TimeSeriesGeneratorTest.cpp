@@ -5,18 +5,12 @@
 // ======================================================================
 
 #include "TimeSeriesInclude.h"
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/local_time/local_time.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TimeZones.h>
 #include <regression/tframe.h>
-
-namespace bp = boost::posix_time;
-namespace bg = boost::gregorian;
-namespace bl = boost::local_time;
 
 Fmi::TimeZones timezones;
 
