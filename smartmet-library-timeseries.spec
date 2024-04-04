@@ -29,7 +29,6 @@ BuildRequires: smartmet-library-spine-devel >= 24.2.8
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
-Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
 Requires: smartmet-library-spine >= 24.2.8

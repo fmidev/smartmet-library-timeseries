@@ -10,6 +10,7 @@
 #include <macgyver/StringConversion.h>
 #include <spine/Convenience.h>
 #include <spine/HTTP.h>
+#include <boost/numeric/conversion/cast.hpp>
 
 namespace SmartMet
 {

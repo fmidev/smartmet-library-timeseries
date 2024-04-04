@@ -22,7 +22,6 @@ LIBS += -L$(libdir) \
 	$(REQUIRES_LIBS) \
 	-lsmartmet-macgyver \
 	-lsmartmet-spine \
-	-lboost_date_time \
 	-lboost_system \
 	-lpthread
 
