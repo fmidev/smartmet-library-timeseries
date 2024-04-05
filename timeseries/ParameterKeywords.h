@@ -63,6 +63,7 @@ const std::string DEM_PARAM = "dem";
 const std::string PLACE_PARAM = "place";
 const std::string FMISID_PARAM = "fmisid";
 const std::string WMO_PARAM = "wmo";
+const std::string WSI_PARAM = "wsi";
 const std::string LPNN_PARAM = "lpnn";
 const std::string GEOID_PARAM = "geoid";
 const std::string RWSID_PARAM = "rwsid";
