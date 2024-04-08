@@ -74,6 +74,7 @@ const std::map<std::string, Parameter::Type> special_parameter_map = {
     {X_PARAM, Parameter::Type::DataIndependent},
     {Y_PARAM, Parameter::Type::DataIndependent},
     {LPNN_PARAM, Parameter::Type::DataIndependent},
+    {WSI_PARAM, Parameter::Type::DataIndependent},
     {MODEL_PARAM, Parameter::Type::DataIndependent},
     {"modtime", Parameter::Type::DataIndependent},
     {MON_PARAM, Parameter::Type::DataIndependent},

@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.2.23
-Release: 3%{?dist}.fmi
+Version: 24.4.5
+Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -22,16 +22,16 @@ BuildRequires: gcc-c++
 BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
-BuildRequires: smartmet-utils-devel >= 23.9.6
+BuildRequires: smartmet-utils-devel >= 24.3.13
 BuildRequires: smartmet-library-macgyver-devel >= 24.1.17
-BuildRequires: smartmet-library-newbase-devel >= 24.1.30
-BuildRequires: smartmet-library-spine-devel >= 24.2.8
+BuildRequires: smartmet-library-newbase-devel >= 24.3.11
+BuildRequires: smartmet-library-spine-devel >= 24.4.5
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 24.2.8
+Requires: smartmet-library-spine >= 24.4.5
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,8 +51,8 @@ Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
 Requires: smartmet-library-macgyver-devel >= 24.1.17
-Requires: smartmet-library-newbase-devel >= 24.1.30
-Requires: smartmet-library-spine-devel >= 24.2.8
+Requires: smartmet-library-newbase-devel >= 24.3.11
+Requires: smartmet-library-spine-devel >= 24.4.5
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Apr  5 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.4.5-1.fmi
+- Added support for WIGOS wsi
+
 * Fri Feb 23 2024 Mika Heiskanen <mheiskan@rhel8.dev.fmi.fi> - 24.2.23-3.fmi
 - Revert: TimeSeries class inherits publicly from std::vector which forces implementing a strange emplace_back method
 
