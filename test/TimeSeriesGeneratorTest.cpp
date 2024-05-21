@@ -486,6 +486,78 @@ void offset()
   TEST_PASSED();
 }
 
+namespace
+{
+  struct ObsDefaults : public SmartMet::TimeSeries::TimeSeriesGeneratorOptions::Defaults
+  {
+    constexpr ObsDefaults()
+    {
+      defaultStartOffset = -1440;
+    }
+  };
+
+  constexpr ObsDefaults obs_defaults;
+}
+
+void parse_http_request_empty()
+{
+  using namespace SmartMet::Spine;
+  using namespace SmartMet::TimeSeries;
+
+  const Fmi::DateTime now = Fmi::DateTime::from_iso_extended_string("2012-11-13T05:00:00Z");
+  const Fmi::DateTime expected_start = now - Fmi::Hours(24);
+  const Fmi::DateTime expected_end = now;
+
+  HTTP::Request req;
+  TimeSeriesGeneratorOptions opt = TimeSeriesGeneratorOptions::parse(req, obs_defaults, now);
+
+  if (opt.mode != TimeSeriesGeneratorOptions::Mode::TimeSteps)
+    TEST_FAILED("Mode::Timesteps expected");
+
+  if (!opt.startTimeAssumed)
+    TEST_FAILED("Assumed start time expected");
+
+  if (!opt.startTimeUTC)
+    TEST_FAILED("UTC start time expected");
+
+  if (opt.startTime != expected_start)
+    TEST_FAILED("Start time " + expected_start.to_simple_string() + " expected. Got "
+        + opt.startTime.to_simple_string());
+
+  if (opt.endTime != expected_end)
+    TEST_FAILED("End time " + expected_end.to_simple_string() + " expected. Got "
+        + expected_end.to_simple_string());
+
+  TEST_PASSED();
+}
+
+void parse_http_request_1()
+{
+  using namespace SmartMet::Spine;
+  using namespace SmartMet::TimeSeries;
+
+  HTTP::Request req;
+  req.setParameter("starttime", "2012-11-13T05:00:00Z");
+  req.setParameter("endtime", "2012-11-14T05:00:00Z");
+  req.setParameter("timestep", "180");
+
+  TimeSeriesGeneratorOptions opt = TimeSeriesGeneratorOptions::parse(req);
+
+  if (opt.mode != TimeSeriesGeneratorOptions::Mode::TimeSteps)
+    TEST_FAILED("Failed to parse mode");
+
+  if (opt.startTime != Fmi::TimeParser::parse("2012-11-13T05:00:00Z"))
+    TEST_FAILED("Failed to parse starttime");
+
+  if (opt.endTime != Fmi::TimeParser::parse("2012-11-14T05:00:00Z"))
+    TEST_FAILED("Failed to parse endtime");
+
+  if (!opt.timeStep || *opt.timeStep != 180)
+    TEST_FAILED("Failed to parse timestep");
+
+  TEST_PASSED();
+}
+
 // ----------------------------------------------------------------------
 /*!
  * The actual test suite
@@ -512,6 +584,9 @@ class tests : public tframe::tests
     TEST(offset);
     TEST(datatimes);
     TEST(datatimes_climatology);
+
+    TEST(parse_http_request_empty);
+    TEST(parse_http_request_1);
   }
 };
 

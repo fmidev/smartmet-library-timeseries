@@ -35,7 +35,10 @@ const int default_timestep = 60;
 // ----------------------------------------------------------------------
 
 TimeSeriesGeneratorOptions::TimeSeriesGeneratorOptions(const Fmi::DateTime& now)
-    : startTime(now), endTime(now), dataTimes(new TimeList::element_type())
+    : startTime(Fmi::DateTime::NOT_A_DATE_TIME)
+    , endTime(Fmi::DateTime::NOT_A_DATE_TIME)
+    , dataTimes(new TimeList::element_type())
+    , now(now)
 {
 }
 
@@ -196,7 +199,7 @@ const TimeSeriesGeneratorOptions::TimeList& TimeSeriesGeneratorOptions::getDataT
 
 // Parse day option
 
-void parse_day(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_day(const Spine::HTTP::Request& theReq)
 {
   if (theReq.getParameter("day"))
   {
@@ -214,18 +217,18 @@ void parse_day(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& 
       if (day < 1 || day > 31)
         throw Fmi::Exception(BCP, "Invalid day selection '" + part + "'!");
 
-      options.days.insert(day);
+      days.insert(day);
     }
   }
 }
 
 // Parse hour option
 
-void parse_hour(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_hour(const Spine::HTTP::Request& theReq)
 {
   if (theReq.getParameter("hour"))
   {
-    options.mode = TimeSeriesGeneratorOptions::FixedTimes;
+    mode = TimeSeriesGeneratorOptions::FixedTimes;
 
     const std::string hours = required_string(theReq.getParameter("hour"), "");
 
@@ -237,17 +240,17 @@ void parse_hour(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request&
       if (hour < 0 || hour > 23)
         throw Fmi::Exception(BCP, "Invalid hour selection '" + part + "'!");
 
-      options.timeList.insert(hour * 100);
+      timeList.insert(hour * 100);
     }
   }
 }
 
 // Parse time option
-void parse_time(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_time(const Spine::HTTP::Request& theReq)
 {
   if (theReq.getParameter("time"))
   {
-    options.mode = TimeSeriesGeneratorOptions::FixedTimes;
+    mode = TimeSeriesGeneratorOptions::FixedTimes;
     const std::string times = required_string(theReq.getParameter("time"), "");
 
     std::vector<std::string> parts;
@@ -259,16 +262,16 @@ void parse_time(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request&
       if (th < 0 || th > 2359)
         throw Fmi::Exception(BCP, "Invalid time selection '" + part + "'!");
 
-      options.timeList.insert(th);
+      timeList.insert(th);
     }
   }
 }
 
-void parse_timestep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_timestep(const Spine::HTTP::Request& theReq)
 {
   if (theReq.getParameter("timestep"))
   {
-    if (options.mode != TimeSeriesGeneratorOptions::TimeSteps)
+    if (mode != TimeSeriesGeneratorOptions::TimeSteps)
       throw Fmi::Exception(
           BCP, "Cannot use timestep option when another time mode is implied by another option");
 
@@ -276,17 +279,17 @@ void parse_timestep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Requ
 
     if (step == "data" || step == "all")
     {
-      options.mode = TimeSeriesGeneratorOptions::DataTimes;
-      options.timeStep = 0;
+      mode = TimeSeriesGeneratorOptions::DataTimes;
+      timeStep = 0;
     }
     else if (step == "graph")
     {
-      options.mode = TimeSeriesGeneratorOptions::GraphTimes;
-      options.timeStep = 0;
+      mode = TimeSeriesGeneratorOptions::GraphTimes;
+      timeStep = 0;
     }
     else if (step != "current")
     {
-      options.mode = TimeSeriesGeneratorOptions::TimeSteps;
+      mode = TimeSeriesGeneratorOptions::TimeSteps;
       int num = duration_string_to_minutes(step);
 
       if (num < 0)
@@ -295,12 +298,12 @@ void parse_timestep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Requ
       if (num > 0 && 1440 % num != 0)
         throw Fmi::Exception(BCP, "Timestep must be a divisor of 24*60 or zero for all timesteps!");
 
-      options.timeStep = num;
+      timeStep = num;
     }
   }
 }
 
-void parse_timesteps(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_timesteps(const Spine::HTTP::Request& theReq)
 {
   if (theReq.getParameter("timesteps"))
   {
@@ -310,32 +313,36 @@ void parse_timesteps(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Req
     if (num < 0)
       throw Fmi::Exception(BCP, "The 'timesteps' option cannot be negative!");
 
-    options.timeSteps = num;
+    timeSteps = num;
   }
 }
 
-void parse_starttime(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_starttime(
+  const Spine::HTTP::Request& theReq,
+  const TimeSeriesGeneratorOptions::Defaults& defaults)
 {
   if (theReq.getParameter("starttime"))
   {
     std::string stamp = required_string(theReq.getParameter("starttime"), "");
 
     if (stamp == "data")
-      options.startTimeData = true;
+      startTimeData = true;
 
     else
     {
-      options.startTime = Fmi::TimeParser::parse(stamp);
-      options.startTimeUTC = Fmi::TimeParser::looks_utc(stamp);
+      startTime = Fmi::TimeParser::parse(stamp);
+      startTimeUTC = Fmi::TimeParser::looks_utc(stamp);
     }
   }
   else
   {
-    options.startTimeUTC = true;  // generate from "now" in all locations
+    startTimeAssumed = true;
+    startTime = now + Fmi::Minutes(defaults.defaultStartOffset);
+    startTimeUTC = true;  // generate from "now" in all locations
   }
 }
 
-void parse_startstep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_startstep(const Spine::HTTP::Request& theReq)
 {
   if (theReq.getParameter("startstep"))
   {
@@ -346,47 +353,107 @@ void parse_startstep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Req
     if (startstep > 10000)
       throw Fmi::Exception(BCP, "Too large 'startstep' value!");
 
-    int timestep = (options.timeStep ? *options.timeStep : default_timestep);
+    int timestep = (timeStep ? *timeStep : default_timestep);
 
-    options.startTime += Fmi::Minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
+    startTime += Fmi::Minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
   }
 }
 
-void parse_endtime(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_endtime(const Spine::HTTP::Request& theReq,
+                                               const TimeSeriesGeneratorOptions::Defaults& defaults)
 {
   if (theReq.getParameter("endtime"))
   {
     std::string stamp = required_string(theReq.getParameter("endtime"), "");
     if (stamp != "now")
     {
-      if (!!options.timeSteps)
+      if (!!timeSteps)
         throw Fmi::Exception(BCP, "Cannot specify 'timesteps' and 'endtime' simultaneously!");
 
       if (stamp == "data")
-        options.endTimeData = true;
+        endTimeData = true;
       else
       {
         // iso, sql, xml, timestamp obey tz, epoch is always UTC
-        options.endTime = Fmi::TimeParser::parse(stamp);
-        options.endTimeUTC = Fmi::TimeParser::looks_utc(stamp);
+        endTime = Fmi::TimeParser::parse(stamp);
+        endTimeUTC = Fmi::TimeParser::looks_utc(stamp);
       }
     }
   }
-  else if (!!options.timeSteps)
+  else if (!!timeSteps)
   {
-    options.endTimeUTC = options.startTimeUTC;
+    endTimeUTC = startTimeUTC;
     // If you give the number of timesteps, we must assume a default timestep unless you give
     // one
-    if (!options.timeStep)
-      options.timeStep = default_timestep;
-    options.endTime = options.startTime + Fmi::Minutes(*options.timeStep * *options.timeSteps);
+    if (!timeStep)
+      timeStep = default_timestep;
+    endTime = startTime + Fmi::Minutes(*timeStep * *timeSteps);
   }
   else
   {
-    options.endTimeUTC = options.startTimeUTC;
-    options.endTime = options.startTime + Fmi::Hours(24);
+    endTimeUTC = startTimeUTC;
+    endTime = startTime + Fmi::Minutes(defaults.defaultIntervalLength);
   }
 }
+
+void TimeSeriesGeneratorOptions::parseImpl(
+  const Spine::HTTP::Request& theReq,
+  const TimeSeriesGeneratorOptions::Defaults& defaults)
+{
+  Fmi::DateTime now =
+      optional_time(theReq.getParameter("now"), Fmi::SecondClock::universal_time());
+
+  // We first parse the options which imply the TimeMode
+  // because the behaviour of some other options depend on it
+
+  parse_hour(theReq);
+  parse_time(theReq);
+  parse_day(theReq);
+
+  // Timestep should be parsed last so we can check if the defaults have been changed
+
+  parse_timestep(theReq);
+
+  // TIMEMODE HAS NOW BEEN DETERMINED
+
+  // The number of timesteps is a spine option for various modes,
+  // including DataTimes and GraphTimes
+
+  parse_timesteps(theReq);
+
+  // starttime option may modify "now" which is the default
+  // value set by the constructor
+
+  parse_starttime(theReq, defaults);
+
+  // startstep must be handled after starttime and timestep options
+
+  parse_startstep(theReq);
+
+  // endtime must be handled last since it may depend on starttime,
+  // timestep and timesteps options. The default is to set the end
+  // time to the start time plus 24 Fmi::SecondClock.
+
+  parse_endtime(theReq, defaults);
+}
+
+TimeSeriesGeneratorOptions TimeSeriesGeneratorOptions::parse(
+    const Spine::HTTP::Request& theReq,
+    const TimeSeriesGeneratorOptions::Defaults& defaults,
+    const Fmi::DateTime& now)
+{
+  try
+  {
+    TimeSeriesGeneratorOptions options(now);
+    options.parseImpl(theReq, defaults);
+    return options;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 
 // ----------------------------------------------------------------------
 /*!
@@ -399,52 +466,7 @@ void parse_endtime(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Reque
 
 TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq)
 {
-  try
-  {
-    Fmi::DateTime now =
-        optional_time(theReq.getParameter("now"), Fmi::SecondClock::universal_time());
-
-    TimeSeriesGeneratorOptions options(now);
-
-    // We first parse the options which imply the TimeMode
-    // because the behaviour of some other options depend on it
-
-    parse_hour(options, theReq);
-    parse_time(options, theReq);
-    parse_day(options, theReq);
-
-    // Timestep should be parsed last so we can check if the defaults have been changed
-
-    parse_timestep(options, theReq);
-
-    // TIMEMODE HAS NOW BEEN DETERMINED
-
-    // The number of timesteps is a spine option for various modes,
-    // including DataTimes and GraphTimes
-
-    parse_timesteps(options, theReq);
-
-    // starttime option may modify "now" which is the default
-    // value set by the constructor
-
-    parse_starttime(options, theReq);
-
-    // startstep must be handled after starttime and timestep options
-
-    parse_startstep(options, theReq);
-
-    // endtime must be handled last since it may depend on starttime,
-    // timestep and timesteps options. The default is to set the end
-    // time to the start time plus 24 Fmi::SecondClock.
-
-    parse_endtime(options, theReq);
-
-    return options;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
+  return TimeSeriesGeneratorOptions::parse(theReq);
 }
 
 }  // namespace TimeSeries

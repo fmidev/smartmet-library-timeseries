@@ -31,6 +31,31 @@ struct TimeSeriesGeneratorOptions
     TimeSteps    // fixed timestep
   };
 
+  struct Defaults
+  {
+    /**
+     * Default start offset in minutes from the current time.
+     *
+     * Used to calculate the start time if it is not provided in the request and cannot be
+     * determined from other request parameters
+    */
+    int defaultStartOffset;
+
+    /**
+     * Default length in minutes for the time series.
+     *
+     * Used to calculate the end time if it is not provided in the request and cannot be
+     * determined from other request parameters
+    */
+    unsigned defaultIntervalLength;
+
+    constexpr Defaults()
+      : defaultStartOffset(0)
+      , defaultIntervalLength(1440)
+    {
+    }
+  };
+
   // Timesteps established from the outside
   using TimeList = boost::shared_ptr<std::list<Fmi::DateTime>>;
 
@@ -47,6 +72,11 @@ struct TimeSeriesGeneratorOptions
   void setDataTimes(const TimeList& times, bool climatology = false);
   const TimeList& getDataTimes() const;
 
+  static TimeSeriesGeneratorOptions parse(
+    const Spine::HTTP::Request& theReq,
+    const Defaults& defaults = Defaults(),
+    const Fmi::DateTime& now = Fmi::SecondClock::universal_time());
+
   Mode mode = Mode::TimeSteps;              // algorithm selection
   Fmi::DateTime startTime;                  // start time
   Fmi::DateTime endTime;                    // end time
@@ -58,14 +88,30 @@ struct TimeSeriesGeneratorOptions
   std::set<unsigned int> days;
 
  private:
+  void parse_day(const Spine::HTTP::Request& theReq);
+  void parse_hour(const Spine::HTTP::Request& theReq);
+  void parse_time(const Spine::HTTP::Request& theReq);
+  void parse_timestep(const Spine::HTTP::Request& theReq);
+  void parse_timesteps(const Spine::HTTP::Request& theReq);
+  void parse_starttime(const Spine::HTTP::Request& theReq, const Defaults& defaults);
+  void parse_startstep(const Spine::HTTP::Request& theReq);
+  void parse_endtime(const Spine::HTTP::Request& theReq, const Defaults& defaults);
+
+  void parseImpl(const Spine::HTTP::Request& theReq,
+                 const Defaults& defaults);
+
   TimeList dataTimes;  // Mode:DataTimes, Fixed times set from outside
+  Fmi::DateTime now;
  public:
   bool startTimeData = false;  // Take start time from data
   bool endTimeData = false;    // Take end time from data
   bool isClimatology = false;
+  bool startTimeAssumed = false;  // Start time is not provided and the default value has been used
 };
 
-TimeSeriesGeneratorOptions parseTimes(const Spine::HTTP::Request& theReq);
+TimeSeriesGeneratorOptions parseTimes(
+  const Spine::HTTP::Request& theReq,
+  const TimeSeriesGeneratorOptions::Defaults& defaults = TimeSeriesGeneratorOptions::Defaults());
 
 std::ostream& operator<<(std::ostream& stream, const TimeSeriesGeneratorOptions& opt);
 
