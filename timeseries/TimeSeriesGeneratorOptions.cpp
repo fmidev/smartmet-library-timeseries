@@ -376,7 +376,7 @@ void TimeSeriesGeneratorOptions::parse_endtime(const Spine::HTTP::Request& theRe
           endTime = Fmi::TimeParser::parse(stamp);
           endTimeUTC = Fmi::TimeParser::looks_utc(stamp);
           startTime = endTime - Fmi::Minutes(*timeStep * *timeSteps);
-          endTimeUTC = startTimeUTC;
+          startTimeUTC = endTimeUTC;
           startTimeAssumed = false;
         }
         else
