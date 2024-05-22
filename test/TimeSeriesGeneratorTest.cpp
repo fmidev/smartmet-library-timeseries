@@ -12,6 +12,8 @@
 #include <macgyver/TimeZones.h>
 #include <regression/tframe.h>
 
+#include <macgyver/DebugTools.h>
+
 Fmi::TimeZones timezones;
 
 std::string tostr(const TS::TimeSeriesGenerator::LocalTimeList& tlist)
@@ -531,10 +533,13 @@ void parse_http_request_empty()
   TEST_PASSED();
 }
 
-void parse_http_request_1()
+void parse_http_request_interval_timestep()
 {
   using namespace SmartMet::Spine;
   using namespace SmartMet::TimeSeries;
+
+  const Fmi::DateTime expected_start = Fmi::TimeParser::parse("2012-11-13T05:00:00Z");
+  const Fmi::DateTime expected_end = Fmi::TimeParser::parse("2012-11-14T05:00:00Z");
 
   HTTP::Request req;
   req.setParameter("starttime", "2012-11-13T05:00:00Z");
@@ -544,16 +549,103 @@ void parse_http_request_1()
   TimeSeriesGeneratorOptions opt = TimeSeriesGeneratorOptions::parse(req);
 
   if (opt.mode != TimeSeriesGeneratorOptions::Mode::TimeSteps)
-    TEST_FAILED("Failed to parse mode");
+    TEST_FAILED("Mode::TimeSteps expected");
 
   if (opt.startTime != Fmi::TimeParser::parse("2012-11-13T05:00:00Z"))
-    TEST_FAILED("Failed to parse starttime");
+    TEST_FAILED("Start time " + expected_start.to_simple_string() + " expected. Got "
+        + opt.startTime.to_simple_string());
 
   if (opt.endTime != Fmi::TimeParser::parse("2012-11-14T05:00:00Z"))
-    TEST_FAILED("Failed to parse endtime");
+    TEST_FAILED("End time " + expected_end.to_simple_string() + " expected. Got "
+        + expected_end.to_simple_string());
 
-  if (!opt.timeStep || *opt.timeStep != 180)
-    TEST_FAILED("Failed to parse timestep");
+  if (!opt.timeStep)
+    TEST_FAILED("Timestep expected but not received");
+
+  if (*opt.timeStep != 180)
+    TEST_FAILED("Timestep 180 expected but got " + Fmi::to_string(*opt.timeStep));
+
+  TEST_PASSED();
+}
+
+void parse_http_request_start_timestep_numsteps()
+{
+  using namespace SmartMet::Spine;
+  using namespace SmartMet::TimeSeries;
+
+  const Fmi::DateTime expected_start = Fmi::TimeParser::parse("2012-11-13T05:00:00Z");
+  const Fmi::DateTime expected_end = Fmi::TimeParser::parse("2012-11-13T17:00:00Z");
+
+  HTTP::Request req;
+  req.setParameter("starttime", "2012-11-13T05:00:00Z");
+  req.setParameter("timestep", "180");
+  req.setParameter("timesteps", "4");
+
+  TimeSeriesGeneratorOptions opt = TimeSeriesGeneratorOptions::parse(req);
+
+  if (opt.mode != TimeSeriesGeneratorOptions::Mode::TimeSteps)
+    TEST_FAILED("Mode TimeSteps expected");
+
+  if (opt.startTime != Fmi::TimeParser::parse("2012-11-13T05:00:00Z"))
+    TEST_FAILED("Start time " + expected_start.to_simple_string() + " expected. Got "
+        + opt.startTime.to_simple_string());
+
+  if (!opt.timeStep)
+    TEST_FAILED("Timestep expected but not received");
+
+  if (*opt.timeStep != 180)
+    TEST_FAILED("Timestep 180 expected but got " + Fmi::to_string(*opt.timeStep));
+
+  if (!opt.timeSteps)
+    TEST_FAILED("Number of timesteps expected but not received");
+
+  if (*opt.timeSteps != 4)
+    TEST_FAILED("Number of timesteps 4 expected but got " + Fmi::to_string(*opt.timeSteps));
+
+  if (opt.endTime != expected_end)
+    TEST_FAILED("End time " + expected_end.to_simple_string() + " expected. Got "
+        + opt.endTime.to_simple_string());
+
+  TEST_PASSED();
+}
+
+void parse_http_request_end_timestep_numsteps()
+{
+  using namespace SmartMet::Spine;
+  using namespace SmartMet::TimeSeries;
+
+  const Fmi::DateTime expected_start = Fmi::TimeParser::parse("2012-11-13T05:00:00Z");
+  const Fmi::DateTime expected_end = Fmi::TimeParser::parse("2012-11-13T17:00:00Z");
+
+  HTTP::Request req;
+  req.setParameter("endtime", "2012-11-13T17:00:00Z");
+  req.setParameter("timestep", "180");
+  req.setParameter("timesteps", "4");
+
+  TimeSeriesGeneratorOptions opt = TimeSeriesGeneratorOptions::parse(req);
+
+  if (opt.mode != TimeSeriesGeneratorOptions::Mode::TimeSteps)
+    TEST_FAILED("Mode TimeSteps expected");
+
+  if (opt.startTime != Fmi::TimeParser::parse("2012-11-13T05:00:00Z"))
+    TEST_FAILED("Start time " + expected_start.to_simple_string() + " expected. Got "
+        + opt.startTime.to_simple_string());
+
+  if (!opt.timeStep)
+    TEST_FAILED("Timestep expected but not received");
+
+  if (*opt.timeStep != 180)
+    TEST_FAILED("Timestep 180 expected but got " + Fmi::to_string(*opt.timeStep));
+
+  if (!opt.timeSteps)
+    TEST_FAILED("Number of timesteps expected but not received");
+
+  if (*opt.timeSteps != 4)
+    TEST_FAILED("Number of timesteps 4 expected but got " + Fmi::to_string(*opt.timeSteps));
+
+  if (opt.endTime != expected_end)
+    TEST_FAILED("End time " + expected_end.to_simple_string() + " expected. Got "
+        + opt.endTime.to_simple_string());
 
   TEST_PASSED();
 }
@@ -586,7 +678,9 @@ class tests : public tframe::tests
     TEST(datatimes_climatology);
 
     TEST(parse_http_request_empty);
-    TEST(parse_http_request_1);
+    TEST(parse_http_request_interval_timestep);
+    TEST(parse_http_request_start_timestep_numsteps);
+    TEST(parse_http_request_end_timestep_numsteps);
   }
 };
 

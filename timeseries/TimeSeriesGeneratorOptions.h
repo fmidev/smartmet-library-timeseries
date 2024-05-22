@@ -49,9 +49,15 @@ struct TimeSeriesGeneratorOptions
     */
     unsigned defaultIntervalLength;
 
+    /**
+     * Default timestep in minutes.
+    */
+    unsigned defaultTimeStep;
+
     constexpr Defaults()
       : defaultStartOffset(0)
       , defaultIntervalLength(1440)
+      , defaultTimeStep(60)
     {
     }
   };
@@ -94,7 +100,7 @@ struct TimeSeriesGeneratorOptions
   void parse_timestep(const Spine::HTTP::Request& theReq);
   void parse_timesteps(const Spine::HTTP::Request& theReq);
   void parse_starttime(const Spine::HTTP::Request& theReq, const Defaults& defaults);
-  void parse_startstep(const Spine::HTTP::Request& theReq);
+  void parse_startstep(const Spine::HTTP::Request& theReq, const Defaults& defaults);
   void parse_endtime(const Spine::HTTP::Request& theReq, const Defaults& defaults);
 
   void parseImpl(const Spine::HTTP::Request& theReq,

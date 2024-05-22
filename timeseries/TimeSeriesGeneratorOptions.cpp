@@ -22,8 +22,6 @@ using Spine::required_string;
 
 namespace TimeSeries
 {
-const int default_timestep = 60;
-
 // ----------------------------------------------------------------------
 /*!
  * \brief The default constructor marks most options as missing
@@ -342,7 +340,9 @@ void TimeSeriesGeneratorOptions::parse_starttime(
   }
 }
 
-void TimeSeriesGeneratorOptions::parse_startstep(const Spine::HTTP::Request& theReq)
+void TimeSeriesGeneratorOptions::parse_startstep(
+  const Spine::HTTP::Request& theReq,
+  const TimeSeriesGeneratorOptions::Defaults& defaults)
 {
   if (theReq.getParameter("startstep"))
   {
@@ -353,7 +353,7 @@ void TimeSeriesGeneratorOptions::parse_startstep(const Spine::HTTP::Request& the
     if (startstep > 10000)
       throw Fmi::Exception(BCP, "Too large 'startstep' value!");
 
-    int timestep = (timeStep ? *timeStep : default_timestep);
+    int timestep = (timeStep ? *timeStep : defaults.defaultTimeStep);
 
     startTime += Fmi::Minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
   }
@@ -368,7 +368,23 @@ void TimeSeriesGeneratorOptions::parse_endtime(const Spine::HTTP::Request& theRe
     if (stamp != "now")
     {
       if (!!timeSteps)
-        throw Fmi::Exception(BCP, "Cannot specify 'timesteps' and 'endtime' simultaneously!");
+      {
+        // If start time is not provided, we can calculate it from provided end time
+        // and the number of timesteps
+        if (startTimeAssumed)
+        {
+          endTime = Fmi::TimeParser::parse(stamp);
+          endTimeUTC = Fmi::TimeParser::looks_utc(stamp);
+          startTime = endTime - Fmi::Minutes(*timeStep * *timeSteps);
+          endTimeUTC = startTimeUTC;
+          startTimeAssumed = false;
+        }
+        else
+        {
+          throw Fmi::Exception(BCP, "Cannot specify 'timesteps' and 'endtime' simultaneously!");
+        }
+
+      }
 
       if (stamp == "data")
         endTimeData = true;
@@ -386,7 +402,7 @@ void TimeSeriesGeneratorOptions::parse_endtime(const Spine::HTTP::Request& theRe
     // If you give the number of timesteps, we must assume a default timestep unless you give
     // one
     if (!timeStep)
-      timeStep = default_timestep;
+      timeStep = defaults.defaultTimeStep;
     endTime = startTime + Fmi::Minutes(*timeStep * *timeSteps);
   }
   else
@@ -428,7 +444,7 @@ void TimeSeriesGeneratorOptions::parseImpl(
 
   // startstep must be handled after starttime and timestep options
 
-  parse_startstep(theReq);
+  parse_startstep(theReq, defaults);
 
   // endtime must be handled last since it may depend on starttime,
   // timestep and timesteps options. The default is to set the end
