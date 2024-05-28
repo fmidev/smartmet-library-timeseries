@@ -46,7 +46,7 @@ class StatCalculator
   boost::optional<Fmi::LocalDateTime> itsTimestep;
 
  public:
-  StatCalculator(LocalTimePoolPtr time_pool) : itsTimeSeries(time_pool) {}
+  StatCalculator() = default;
   void operator()(const TimedValue &tv);
   Value getStatValue(const DataFunction &func, bool useWeights) const;
   void setTimestep(const Fmi::LocalDateTime &timestep) { itsTimestep = timestep; }
@@ -135,7 +135,7 @@ TimeSeries area_aggregate(const TimeSeriesGroup &ts_group, const DataFunction &f
 {
   try
   {
-    TimeSeries ret(ts_group.empty() ? nullptr : ts_group[0].timeseries.getLocalTimePool());
+    TimeSeries ret;
 
     if (ts_group.empty())
     {
@@ -149,7 +149,7 @@ TimeSeries area_aggregate(const TimeSeriesGroup &ts_group, const DataFunction &f
     // iterate through timesteps
     for (size_t i = 0; i < ts_size; i++)
     {
-      StatCalculator statcalculator(ts_group[0].timeseries.getLocalTimePool());
+      StatCalculator statcalculator;
 
       // iterate through locations
       for (const auto &t : ts_group)
@@ -181,7 +181,7 @@ TimedValue time_aggregate(const TimeSeries &ts,
 {
   try
   {
-    StatCalculator statcalculator(ts.getLocalTimePool());
+    StatCalculator statcalculator;
     statcalculator.setTimestep(timestep);
 
     auto start_time =
@@ -211,7 +211,7 @@ TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
 {
   try
   {
-    TimeSeriesPtr ret(new TimeSeries(ts.getLocalTimePool()));
+    TimeSeriesPtr ret(new TimeSeries);
 
     std::vector<std::pair<int, int>> agg_indexes = get_aggregation_indexes(func, ts);
 
@@ -227,7 +227,7 @@ TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
         continue;
       }
 
-      StatCalculator statcalculator(ts.getLocalTimePool());
+      StatCalculator statcalculator;
       statcalculator.setTimestep(ts[i].time);
       for (int k = agg_index_start; k <= agg_index_end; k++)
       {
@@ -577,11 +577,11 @@ TimeSeriesPtr aggregate(const TimeSeries &ts, const DataFunctions &pf)
 {
   try
   {
-    TimeSeriesPtr ret(new TimeSeries(ts.getLocalTimePool()));
+    TimeSeriesPtr ret(new TimeSeries);
 
     if (pf.innerFunction.type() == FunctionType::AreaFunction)
     {
-      TimeSeries local_ts(ts.getLocalTimePool());
+      TimeSeries local_ts;
       // Do filtering
       for (const auto &tv : ts)
       {

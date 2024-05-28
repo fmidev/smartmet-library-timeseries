@@ -98,7 +98,7 @@ void erase_redundant_timesteps(TimeSeries& ts, const TimeSeriesGenerator::LocalT
       return;
 
     // Create reduced timeseries and swap it with the input
-    TimeSeries output(ts.getLocalTimePool());
+    TimeSeries output;
     output.reserve(valid_count);
 
     for (std::size_t i = 0; i < n; i++)
@@ -276,7 +276,7 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
   if (!tlist || tlist->empty())
     return;
 
-  TimeSeries ts2(ts.getLocalTimePool());
+  TimeSeries ts2;
 
   auto it = tlist->begin();
 
@@ -353,7 +353,7 @@ TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
           tsv->push_back(ts_k);
         else
         {
-          TimeSeries ts_ik(fmisid_ts.getLocalTimePool());
+          TimeSeries ts_ik;
           ts_ik.insert(ts_ik.begin(), ts_k.begin() + start_index, ts_k.begin() + end_index);
           // Add missing timesteps
           add_missing_timesteps(ts_ik, tlist);

@@ -6,60 +6,19 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-std::ostream& operator<<(std::ostream& os, const LocalTimePool& localTimePool)
-{
-  localTimePool.print(os);
-  return os;
-}
-
-const Fmi::LocalDateTime& LocalTimePool::create(
-    const Fmi::DateTime& t, const Fmi::TimeZonePtr& tz)
-{
-  auto key = Fmi::hash_value(t);
-  Fmi::hash_combine(key, Fmi::hash_value(tz));
-
-  // TODO: In C++17 should use try_emplace
-
-  auto pos = localtimes.find(key);
-  if (pos != localtimes.end())
-    return pos->second;
-
-  // Note: iterators may be invalidated by a rehash caused by this, but references are not
-  auto pos_bool = localtimes.emplace(key, Fmi::LocalDateTime(t, tz));
-
-  assert(pos_bool.second == true);
-  return pos_bool.first->second;
-}
-
-size_t LocalTimePool::size() const
-{
-  return localtimes.size();
-}
-
-void LocalTimePool::print(std::ostream& os) const
-{
-  for (const auto& item : localtimes)
-    os << item.first << " -> " << item.second << std::endl;
-}
-
-TimeSeries::TimeSeries(LocalTimePoolPtr time_pool) : local_time_pool(time_pool) {}
-
 void TimeSeries::emplace_back(const TimedValue& tv)
 {
-  TimedValueVector::emplace_back(local_time_pool->create(tv.time.utc_time(), tv.time.zone()),
-                                 tv.value);
+  TimedValueVector::emplace_back(tv.time, tv.value);
 }
 
 void TimeSeries::push_back(const TimedValue& tv)
 {
-  TimedValueVector::push_back(
-      TimedValue(local_time_pool->create(tv.time.utc_time(), tv.time.zone()), tv.value));
+  TimedValueVector::push_back(TimedValue(tv.time, tv.value));
 }
 
 TimedValueVector::iterator TimeSeries::insert(TimedValueVector::iterator pos, const TimedValue& tv)
 {
-  return TimedValueVector::insert(
-      pos, TimedValue(local_time_pool->create(tv.time.utc_time(), tv.time.zone()), tv.value));
+  return TimedValueVector::insert(pos, TimedValue(tv.time, tv.value));
 }
 
 void TimeSeries::insert(TimedValueVector::iterator pos,
@@ -82,7 +41,6 @@ TimeSeries& TimeSeries::operator=(const TimeSeries& ts)
   {
     clear();
     TimedValueVector::insert(end(), ts.begin(), ts.end());
-    local_time_pool = ts.local_time_pool;
   }
 
   return *this;

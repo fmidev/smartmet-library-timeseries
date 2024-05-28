@@ -22,8 +22,7 @@ TS::TimeSeries generate_observation_timeseries()
 
   Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = std::make_shared<TS::LocalTimePool>();
-  TS::TimeSeries timeseries(pool);
+  TS::TimeSeries timeseries;
 
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), TS::None()));
@@ -78,8 +77,7 @@ TS::TimeSeries generate_direction_timeseries()
 
   Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = std::make_shared<TS::LocalTimePool>();
-  TS::TimeSeries timeseries(pool);
+  TS::TimeSeries timeseries;
 
   timeseries.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), TS::None()));
@@ -134,8 +132,7 @@ TS::TimeSeries generate_timeseries_with_diverse_values(bool add_missing_value = 
 
   Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = std::make_shared<TS::LocalTimePool>();
-  TS::TimeSeries timeseries(pool);
+  TS::TimeSeries timeseries;
 
   Fmi::LocalDateTime t1(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone);
   Fmi::LocalDateTime t2(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone);
@@ -175,8 +172,7 @@ TS::TimeSeries generate_timeseries(bool add_missing_value = false, bool degrees 
 
   Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = std::make_shared<TS::LocalTimePool>();
-  TS::TimeSeries timeseries(pool);
+  TS::TimeSeries timeseries;
 
   Fmi::LocalDateTime t1(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone);
   Fmi::LocalDateTime t2(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(23)), zone);
@@ -216,8 +212,7 @@ TS::TimeSeriesGroup generate_timeseries_group()
 
   Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = std::make_shared<TS::LocalTimePool>();
-  TS::TimeSeries timeseries_helsinki(pool);
+  TS::TimeSeries timeseries_helsinki;
 
   timeseries_helsinki.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 1.0));
@@ -230,7 +225,7 @@ TS::TimeSeriesGroup generate_timeseries_group()
   timeseries_helsinki.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 21.0));
 
-  TS::TimeSeries timeseries_tampere(pool);
+  TS::TimeSeries timeseries_tampere;
 
   timeseries_tampere.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 2.0));
@@ -243,7 +238,7 @@ TS::TimeSeriesGroup generate_timeseries_group()
   timeseries_tampere.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 22.0));
 
-  TS::TimeSeries timeseries_oulu(pool);
+  TS::TimeSeries timeseries_oulu;
 
   timeseries_oulu.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 3.0));
@@ -256,7 +251,7 @@ TS::TimeSeriesGroup generate_timeseries_group()
   timeseries_oulu.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 23.0));
 
-  TS::TimeSeries timeseries_kuopio(pool);
+  TS::TimeSeries timeseries_kuopio;
 
   timeseries_kuopio.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 4.0));
@@ -269,7 +264,7 @@ TS::TimeSeriesGroup generate_timeseries_group()
   timeseries_kuopio.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 24.0));
 
-  TS::TimeSeries timeseries_turku(pool);
+  TS::TimeSeries timeseries_turku;
 
   timeseries_turku.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 5.0));
@@ -304,8 +299,7 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
 
   Fmi::TimeZonePtr zone(tz_eet_name);
 
-  auto pool = std::make_shared<TS::LocalTimePool>();
-  TS::TimeSeries timeseries_helsinki(pool);
+  TS::TimeSeries timeseries_helsinki;
 
   timeseries_helsinki.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 1.0));
@@ -318,7 +312,7 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
   timeseries_helsinki.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 21.0));
 
-  TS::TimeSeries timeseries_tampere(pool);
+  TS::TimeSeries timeseries_tampere;
 
   timeseries_tampere.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 2.0));
@@ -331,7 +325,7 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
   timeseries_tampere.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 22.0));
 
-  TS::TimeSeries timeseries_oulu(pool);
+  TS::TimeSeries timeseries_oulu;
 
   timeseries_oulu.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 3.0));
@@ -344,7 +338,7 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
   timeseries_oulu.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 23.0));
 
-  TS::TimeSeries timeseries_kuopio(pool);
+  TS::TimeSeries timeseries_kuopio;
 
   timeseries_kuopio.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 4.0));
@@ -357,7 +351,7 @@ TS::TimeSeriesGroup generate_timeseries_group_nans()
   timeseries_kuopio.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(26)), zone), 24.0));
 
-  TS::TimeSeries timeseries_turku(pool);
+  TS::TimeSeries timeseries_turku;
 
   timeseries_turku.push_back(TS::TimedValue(
       Fmi::LocalDateTime(Fmi::DateTime(Fmi::Date(2015, 3, 2), Fmi::Hours(22)), zone), 5.0));

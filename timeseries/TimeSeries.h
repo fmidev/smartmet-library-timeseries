@@ -68,21 +68,6 @@ struct Value : public Value_
   bool operator!=(const Value& x) const { return this->Value_::operator!=((Value_&)x); }
 };
 
-// Local time pool
-class LocalTimePool
-{
- public:
-  const Fmi::LocalDateTime& create(const Fmi::DateTime& t,
-                                                   const Fmi::TimeZonePtr& tz);
-  size_t size() const;
-  void print(std::ostream& os) const;
-
- private:
-  std::unordered_map<std::size_t, Fmi::LocalDateTime> localtimes;
-};
-
-using LocalTimePoolPtr = std::shared_ptr<LocalTimePool>;
-
 struct TimedValue
 {
   TimedValue(const Fmi::LocalDateTime& timestamp, const Value& val)
@@ -103,7 +88,7 @@ struct TimedValue
     return *this;
   }
 
-  Fmi::LocalDateTime& time;
+  Fmi::LocalDateTime time;
   Value value;
 };
 
@@ -112,7 +97,7 @@ using TimedValueVector = std::vector<TimedValue>;
 class TimeSeries : public TimedValueVector
 {
  public:
-  TimeSeries(LocalTimePoolPtr time_pool);
+  TimeSeries() = default;
   TimeSeries(const TimeSeries&) = default;
   void emplace_back(const TimedValue& tv);
   void push_back(const TimedValue& tv);
@@ -124,11 +109,6 @@ class TimeSeries : public TimedValueVector
               TimedValueVector::const_iterator first,
               TimedValueVector::const_iterator last);
   TimeSeries& operator=(const TimeSeries& ts);
-
-  LocalTimePoolPtr getLocalTimePool() const { return local_time_pool; }
-
- private:
-  LocalTimePoolPtr local_time_pool{nullptr};
 };
 
 // one time series
@@ -151,8 +131,6 @@ using TimeSeriesGroupPtr = boost::shared_ptr<TimeSeriesGroup>;
 // time series vector
 using TimeSeriesVector = std::vector<TimeSeries>;
 using TimeSeriesVectorPtr = boost::shared_ptr<TimeSeriesVector>;
-
-std::ostream& operator<<(std::ostream& os, const LocalTimePool& localTimePool);
 
 }  // namespace TimeSeries
 }  // namespace SmartMet
