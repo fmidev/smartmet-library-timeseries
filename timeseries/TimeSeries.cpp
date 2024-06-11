@@ -8,17 +8,17 @@ namespace TimeSeries
 {
 void TimeSeries::emplace_back(const TimedValue& tv)
 {
-  TimedValueVector::emplace_back(tv.time, tv.value);
+  TimedValueVector::emplace_back(tv);
 }
 
 void TimeSeries::push_back(const TimedValue& tv)
 {
-  TimedValueVector::push_back(TimedValue(tv.time, tv.value));
+  TimedValueVector::push_back(tv);
 }
 
 TimedValueVector::iterator TimeSeries::insert(TimedValueVector::iterator pos, const TimedValue& tv)
 {
-  return TimedValueVector::insert(pos, TimedValue(tv.time, tv.value));
+  return TimedValueVector::insert(pos, tv);
 }
 
 void TimeSeries::insert(TimedValueVector::iterator pos,

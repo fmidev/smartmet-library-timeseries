@@ -106,8 +106,8 @@ double interpolate_value(bool normal,
 }
 
 Fmi::TimePeriod extract_subvector_timeperiod(const DataVector& data,
-                                         const Fmi::DateTime& startTime,
-                                         const Fmi::DateTime& endTime)
+                                             const Fmi::DateTime& startTime,
+                                             const Fmi::DateTime& endTime)
 {
   auto firstTimestamp =
       ((startTime == not_a_date_time || startTime < data[0].time) ? data[0].time : startTime);
@@ -126,7 +126,7 @@ void extract_subvector_weighted_segment(DataVector& subvector,
   // iterate through the data vector and sort out periods and corresponding weights
 
   // period between two timesteps
-    Fmi::TimePeriod timestep_period(item1.time, item2.time + Fmi::Microseconds(1));
+  Fmi::TimePeriod timestep_period(item1.time, item2.time + Fmi::Microseconds(1));
   // if timestep period is inside the queried period handle it
 
   if (query_period.intersects(timestep_period))
@@ -142,7 +142,8 @@ void extract_subvector_weighted_segment(DataVector& subvector,
                                Fmi::Seconds(timestep_period.length().total_seconds() / 2));
     if (intersection_period.contains(halfway_time))
     {
-      Fmi::TimePeriod first_part_period(intersection_period.begin(), halfway_time + Microseconds(1));
+      Fmi::TimePeriod first_part_period(intersection_period.begin(),
+                                        halfway_time + Microseconds(1));
       Fmi::TimePeriod second_part_period(halfway_time, intersection_period.end());
       subvector.push_back(
           DataItem(item1.time, item1.value, first_part_period.length().total_seconds()));
@@ -693,8 +694,8 @@ double Stat::percentage(double lowerLimit,
     if (!get_subvector(subvector, startTime, endTime))
       return itsMissingValue;
 
-    int occurances(0);
-    int total_count(0);
+    int occurances = 0;
+    int total_count = 0;
 
     for (const DataItem& item : subvector)
     {
@@ -702,6 +703,9 @@ double Stat::percentage(double lowerLimit,
         occurances += (itsWeights ? item.weight : 1);
       total_count += (itsWeights ? item.weight : 1);
     }
+
+    if (total_count == 0)
+      return itsMissingValue;
 
     if (occurances == 0)
       return 0.0;
