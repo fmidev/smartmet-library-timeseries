@@ -40,8 +40,8 @@ class TableFeeder
   TableFeeder(Spine::Table& table,
               const Fmi::ValueFormatter& valueformatter,
               const std::vector<int>& precisions,
-              boost::shared_ptr<Fmi::TimeFormatter> timeformatter,
-              boost::optional<Fmi::TimeZonePtr> timezoneptr,
+              std::shared_ptr<Fmi::TimeFormatter> timeformatter,
+              std::optional<Fmi::TimeZonePtr> timezoneptr,
               unsigned int currentcolumn = 0)
       : itsValueFormatter(valueformatter),
         itsPrecisions(precisions),

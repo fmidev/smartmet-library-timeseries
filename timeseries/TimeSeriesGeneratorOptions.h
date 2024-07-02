@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <optional>
+#include <memory>
 #include <macgyver/DateTime.h>
 
 #include <list>
@@ -32,7 +32,7 @@ struct TimeSeriesGeneratorOptions
   };
 
   // Timesteps established from the outside
-  using TimeList = boost::shared_ptr<std::list<Fmi::DateTime>>;
+  using TimeList = std::shared_ptr<std::list<Fmi::DateTime>>;
 
   // Methods
 
@@ -52,8 +52,8 @@ struct TimeSeriesGeneratorOptions
   Fmi::DateTime endTime;                    // end time
   bool startTimeUTC = true;                 // timestamps can be interpreted to be in
   bool endTimeUTC = true;                   // UTC time or in some specific time zone
-  boost::optional<unsigned int> timeSteps;  // number of time steps
-  boost::optional<unsigned int> timeStep;   // Mode:TimeSteps, timestep in Fmi::Minutes
+  std::optional<unsigned int> timeSteps;  // number of time steps
+  std::optional<unsigned int> timeStep;   // Mode:TimeSteps, timestep in Fmi::Minutes
   std::set<unsigned int> timeList;          // Mode:FixedTimes,  integers of form HHMM
   std::set<unsigned int> days;
 
