@@ -14,7 +14,7 @@ Spine::TableVisitor& operator<<(Spine::TableVisitor& tf, const Value& val)
 {
   try
   {
-    std::visit(tf, dynamic_cast<const Value_&>(val));
+    val.apply_visitor(tf);
     return tf;
   }
   catch (...)

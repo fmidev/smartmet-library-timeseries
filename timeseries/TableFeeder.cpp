@@ -79,7 +79,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesGroup& ts_group)
         str_value.erase(str_value.size() - 2, 1);
 
       Value dv = str_value;
-      std::visit(itsTableVisitor, dynamic_cast<Value_&>(dv));
+      dv.apply_visitor(itsTableVisitor);
     }
 
     return *this;
@@ -107,7 +107,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesVector& ts_vector)
       TimeSeries ts(tvalue);
       for (auto& t : ts)
       {
-        std::visit(itsTableVisitor, dynamic_cast<Value_&>(t.value));
+        t.value.apply_visitor(itsTableVisitor);
       }
       itsTableVisitor.setCurrentColumn(itsTableVisitor.getCurrentColumn() + 1);
     }
@@ -129,7 +129,7 @@ const TableFeeder& TableFeeder::operator<<(const std::vector<Value>& value_vecto
       return *this;
 
     for (const auto& val : value_vector)
-      std::visit(itsTableVisitor, dynamic_cast<const Value_&>(val));
+      val.apply_visitor(itsTableVisitor);
 
     return *this;
   }

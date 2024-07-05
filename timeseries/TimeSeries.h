@@ -14,6 +14,7 @@
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 namespace SmartMet
@@ -53,6 +54,12 @@ struct Value : public Value_
                typename std::enable_if<std::is_floating_point<ArgType>::value, int>::type = 0)
       : Value_(double(x))
   {
+  }
+
+  template <typename VisitorType>
+  auto apply_visitor(VisitorType&& visitor) const
+  {
+    return std::visit(visitor, dynamic_cast<const Value_&>(*this));
   }
 
   inline Value(const Spine::LonLat& x) : Value_(x) {}
