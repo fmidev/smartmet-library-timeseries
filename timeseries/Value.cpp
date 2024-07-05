@@ -25,5 +25,5 @@ bool Value::operator == (const Value& other) const
     if (ind != other.index())
         return false;
 
-    return std::visit(EqualVisitor(other), *this);
+    return std::visit(EqualVisitor(other), dynamic_cast<const Value_&>(*this));
 }

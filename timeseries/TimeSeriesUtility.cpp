@@ -247,7 +247,7 @@ int get_fmisid_value(const Value& value)
 {
   try
   {
-    return std::visit(FmisidVisitor(), value);
+    return std::visit(FmisidVisitor(), dynamic_cast<const Value_&>(value));
   }
   catch (...)
   {
