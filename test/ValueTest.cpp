@@ -40,5 +40,48 @@ BOOST_AUTO_TEST_CASE(compare_with_none)
     BOOST_CHECK(v1 != v2);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_CASE(get_double)
+{
+  None none;
+  Fmi::LocalDateTime ldt;
+  SmartMet::Spine::LonLat lonlat(24.0, 60.0);
+  Value v1 = none;
+  Value v2 = 42;
+  Value v3 = 3.14;
+  Value v4 = ldt;
+  Value v5 = lonlat;
+  Value v6 = "42.25";
 
+  //std::cout << v2.as_string() << std::endl;
+
+  BOOST_CHECK_THROW(v1.as_double(), Fmi::Exception);
+  BOOST_CHECK_EQUAL(v2.as_double(), 42.0);
+  BOOST_CHECK_EQUAL(v3.as_double(), 3.14);
+  BOOST_CHECK_THROW(v4.as_double(), Fmi::Exception);
+  BOOST_CHECK_THROW(v5.as_double(), Fmi::Exception);
+  BOOST_CHECK_EQUAL(v6.as_double(), 42.25);
+}
+
+BOOST_AUTO_TEST_CASE(get_int)
+{
+  None none;
+  Fmi::TimeZonePtr tz("Europe/Helsinki");
+  Fmi::DateTime dt = Fmi::DateTime::from_iso_extended_string("2024-07-15T00:00:00");
+  Fmi::LocalDateTime ldt(dt, tz);
+  SmartMet::Spine::LonLat lonlat(24.0, 60.0);
+  Value v1 = none;
+  Value v2 = 42;
+  Value v3 = 1024.0;
+  Value v4 = ldt;
+  Value v5 = lonlat;
+  Value v6 = "42";
+
+  BOOST_CHECK_THROW(v1.as_int(), Fmi::Exception);
+  BOOST_CHECK_EQUAL(v2.as_int(), 42);
+  BOOST_CHECK_EQUAL(v3.as_int(), 1024);
+  BOOST_CHECK_THROW(v4.as_int(), Fmi::Exception);
+  BOOST_CHECK_THROW(v5.as_int(), Fmi::Exception);
+  BOOST_CHECK_EQUAL(v6.as_int(), 42);
+}
+
+BOOST_AUTO_TEST_SUITE_END()

@@ -73,6 +73,13 @@ struct Value : public Value_
   bool operator==(const Value& x) const; /* { return this->Value_::operator==((Value_&)x); } */
 
   bool operator!=(const Value& x) const { return ! operator == (x); }
+
+  /**
+   *   @brief Get double value using supported conversions
+   */
+  double as_double() const;
+
+  int as_int() const;
 };
 
 struct TimedValue
