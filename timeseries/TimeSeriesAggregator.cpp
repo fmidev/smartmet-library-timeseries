@@ -43,7 +43,7 @@ class StatCalculator
   Fmi::LocalDateTime getLocalDateTimeStatValue(const DataFunction &func) const;
   LonLat getLonLatStatValue(const DataFunction &func) const;
 
-  boost::optional<Fmi::LocalDateTime> itsTimestep;
+  std::optional<Fmi::LocalDateTime> itsTimestep;
 
  public:
   StatCalculator() = default;
@@ -63,14 +63,14 @@ bool include_value(const TimedValue &tv, const DataFunction &func)
   if (func.lowerOrUpperLimitGiven() && funcId != FunctionId::Percentage &&
       funcId != FunctionId::Count)
   {
-    boost::optional<double> double_value;
-    if (boost::get<double>(&(tv.value)))
+    std::optional<double> double_value;
+    if (const double* tmp = std::get_if<double>(&tv.value))
     {
-      double_value = boost::get<double>(tv.value);
+      double_value = *tmp;
     }
-    else if (boost::get<int>(&(tv.value)))
+    else if (const int* tmp = std::get_if<int>(&tv.value))
     {
-      double_value = boost::get<int>(tv.value);
+      double_value = *tmp;
     }
 
     if (double_value && (*double_value < func.lowerLimit() || *double_value > func.upperLimit()))
@@ -319,16 +319,16 @@ std::string StatCalculator::getStringStatValue(const DataFunction &func) const
       case FunctionId::Percentage:
       case FunctionId::Change:
       case FunctionId::Trend:
-        return boost::get<std::string>(itsTimeSeries[0].value);
+        return std::get<std::string>(itsTimeSeries[0].value);
 
       case FunctionId::Maximum:
-        return boost::get<std::string>(itsTimeSeries[itsTimeSeries.size() - 1].value);
+        return std::get<std::string>(itsTimeSeries[itsTimeSeries.size() - 1].value);
 
       case FunctionId::Minimum:
-        return boost::get<std::string>(itsTimeSeries[0].value);
+        return std::get<std::string>(itsTimeSeries[0].value);
 
       case FunctionId::Median:
-        return boost::get<std::string>(itsTimeSeries[itsTimeSeries.size() / 2].value);
+        return std::get<std::string>(itsTimeSeries[itsTimeSeries.size() / 2].value);
 
       case FunctionId::Nearest:
       case FunctionId::Interpolate:
@@ -337,9 +337,9 @@ std::string StatCalculator::getStringStatValue(const DataFunction &func) const
         {
           for (auto item : itsTimeSeries)
             if (item.time.utc_time() == itsTimestep->utc_time())
-              return boost::get<std::string>(item.value);
+              return std::get<std::string>(item.value);
         }
-        return boost::get<std::string>(itsTimeSeries[0].value);
+        return std::get<std::string>(itsTimeSeries[0].value);
       }
 
       case FunctionId::Sum:
@@ -351,7 +351,7 @@ std::string StatCalculator::getStringStatValue(const DataFunction &func) const
         {
           if (ss.str().size() > 1)
             ss << " ";
-          ss << boost::get<std::string>(tv.value);
+          ss << std::get<std::string>(tv.value);
         }
         ss << "]";
         return ss.str();
@@ -390,14 +390,14 @@ Fmi::LocalDateTime StatCalculator::getLocalDateTimeStatValue(
     FunctionId fid(func.id());
 
     if (fid == FunctionId::Maximum)
-      return boost::get<Fmi::LocalDateTime>(
+      return std::get<Fmi::LocalDateTime>(
           itsTimeSeries[itsTimeSeries.size() - 1].value);
 
     if (fid == FunctionId::Minimum)
-      return boost::get<Fmi::LocalDateTime>(itsTimeSeries[0].value);
+      return std::get<Fmi::LocalDateTime>(itsTimeSeries[0].value);
 
     if (fid == FunctionId::Median)
-      return boost::get<Fmi::LocalDateTime>(
+      return std::get<Fmi::LocalDateTime>(
           itsTimeSeries[itsTimeSeries.size() / 2].value);
 
     std::stringstream ss;
@@ -420,8 +420,8 @@ LonLat StatCalculator::getLonLatStatValue(const DataFunction &func) const
     for (const TimedValue &tv : itsTimeSeries)
     {
       Value value(tv.value);
-      lon_vector.push_back((boost::get<LonLat>(value)).lon);
-      lat_vector.push_back((boost::get<LonLat>(value)).lat);
+      lon_vector.push_back((std::get<LonLat>(value)).lon);
+      lat_vector.push_back((std::get<LonLat>(value)).lat);
     }
 
     FunctionId fid(func.id());
@@ -471,14 +471,13 @@ void StatCalculator::operator()(const TimedValue &tv)
 {
   try
   {
-    if (boost::get<double>(&(tv.value)))
+    if (const double* d = std::get_if<double>(&(tv.value)))
     {
-      double d(boost::get<double>(tv.value));
-      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
+      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), *d));
     }
-    else if (boost::get<int>(&(tv.value)))
+    else if (const int* i = std::get_if<int>(&(tv.value)))
     {
-      double d(boost::get<int>(tv.value));
+      double d = *i;
       itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
     }
     else
@@ -502,7 +501,7 @@ Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) co
     bool missingValuesPresent(false);
     for (const TimedValue &tv : itsTimeSeries)
     {
-      if (boost::get<None>(&(tv.value)))
+      if (std::get_if<None>(&(tv.value)))
       {
         missingValuesPresent = true;
         break;
@@ -525,18 +524,18 @@ Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) co
     {
       Value value(itsTimeSeries[0].value);
 
-      if (boost::get<std::string>(&value))
+      if (std::get_if<std::string>(&value))
       {
-        if (!boost::get<None>(&value))
+        if (!std::get_if<None>(&value))
         {
           ret = getStringStatValue(func);
         }
       }
-      else if (boost::get<Fmi::LocalDateTime>(&value))
+      else if (std::get_if<Fmi::LocalDateTime>(&value))
       {
         ret = getLocalDateTimeStatValue(func);
       }
-      else if (boost::get<LonLat>(&value))
+      else if (std::get_if<LonLat>(&value))
       {
         ret = getLonLatStatValue(func);
       }
