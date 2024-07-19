@@ -18,8 +18,7 @@ DEFINES = -DUNIX -D_REENTRANT
  INCLUDES += \
 	-isystem $(includedir)/smartmet
 
-LIBS += -L$(libdir) \
-	$(REQUIRES_LIBS) \
+LIBS += $(REQUIRED_LIBS) \
 	-lsmartmet-macgyver \
 	-lsmartmet-spine \
 	-lboost_system \
