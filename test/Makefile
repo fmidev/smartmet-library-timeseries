@@ -28,6 +28,7 @@ LIBS += ../libsmartmet-timeseries.so \
 all: $(PROG)
 clean:
 	rm -f $(PROG) *~
+	rm -rf obj
 
 test: $(PROG)
 	@rm -rf /tmp/$$UID/bscachetest #Cache test uses this
@@ -41,5 +42,13 @@ test: $(PROG)
 	done; \
 	$$ok
 
-$(PROG) : % : %.cpp Makefile ../libsmartmet-timeseries.so
+$(PROG) : % : obj/%.o Makefile
 	$(CXX) $(CFLAGS) -o $@ $@.cpp $(INCLUDES) $(LIBS)
+
+obj/%.o: %.cpp
+	@mkdir -p obj
+	$(CXX) $(CFLAGS) $(INCLUDES) -c -MD -MF $(patsubst obj/%.o, obj/%.d, $@) -MT $@ -o $@ $<
+
+ifneq ($(wildcard obj/*.d),)
+-include $(wildcard obj/*.d)
+endif
