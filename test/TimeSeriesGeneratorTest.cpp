@@ -17,7 +17,7 @@ Fmi::TimeZones timezones;
 std::string tostr(const TS::TimeSeriesGenerator::LocalTimeList& tlist)
 {
   std::ostringstream out;
-  BOOST_FOREACH (const Fmi::LocalDateTime& t, tlist)
+  for (const Fmi::LocalDateTime& t, tlist)
   {
     out << t << '\n';
   }
