@@ -5,7 +5,6 @@
 // ======================================================================
 
 #include "TimeSeriesInclude.h"
-#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>

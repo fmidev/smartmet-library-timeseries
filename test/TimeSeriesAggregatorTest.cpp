@@ -6,7 +6,6 @@
 
 #include "TimeSeriesInclude.h"
 #include <memory>
-#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 #include <regression/tframe.h>
 
