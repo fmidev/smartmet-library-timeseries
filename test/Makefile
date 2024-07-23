@@ -17,7 +17,9 @@ CFLAGS = -DUNIX -O0 -g $(FLAGS)
 
 INCLUDES += -I../timeseries
 
-LIBS += ../libsmartmet-timeseries.so \
+LIBS += \
+	$(PREFIX_LDFLAGS) \
+	../libsmartmet-timeseries.so \
 	-lsmartmet-spine \
 	-lsmartmet-macgyver \
 	$(REQUIRED_LIBS) \
