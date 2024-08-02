@@ -16,7 +16,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeries& ts)
     for (const auto& t : ts)
     {
       Value val = t.value;
-      boost::apply_visitor(itsTableVisitor, val);
+      std::visit(itsTableVisitor, dynamic_cast<Value_&>(val));
     }
 
     return *this;
@@ -64,7 +64,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesGroup& ts_group)
         // take value from i:th timestep
         Value val = timeseries[i].value;
         // append value to the ostream
-        boost::apply_visitor(ostream_visitor, val);
+        std::visit(ostream_visitor, dynamic_cast<const Value_&>(val));
       }
       // if no data added (timestep not included)
       if (ss.str().size() == 1)
@@ -79,7 +79,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesGroup& ts_group)
         str_value.erase(str_value.size() - 2, 1);
 
       Value dv = str_value;
-      boost::apply_visitor(itsTableVisitor, dv);
+      dv.apply_visitor(itsTableVisitor);
     }
 
     return *this;
@@ -107,7 +107,7 @@ const TableFeeder& TableFeeder::operator<<(const TimeSeriesVector& ts_vector)
       TimeSeries ts(tvalue);
       for (auto& t : ts)
       {
-        boost::apply_visitor(itsTableVisitor, t.value);
+        t.value.apply_visitor(itsTableVisitor);
       }
       itsTableVisitor.setCurrentColumn(itsTableVisitor.getCurrentColumn() + 1);
     }
@@ -129,7 +129,7 @@ const TableFeeder& TableFeeder::operator<<(const std::vector<Value>& value_vecto
       return *this;
 
     for (const auto& val : value_vector)
-      boost::apply_visitor(itsTableVisitor, val);
+      val.apply_visitor(itsTableVisitor);
 
     return *this;
   }

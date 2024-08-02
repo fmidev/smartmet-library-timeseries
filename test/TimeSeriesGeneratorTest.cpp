@@ -5,7 +5,6 @@
 // ======================================================================
 
 #include "TimeSeriesInclude.h"
-#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
@@ -17,7 +16,7 @@ Fmi::TimeZones timezones;
 std::string tostr(const TS::TimeSeriesGenerator::LocalTimeList& tlist)
 {
   std::ostringstream out;
-  BOOST_FOREACH (const Fmi::LocalDateTime& t, tlist)
+  for (const Fmi::LocalDateTime& t : tlist)
   {
     out << t << '\n';
   }
@@ -321,7 +320,7 @@ void datatimes()
 {
   using namespace SmartMet::TimeSeries;
 
-  auto tlist = boost::make_shared<TimeSeriesGeneratorOptions::TimeList::element_type>();
+  auto tlist = std::make_shared<TimeSeriesGeneratorOptions::TimeList::element_type>();
 
   tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 28), Fmi::Hours(12)));
   tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 29), Fmi::Hours(12)));
@@ -377,7 +376,7 @@ void datatimes_climatology()
 {
   using namespace SmartMet::TimeSeries;
 
-  auto tlist = boost::make_shared<TimeSeriesGeneratorOptions::TimeList::element_type>();
+  auto tlist = std::make_shared<TimeSeriesGeneratorOptions::TimeList::element_type>();
 
   tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 28), Fmi::Hours(12)));
   tlist->push_back(Fmi::DateTime(Fmi::Date(2012, 10, 29), Fmi::Hours(12)));

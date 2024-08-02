@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <boost/variant.hpp>
+#include <variant>
 #include <macgyver/LocalDateTime.h>
 #include <spine/LonLat.h>
 #include <spine/None.h>
@@ -14,6 +14,7 @@
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 namespace SmartMet
@@ -25,7 +26,7 @@ using LonLat = ::SmartMet::Spine::LonLat;
 using LonLatFormat = ::SmartMet::Spine::LonLatFormat;
 
 // data variable for qengine, obsengine
-using Value_ = boost::variant<Spine::None,
+using Value_ = std::variant<Spine::None,
                               std::string,
                               double,
                               int,
@@ -55,6 +56,12 @@ struct Value : public Value_
   {
   }
 
+  template <typename VisitorType>
+  auto apply_visitor(VisitorType&& visitor) const
+  {
+    return std::visit(visitor, dynamic_cast<const Value_&>(*this));
+  }
+
   inline Value(const Spine::LonLat& x) : Value_(x) {}
 
   inline Value(const Fmi::LocalDateTime& x) : Value_(x) {}
@@ -63,9 +70,16 @@ struct Value : public Value_
 
   inline Value& operator=(const Value&) = default;
 
-  bool operator==(const Value& x) const { return this->Value_::operator==((Value_&)x); }
+  bool operator==(const Value& x) const; /* { return this->Value_::operator==((Value_&)x); } */
 
-  bool operator!=(const Value& x) const { return this->Value_::operator!=((Value_&)x); }
+  bool operator!=(const Value& x) const { return ! operator == (x); }
+
+  /**
+   *   @brief Get double value using supported conversions
+   */
+  double as_double() const;
+
+  int as_int() const;
 };
 
 struct TimedValue
@@ -112,7 +126,7 @@ class TimeSeries : public TimedValueVector
 };
 
 // one time series
-using TimeSeriesPtr = boost::shared_ptr<TimeSeries>;
+using TimeSeriesPtr = std::shared_ptr<TimeSeries>;
 
 // time series result variable for an area
 struct LonLatTimeSeries
@@ -126,11 +140,11 @@ struct LonLatTimeSeries
 
 // several coordinate-time series pairs
 using TimeSeriesGroup = std::vector<LonLatTimeSeries>;
-using TimeSeriesGroupPtr = boost::shared_ptr<TimeSeriesGroup>;
+using TimeSeriesGroupPtr = std::shared_ptr<TimeSeriesGroup>;
 
 // time series vector
 using TimeSeriesVector = std::vector<TimeSeries>;
-using TimeSeriesVectorPtr = boost::shared_ptr<TimeSeriesVector>;
+using TimeSeriesVectorPtr = std::shared_ptr<TimeSeriesVector>;
 
 }  // namespace TimeSeries
 }  // namespace SmartMet

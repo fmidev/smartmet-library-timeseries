@@ -10,7 +10,7 @@ namespace SmartMet
 namespace TimeSeries
 {
 /*** typedefs ***/
-using TimeSeriesData = boost::variant<TimeSeriesPtr, TimeSeriesVectorPtr, TimeSeriesGroupPtr>;
+using TimeSeriesData = std::variant<TimeSeriesPtr, TimeSeriesVectorPtr, TimeSeriesGroupPtr>;
 
 using OutputData = std::vector<std::pair<std::string, std::vector<TimeSeriesData> > >;
 using PressureLevelParameterPair = std::pair<int, std::string>;

@@ -16,24 +16,23 @@ std::ostream& operator<<(std::ostream& os, const Value& val)
 {
   try
   {
-    if (boost::get<double>(&val) != nullptr)
-      os << *(boost::get<double>(&val));
-    else if (boost::get<int>(&val) != nullptr)
-      os << *(boost::get<int>(&val));
-    else if (boost::get<std::string>(&val) != nullptr)
-      os << *(boost::get<std::string>(&val));
-    else if (boost::get<LonLat>(&val) != nullptr)
+    if (const auto* ptr = std::get_if<double>(&val))
+      os << *ptr;
+    else if (const auto* ptr = std::get_if<int>(&val))
+      os << *ptr;
+    else if (const auto* ptr = std::get_if<std::string>(&val))
+      os << *ptr;
+    else if (const auto* ptr = std::get_if<LonLat>(&val))
     {
-      LonLat coord = *(boost::get<LonLat>(&val));
+      LonLat coord = *ptr;
       os << coord.lon << ", " << coord.lat;
     }
-    else if (boost::get<Fmi::LocalDateTime>(&val) != nullptr)
+    else if (const auto* ptr = std::get_if<Fmi::LocalDateTime>(&val))
     {
-      Fmi::LocalDateTime ldt =
-          *(boost::get<Fmi::LocalDateTime>(&val));
+      Fmi::LocalDateTime ldt = *ptr;
       os << ldt;
     }
-    else if (boost::get<None>(&val) != nullptr)
+    else if (std::get_if<None>(&val))
     {
       os << "nan";
     }

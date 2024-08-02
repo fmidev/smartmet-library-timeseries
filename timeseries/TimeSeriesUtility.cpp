@@ -15,12 +15,12 @@ std::ostream& operator<<(std::ostream& os, const TimeSeriesData& tsdata)
 {
   try
   {
-    if (boost::get<TimeSeriesPtr>(&tsdata) != nullptr)
-      os << **(boost::get<TimeSeriesPtr>(&tsdata));
-    else if (boost::get<TimeSeriesVectorPtr>(&tsdata) != nullptr)
-      os << **(boost::get<TimeSeriesVectorPtr>(&tsdata));
-    else if (boost::get<TimeSeriesGroupPtr>(&tsdata) != nullptr)
-      os << **(boost::get<TimeSeriesGroupPtr>(&tsdata));
+    if (const auto* ptr = std::get_if<TimeSeriesPtr>(&tsdata))
+      os << **ptr;
+    else if (const auto* ptr = std::get_if<TimeSeriesVectorPtr>(&tsdata))
+      os << **ptr;
+    else if (const auto* ptr = std::get_if<TimeSeriesGroupPtr>(&tsdata))
+      os << **ptr;
 
     return os;
   }
@@ -194,22 +194,22 @@ size_t number_of_elements(const OutputData& outputData)
       {
         const TimeSeriesData& tsdata = outdata[j];
 
-        if (boost::get<TimeSeriesPtr>(&tsdata))
+        if (const auto* ptr = std::get_if<TimeSeriesPtr>(&tsdata))
         {
-          TimeSeriesPtr ts = *(boost::get<TimeSeriesPtr>(&tsdata));
+          const TimeSeriesPtr ts = *ptr;
           if (ts && !ts->empty())
             ret += ts->size();
         }
-        else if (boost::get<TimeSeriesVectorPtr>(&tsdata))
+        else if (const auto* ptr = std::get_if<TimeSeriesVectorPtr>(&tsdata))
         {
-          TimeSeriesVectorPtr tsv = *(boost::get<TimeSeriesVectorPtr>(&tsdata));
+          TimeSeriesVectorPtr tsv = *ptr;
           if (tsv)
             for (unsigned int k = 0; k < tsv->size(); k++)
               ret += tsv->at(k).size();
         }
-        else if (boost::get<TimeSeriesGroupPtr>(&tsdata))
+        else if (const auto* ptr = std::get_if<TimeSeriesGroupPtr>(&tsdata))
         {
-          TimeSeriesGroupPtr tsg = *(boost::get<TimeSeriesGroupPtr>(&tsdata));
+          TimeSeriesGroupPtr tsg = *ptr;
           if (tsg)
             for (unsigned int k = 0; k < tsg->size(); k++)
               ret += tsg->at(k).timeseries.size();
@@ -224,30 +224,31 @@ size_t number_of_elements(const OutputData& outputData)
   }
 }
 
+namespace
+{
+  struct FmisidVisitor
+  {
+    // fmisid can be std::string, int or double
+    int operator() (const std::string& fmisid_str)
+    {
+      if (fmisid_str.empty()) throw Fmi::Exception(BCP, "fmisid value is an empty string");
+      return std::stoi(fmisid_str);
+    }
+
+    int operator() (int fmisid) { return fmisid; }
+    int operator() (double fmisid ) { return int(std::floor(fmisid)); }
+    int operator() (None) { throw Fmi::Exception(BCP, "Station with null fmisid encountered!"); }
+    int operator() (const LonLat&) { throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!"); }
+    int operator() (const Fmi::LocalDateTime&) { throw Fmi::Exception(BCP, "Station with LocalDateTime as fmisid encountered!"); }
+  };
+}
+
 int get_fmisid_value(const Value& value)
 {
   try
   {
-    // fmisid can be std::string or double
-    if (boost::get<std::string>(&value))
-    {
-      std::string fmisidstr = boost::get<std::string>(value);
-      boost::algorithm::trim(fmisidstr);
-      if (!fmisidstr.empty())
-        return std::stoi(fmisidstr);
-
-      throw Fmi::Exception(BCP, "fmisid value is an empty string");
-    }
-    if (boost::get<int>(&value))
-      return boost::get<int>(value);
-    if (boost::get<double>(&value))
-      return boost::get<double>(value);
-    if (boost::get<None>(&value))
-      throw Fmi::Exception(BCP, "Station with null fmisid encountered!");
-    if (boost::get<LonLat>(&value))
-      throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!");
-
-    throw Fmi::Exception(BCP, "Unknown fmisid type");
+    FmisidVisitor visitor;
+    return value.apply_visitor(visitor);
   }
   catch (...)
   {

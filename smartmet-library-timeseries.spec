@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.6.10
+Version: 24.7.22
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -23,15 +23,15 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 24.3.13
-BuildRequires: smartmet-library-macgyver-devel >= 24.5.6
-BuildRequires: smartmet-library-newbase-devel >= 24.5.6
-BuildRequires: smartmet-library-spine-devel >= 24.5.6
+BuildRequires: smartmet-library-macgyver-devel >= 24.7.12
+BuildRequires: smartmet-library-newbase-devel >= 24.7.12
+BuildRequires: smartmet-library-spine-devel >= 24.7.12
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 24.5.6
+Requires: smartmet-library-spine >= 24.7.12
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -50,9 +50,9 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 24.5.6
-Requires: smartmet-library-newbase-devel >= 24.5.6
-Requires: smartmet-library-spine-devel >= 24.5.6
+Requires: smartmet-library-macgyver-devel >= 24.7.12
+Requires: smartmet-library-newbase-devel >= 24.7.12
+Requires: smartmet-library-spine-devel >= 24.7.12
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -80,6 +80,15 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Mon Jul 22 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.7.22-1.fmi
+- Replace BOOST_FOREACH and boost::array
+
+* Mon Jul 15 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.7.15-1.fmi
+- Value: add methods for getting int and double (with supported conversions)
+
+* Fri Jul 12 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.7.12-1.fmi
+- Replace many boost library types with C++ standard library ones
+
 * Mon Jun 10 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.6.10-1.fmi
 - Fixed percentage function to check if the divisor is zero
 

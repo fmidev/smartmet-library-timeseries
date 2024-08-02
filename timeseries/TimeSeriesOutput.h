@@ -19,7 +19,7 @@ std::ostream &operator<<(std::ostream &os, const TimeSeriesVector &tsv);
 
 // format Value and write to output stream
 // usage: boost::apply_visitor(ostream_visitor, Value);
-class OStreamVisitor : public boost::static_visitor<>
+class OStreamVisitor
 {
  private:
   std::ostream &itsOutstream;
@@ -46,7 +46,7 @@ class OStreamVisitor : public boost::static_visitor<>
 
 // format Value into string
 // usage: boost::apply_visitor(ostream_visitor, Value);
-class StringVisitor : public boost::static_visitor<std::string>
+class StringVisitor
 {
  private:
   const Fmi::ValueFormatter &itsValueFormatter;
