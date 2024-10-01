@@ -34,6 +34,7 @@ enum class FunctionId
   Nearest,
   Interpolate,
   Amean,
+  CircleMean,
   NullFunction
 };
 

@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include <macgyver/LocalDateTime.h>
 #include <macgyver/DateTime.h>
+#include <macgyver/LocalDateTime.h>
 #include <limits>
 
 namespace SmartMet
@@ -36,7 +36,7 @@ struct DataItem
 {
   DataItem(Fmi::DateTime t, double v, double w = 1.0) : time(t), value(v), weight(w) {}
 
-    Fmi::DateTime time{Fmi::DateTime::NOT_A_DATE_TIME};
+  Fmi::DateTime time{Fmi::DateTime::NOT_A_DATE_TIME};
   double value = std::numeric_limits<double>::quiet_NaN();
   double weight = 1.0;
 };
@@ -107,6 +107,8 @@ class Stat
   double interpolate(const Fmi::DateTime& timestep,
                      const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
                      const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  double circlemean(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                    const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
 
  private:
   double stddev_dir(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,

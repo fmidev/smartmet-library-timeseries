@@ -529,6 +529,55 @@ double Stat::mean(const Fmi::DateTime& startTime /*= not_a_date_time */,
   }
 }
 
+double Stat::circlemean(const Fmi::DateTime& startTime /*= not_a_date_time */,
+                        const Fmi::DateTime& endTime /*= not_a_date_time */) const
+{
+  try
+  {
+#ifdef MYDEBUG
+    std::cout << "circlemean(" << startTime << ", " << endTime << ")" << std::endl;
+#endif
+    DataVector subvector;
+
+    if (!get_subvector(subvector, startTime, endTime))
+      return itsMissingValue;
+
+    // circlemean is unreliable when the unit circle mean radius becomes small. You get radius under
+    // 0.5 already when spanning about 225 degrees with uniform angle distribution, but still the
+    // wind would be mostly from that side instead of the other, and hence "mean" does have a
+    // meaning.
+
+    const double bad_variance_radius_limit = 0.5;
+
+    double xsum = 0;
+    double ysum = 0;
+    int n = 0;
+
+    for (unsigned int i = 0; i < subvector.size(); i++)
+    {
+      auto rad = subvector[i].value * M_PI / 180;
+      xsum += cos(rad);
+      ysum += sin(rad);
+      ++n;
+    }
+
+    auto xmean = xsum / n;  // atan2 would not need this, but this is good for debugging
+    auto ymean = ysum / n;
+
+    auto cmean = atan2(ymean, xmean);
+    auto r = std::sqrt(xmean * xmean + ymean * ymean);
+
+    if (r < bad_variance_radius_limit)
+      return itsMissingValue;
+
+    return cmean * 180 / M_PI;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 double Stat::max(const Fmi::DateTime& startTime /*= not_a_date_time */,
                  const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {

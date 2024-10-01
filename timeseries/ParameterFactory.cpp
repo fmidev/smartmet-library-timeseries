@@ -86,6 +86,8 @@ int get_function_index(const std::string& theFunction)
                                 "nanmeandir_t",
                                 "sdevdir_t",
                                 "nansdevdir_t",
+                                "circlemean",
+                                "nancirclemean"
                                 ""};
 
   std::string func_name(theFunction);
@@ -174,7 +176,9 @@ FunctionId parse_function(const std::string& theFunction)
                                            FunctionId::Mean,
                                            FunctionId::Mean,
                                            FunctionId::StandardDeviation,
-                                           FunctionId::StandardDeviation};
+                                           FunctionId::StandardDeviation,
+                                           FunctionId::CircleMean,
+                                           FunctionId::CircleMean};
 
     int function_index = get_function_index(theFunction);
     if (function_index >= 0)

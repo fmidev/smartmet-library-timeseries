@@ -34,6 +34,9 @@ std::string DataFunction::hash() const
       case FunctionId::Amean:
         ss << "Amean";
         break;
+      case FunctionId::CircleMean:
+        ss << "CircleMean";
+        break;
       case FunctionId::Maximum:
         ss << "Max";
         break;
@@ -108,6 +111,9 @@ std::string DataFunction::info() const
         break;
       case FunctionId::Amean:
         ss << "Amean";
+        break;
+      case FunctionId::CircleMean:
+        ss << "CircleMean";
         break;
       case FunctionId::Maximum:
         ss << "Maximum";

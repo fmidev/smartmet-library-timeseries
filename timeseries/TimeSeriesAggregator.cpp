@@ -3,6 +3,7 @@
 #include "Stat.h"
 #include "TimeSeries.h"
 #include "TimeSeriesOutput.h"
+#include <boost/cast.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <newbase/NFmiGlobals.h>
@@ -12,7 +13,6 @@
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
-#include <boost/cast.hpp>
 
 using namespace std;
 using SmartMet::Spine::LonLat;
@@ -64,11 +64,11 @@ bool include_value(const TimedValue &tv, const DataFunction &func)
       funcId != FunctionId::Count)
   {
     std::optional<double> double_value;
-    if (const double* tmp = std::get_if<double>(&tv.value))
+    if (const double *tmp = std::get_if<double>(&tv.value))
     {
       double_value = *tmp;
     }
-    else if (const int* tmp = std::get_if<int>(&tv.value))
+    else if (const int *tmp = std::get_if<int>(&tv.value))
     {
       double_value = *tmp;
     }
@@ -205,7 +205,7 @@ TimedValue time_aggregate(const TimeSeries &ts,
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
-#endif  
+#endif
 
 TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
 {
@@ -219,7 +219,6 @@ TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
     {
       int agg_index_start(agg_indexes[i].first);
       int agg_index_end(agg_indexes[i].second);
-
 
       if (agg_index_start < 0 || agg_index_end < 0)
       {
@@ -261,13 +260,15 @@ double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeig
     switch (func.id())
     {
       case FunctionId::Mean:
-		return  stat.mean();
+        return stat.mean();
       case FunctionId::Amean:
-	  {
-		// No weights, just arithmetic mean
-		stat.useWeights(false);
-		return  stat.mean();
-	  }
+      {
+        // No weights, just arithmetic mean
+        stat.useWeights(false);
+        return stat.mean();
+      }
+      case FunctionId::CircleMean:
+        return stat.circlemean();
       case FunctionId::Maximum:
         return stat.max();
       case FunctionId::Minimum:
@@ -382,23 +383,20 @@ std::string StatCalculator::getStringStatValue(const DataFunction &func) const
   }
 }
 
-Fmi::LocalDateTime StatCalculator::getLocalDateTimeStatValue(
-    const DataFunction &func) const
+Fmi::LocalDateTime StatCalculator::getLocalDateTimeStatValue(const DataFunction &func) const
 {
   try
   {
     FunctionId fid(func.id());
 
     if (fid == FunctionId::Maximum)
-      return std::get<Fmi::LocalDateTime>(
-          itsTimeSeries[itsTimeSeries.size() - 1].value);
+      return std::get<Fmi::LocalDateTime>(itsTimeSeries[itsTimeSeries.size() - 1].value);
 
     if (fid == FunctionId::Minimum)
       return std::get<Fmi::LocalDateTime>(itsTimeSeries[0].value);
 
     if (fid == FunctionId::Median)
-      return std::get<Fmi::LocalDateTime>(
-          itsTimeSeries[itsTimeSeries.size() / 2].value);
+      return std::get<Fmi::LocalDateTime>(itsTimeSeries[itsTimeSeries.size() / 2].value);
 
     std::stringstream ss;
     ss << "Function " << func.hash() << " can not be applied for a date!";
@@ -471,11 +469,11 @@ void StatCalculator::operator()(const TimedValue &tv)
 {
   try
   {
-    if (const double* d = std::get_if<double>(&(tv.value)))
+    if (const double *d = std::get_if<double>(&(tv.value)))
     {
       itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), *d));
     }
-    else if (const int* i = std::get_if<int>(&(tv.value)))
+    else if (const int *i = std::get_if<int>(&(tv.value)))
     {
       double d = *i;
       itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
