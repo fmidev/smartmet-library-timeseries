@@ -87,7 +87,7 @@ int get_function_index(const std::string& theFunction)
                                 "sdevdir_t",
                                 "nansdevdir_t",
                                 "circlemean",
-                                "nancirclemean"
+                                "nancirclemean",
                                 ""};
 
   std::string func_name(theFunction);
