@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.10.1
+Version: 24.10.2
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Wed Oct  2 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.10.2-1.fmi
+- Added missing comma
+
 * Tue Oct  1 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.10.1-1.fmi
 - Added circlemean (https://en.wikipedia.org/wiki/Circular_mean)
 
