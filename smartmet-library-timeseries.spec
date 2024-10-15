@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.10.2
+Version: 24.10.15
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -22,16 +22,16 @@ BuildRequires: gcc-c++
 BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
-BuildRequires: smartmet-utils-devel >= 24.8.7
-BuildRequires: smartmet-library-macgyver-devel >= 24.8.7
-BuildRequires: smartmet-library-newbase-devel >= 24.8.7
-BuildRequires: smartmet-library-spine-devel >= 24.8.7
+BuildRequires: smartmet-utils-devel >= 24.9.10
+BuildRequires: smartmet-library-macgyver-devel >= 24.10.4
+BuildRequires: smartmet-library-newbase-devel >= 24.10.15
+BuildRequires: smartmet-library-spine-devel >= 24.10.15
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 24.8.7
+Requires: smartmet-library-spine >= 24.10.15
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -50,9 +50,9 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 24.8.7
-Requires: smartmet-library-newbase-devel >= 24.8.7
-Requires: smartmet-library-spine-devel >= 24.8.7
+Requires: smartmet-library-macgyver-devel >= 24.10.4
+Requires: smartmet-library-newbase-devel >= 24.10.15
+Requires: smartmet-library-spine-devel >= 24.10.15
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue Oct 15 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.10.15-1.fmi
+- Removed landscape parameter handling as obsolete
+
 * Wed Oct  2 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.10.2-1.fmi
 - Added missing comma
 
