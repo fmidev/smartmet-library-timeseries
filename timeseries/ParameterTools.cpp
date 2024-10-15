@@ -240,7 +240,6 @@ bool special(const Parameter& theParam)
     switch (theParam.type())
     {
       case Spine::Parameter::Type::Data:
-      case Spine::Parameter::Type::Landscaped:
         return false;
       case Spine::Parameter::Type::DataDerived:
       case Spine::Parameter::Type::DataIndependent:
@@ -268,7 +267,6 @@ bool parameter_is_arithmetic(const Spine::Parameter& theParameter)
     switch (theParameter.type())
     {
       case Spine::Parameter::Type::Data:
-      case Spine::Parameter::Type::Landscaped:
       case Spine::Parameter::Type::DataDerived:
         return true;
       case Spine::Parameter::Type::DataIndependent:

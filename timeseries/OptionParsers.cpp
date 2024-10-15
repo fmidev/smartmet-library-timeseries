@@ -36,8 +36,7 @@ void ParameterOptions::expandParameter(const std::string& paramname)
     std::vector<ParameterAndFunctions> dataSourceParameterFunctions;
     for (const auto& p : itsParameters)
     {
-      if (p.type() == Spine::Parameter::Type::Data ||
-          p.type() == Spine::Parameter::Type::Landscaped)
+      if (p.type() == Spine::Parameter::Type::Data)
       {
         if (!p.getSensorParameter().empty())
         {

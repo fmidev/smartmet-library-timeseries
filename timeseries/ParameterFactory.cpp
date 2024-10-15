@@ -911,9 +911,7 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
 
     Parameter::Type type = Parameter::Type::Data;
 
-    if (Spine::Parameters::IsLandscaped(number))
-      type = Parameter::Type::Landscaped;
-    else if (Spine::Parameters::IsDataIndependent(number))
+    if (Spine::Parameters::IsDataIndependent(number))
       type = Parameter::Type::DataIndependent;
     else if (Spine::Parameters::IsDataDerived(number))
       type = Parameter::Type::DataDerived;
