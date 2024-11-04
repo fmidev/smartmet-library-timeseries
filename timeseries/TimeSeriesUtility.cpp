@@ -205,15 +205,15 @@ size_t number_of_elements(const OutputData& outputData)
         {
           TimeSeriesVectorPtr tsv = *ptr;
           if (tsv)
-            for (unsigned int k = 0; k < tsv->size(); k++)
-              ret += tsv->at(k).size();
+            for (const TimeSeries& ts : *tsv)
+              ret += ts.size();
         }
         else if (const auto* ptr = std::get_if<TimeSeriesGroupPtr>(&tsdata))
         {
           TimeSeriesGroupPtr tsg = *ptr;
           if (tsg)
-            for (unsigned int k = 0; k < tsg->size(); k++)
-              ret += tsg->at(k).timeseries.size();
+            for (const LonLatTimeSeries& llts : *tsg)
+              ret += llts.timeseries.size();
         }
       }
     }
