@@ -1,5 +1,6 @@
 #include "TimeSeriesUtility.h"
 #include "TimeSeriesOutput.h"
+#include <macgyver/StringConversion.h>
 
 namespace SmartMet
 {
@@ -322,7 +323,14 @@ TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
 	*/
 
     // find fmisid time series
-    const TimeSeries& fmisid_ts = observation_result->at(fmisid_index);
+    if (fmisid_index < 0 || fmisid_index >= static_cast<int>(observation_result->size())) {
+      Fmi::Exception err(BCP, "fmisid index out of range ");
+      err.addParameter("fmisid_index", Fmi::to_string(fmisid_index));
+      err.addParameter("observation_result size", Fmi::to_string(observation_result->size()));
+      err.addParameter("producer", producer);
+      throw err;
+    }
+    const TimeSeries& fmisid_ts = (*observation_result)[fmisid_index];
 
     // find indexes for locations
     std::vector<std::pair<unsigned int, unsigned int>> location_indexes;
@@ -347,9 +355,8 @@ TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
       TimeSeriesVectorPtr tsv(new TimeSeriesVector());
       start_index = location_index.first;
       end_index = location_index.second;
-      for (unsigned int k = 0; k < observation_result->size(); k++)
+      for (const TimeSeries& ts_k : *observation_result)
       {
-        const TimeSeries& ts_k = observation_result->at(k);
         if (ts_k.empty())
           tsv->push_back(ts_k);
         else
