@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.10.15
+Version: 24.11.8
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Nov  8 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.8-1.fmi
+- Repackage due to Table ABI changes. Also small error reporting improvements
+
 * Tue Oct 15 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.10.15-1.fmi
 - Removed landscape parameter handling as obsolete
 
