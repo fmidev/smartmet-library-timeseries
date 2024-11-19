@@ -1540,6 +1540,61 @@ void min_t_missing_value()
   TEST_PASSED();
 }
 
+void time_aggregation_with_selected_times()
+{
+  using namespace SmartMet;
+  Fmi::TimeZonePtr zone(tz_eet_name);
+
+  Fmi::LocalDateTime ldt(Fmi::Date(2015, 3, 3), Fmi::Hours(0), zone);
+
+  std::set<int> exclude = { 34, 56, 368, 722, 724, 1224, 1260 };
+  TS::TimeSeries timeseries;
+
+  // Generate timesries with some fictious minute data for 24 hours
+  Fmi::LocalDateTime currTime = ldt;
+  for (int minutes = 0; minutes < 1440; minutes++)
+  {
+    Fmi::LocalDateTime currTime = ldt + Fmi::Minutes(minutes);
+    if (exclude.find(minutes) == exclude.end())
+    {
+      // generate some fictious values
+      double value = 15 + 8 * std::sin(2 * M_PI * minutes / 1440);
+      timeseries.emplace_back(TS::TimedValue(currTime, value));
+    }
+  }
+
+  // Generate time list with 6 hour intervals for aggregation
+  TS::TimeSeriesGenerator::LocalTimeList timesteps = { };
+  for (int hours = -6; hours <= 30; hours += 6)
+  {
+    const Fmi::LocalDateTime tm = ldt + Fmi::Hours(hours);
+    timesteps.push_back(tm);
+  }
+
+  TS::DataFunction funct(TS::FunctionId::Count, TS::FunctionType::TimeFunction);
+  funct.setAggregationIntervalBehind(0);
+  funct.setAggregationIntervalAhead(60);
+  TS::TimeSeriesPtr result = TS::Aggregator::time_aggregate(timeseries, funct, timesteps);
+  std::ostringstream test_result_stream;
+  test_result_stream << *result;
+
+  const std::string expected_result =
+        "2015-Mar-02 18:00:00 EET -> nan\n"
+        "2015-Mar-03 00:00:00 EET -> 58\n"
+        "2015-Mar-03 06:00:00 EET -> 59\n"
+        "2015-Mar-03 12:00:00 EET -> 58\n"
+        "2015-Mar-03 18:00:00 EET -> 60\n"
+        "2015-Mar-04 00:00:00 EET -> nan\n"
+        "2015-Mar-04 06:00:00 EET -> nan\n";
+
+  if (expected_result != test_result_stream.str())
+  {
+    TEST_FAILED("result='" + test_result_stream.str() + "' =! '" + expected_result + "'");
+  }
+
+  TEST_PASSED();
+}
+
 // ----------------------------------------------------------------------
 /*!
  * The actual test suite
@@ -1599,6 +1654,8 @@ class tests : public tframe::tests
     TEST(max_a_with_range_nan);
     TEST(mean_a_t_with_range);
     TEST(mean_t_a_with_range);
+
+    TEST(time_aggregation_with_selected_times);
   }
 };
 

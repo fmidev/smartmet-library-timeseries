@@ -568,6 +568,63 @@ TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group, const DataFun
   }
 }
 
+
+TimeSeriesPtr time_aggregate(
+        const TimeSeries& ts,
+        const DataFunction& func,
+        const TimeSeriesGenerator::LocalTimeList& timesteps)
+try
+{
+  const int before_minutes = func.getAggregationIntervalBehind();
+  const int after_minutes = func.getAggregationIntervalAhead();
+
+  TimeSeries::const_iterator agg_begin_iter = ts.begin();
+  TimeSeries::const_iterator agg_end_iter = ts.begin();
+
+  TimeSeriesPtr ret(new TimeSeries);
+
+  // Return empty result if input time series is empty
+  if (ts.empty())
+    return ret;
+
+  for (TimeSeriesGenerator::LocalTimeList::const_iterator timestep_iter = timesteps.begin();
+       timestep_iter != timesteps.end();
+       ++timestep_iter)
+  {
+    const Fmi::LocalDateTime timestamp  = *timestep_iter;
+    Fmi::LocalDateTime agg_begin = timestamp - Fmi::Minutes(before_minutes);
+    Fmi::LocalDateTime agg_end = timestamp + Fmi::Minutes(after_minutes);
+
+    agg_begin_iter = std::find_if(agg_begin_iter, ts.end(),
+      [&agg_begin](const TimedValue& tv) { return tv.time >= agg_begin; });
+
+    agg_end_iter = std::find_if(agg_end_iter, ts.end(),
+      [&agg_end](const TimedValue& tv) { return tv.time >= agg_end; });
+
+    StatCalculator statcalculator;
+    statcalculator.setTimestep(timestamp);
+
+    for (TimeSeries::const_iterator it = agg_begin_iter; it != agg_end_iter; ++it)
+    {
+      // Be a bit paranoid and check that we don't go beyond the end of the time series
+      // Should never happen, but better safe than sorry
+      if (it == ts.end())
+      {
+        throw Fmi::Exception(BCP, "INTERNAL ERROR: Time series end reached before aggregation end");
+      }
+      statcalculator(*it);
+    }
+
+    ret->emplace_back(TimedValue(timestamp, statcalculator.getStatValue(func, true)));
+  }
+  return ret;
+}
+catch(...)
+{
+  throw Fmi::Exception::Trace(BCP, "Operation failed!");
+}
+
+
 // Before only time-aggregation was possible here, but since
 // filtering was added also 'area aggregation' may happen
 TimeSeriesPtr aggregate(const TimeSeries &ts, const DataFunctions &pf)
