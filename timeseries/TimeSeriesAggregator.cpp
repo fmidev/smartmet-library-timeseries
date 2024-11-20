@@ -482,8 +482,8 @@ TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group, const DataFun
 TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
 try
 {
-  const Fmi::TimeDuration& before = func.getAggregationIntervalBehind();
-  const Fmi::TimeDuration& after = func.getAggregationIntervalAhead();
+  const Fmi::TimeDuration before = Fmi::Minutes(func.getAggregationIntervalBehind());
+  const Fmi::TimeDuration after = Fmi::Minutes(func.getAggregationIntervalAhead());
 
   TimeSeries::const_iterator agg_begin_iter = ts.begin();
   TimeSeries::const_iterator agg_end_iter = ts.begin();
@@ -535,8 +535,8 @@ TimeSeriesPtr time_aggregate(
         const TimeSeriesGenerator::LocalTimeList& timesteps)
 try
 {
-  const Fmi::TimeDuration& before = func.getAggregationIntervalBehind();
-  const Fmi::TimeDuration& after = func.getAggregationIntervalAhead();
+  const Fmi::TimeDuration& before = Fmi::Minutes(func.getAggregationIntervalBehind());
+  const Fmi::TimeDuration& after = Fmi::Minutes(func.getAggregationIntervalAhead());
 
   TimeSeries::const_iterator agg_begin_iter = ts.begin();
   TimeSeries::const_iterator agg_end_iter = ts.begin();
