@@ -10,13 +10,14 @@
 #include <limits>
 #include <string>
 #include <vector>
+#include <macgyver/DateTime.h>
 
 namespace SmartMet
 {
 namespace TimeSeries
 {
 // 7 days
-static const int MAX_AGGREGATION_INTERVAL = (7 * 24 * 60);
+static const Fmi::TimeDuration MAX_AGGREGATION_INTERVAL = Fmi::Minutes(7 * 24 * 60);
 
 enum class FunctionId
 {
@@ -75,16 +76,23 @@ struct DataFunction
     return itsLowerLimit != std::numeric_limits<double>::lowest() ||
            itsUpperLimit != std::numeric_limits<double>::max();
   }
-  unsigned int getAggregationIntervalBehind() const { return itsAggregationIntervalBehind; }
-  unsigned int getAggregationIntervalAhead() const { return itsAggregationIntervalAhead; }
-  void setAggregationIntervalBehind(unsigned int theIntervalBehind)
+  const Fmi::TimeDuration& getAggregationIntervalBehind() const { return itsAggregationIntervalBehind; }
+  const Fmi::TimeDuration& getAggregationIntervalAhead() const { return itsAggregationIntervalAhead; }
+
+  inline void setAggregationIntervalBehind(unsigned int theIntervalBehind)
   {
-    itsAggregationIntervalBehind = theIntervalBehind;
+    itsAggregationIntervalBehind = Fmi::Minutes(theIntervalBehind);
   }
-  void setAggregationIntervalAhead(unsigned int theIntervalAhead)
+
+  inline void setAggregationIntervalAhead(unsigned int theIntervalAhead)
   {
-    itsAggregationIntervalAhead = theIntervalAhead;
+    itsAggregationIntervalAhead = Fmi::Minutes(theIntervalAhead);
   }
+
+  void setAggregationIntervalBehind(const Fmi::TimeDuration& theIntervalBehind);
+
+  void setAggregationIntervalAhead(const Fmi::TimeDuration& theIntervalAhead);
+
   bool isNanFunction() const { return itsNaNFunction; }
   bool isDirFunction() const { return itsDirFunction; }
   std::string hash() const;
@@ -105,8 +113,8 @@ struct DataFunction
   FunctionType itsFunctionType = FunctionType::NullFunctionType;
   double itsLowerLimit = std::numeric_limits<double>::lowest();
   double itsUpperLimit = std::numeric_limits<double>::max();
-  unsigned int itsAggregationIntervalBehind = MAX_AGGREGATION_INTERVAL;
-  unsigned int itsAggregationIntervalAhead = MAX_AGGREGATION_INTERVAL;
+  Fmi::TimeDuration itsAggregationIntervalBehind = MAX_AGGREGATION_INTERVAL;
+  Fmi::TimeDuration itsAggregationIntervalAhead = MAX_AGGREGATION_INTERVAL;
   bool itsNaNFunction = false;
   bool itsDirFunction = false;
 };

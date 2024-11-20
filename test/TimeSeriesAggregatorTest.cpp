@@ -1572,8 +1572,8 @@ void time_aggregation_with_selected_times()
   }
 
   TS::DataFunction funct(TS::FunctionId::Count, TS::FunctionType::TimeFunction);
-  funct.setAggregationIntervalBehind(0);
-  funct.setAggregationIntervalAhead(60);
+  funct.setAggregationIntervalBehind(Fmi::Minutes(0));
+  funct.setAggregationIntervalAhead(Fmi::TimeDuration(0, 59, 59));
   TS::TimeSeriesPtr result = TS::Aggregator::time_aggregate(timeseries, funct, timesteps);
   std::ostringstream test_result_stream;
   test_result_stream << *result;

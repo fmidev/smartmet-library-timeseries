@@ -92,6 +92,16 @@ std::string DataFunction::hash() const
   }
 }
 
+void DataFunction::setAggregationIntervalBehind(const Fmi::TimeDuration& theIntervalBehind)
+{
+  itsAggregationIntervalBehind = std::min(MAX_AGGREGATION_INTERVAL, theIntervalBehind);
+}
+
+void DataFunction::setAggregationIntervalAhead(const Fmi::TimeDuration& theIntervalAhead)
+{
+  itsAggregationIntervalAhead = std::min(MAX_AGGREGATION_INTERVAL, theIntervalAhead);
+}
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Printable information on the function

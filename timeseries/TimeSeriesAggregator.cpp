@@ -80,57 +80,6 @@ bool include_value(const TimedValue &tv, const DataFunction &func)
   return ret;
 }
 
-// returns aggregation indexes for each timestep
-// first member in std::pair contains index behind the timestep
-// second member in std::pair contains index ahead/after the timestep
-std::vector<std::pair<int, int>> get_aggregation_indexes(const DataFunction &paramfunc,
-                                                         const TimeSeries &ts)
-{
-  try
-  {
-    std::vector<std::pair<int, int>> agg_indexes;
-
-    unsigned int agg_interval_behind(paramfunc.getAggregationIntervalBehind());
-    unsigned int agg_interval_ahead(paramfunc.getAggregationIntervalAhead());
-    std::size_t row_count = ts.size();
-
-    for (unsigned int i = 0; i < row_count; i++)
-    {
-      std::pair<int, int> index_item(make_pair(-1, -1));
-
-      // interval behind
-      index_item.first = i;
-      for (int j = i - 1; j >= 0; j--)
-      {
-        time_duration dur(ts[i].time - ts[j].time);
-        if (dur.total_seconds() <= boost::numeric_cast<int>(agg_interval_behind * 60))
-          index_item.first = j;
-        else
-          break;
-      }
-
-      // interval ahead
-      index_item.second = i;
-      for (unsigned int j = i + 1; j < row_count; j++)
-      {
-        time_duration dur(ts[j].time - ts[i].time);
-        if (dur.total_seconds() <= boost::numeric_cast<int>(agg_interval_ahead * 60))
-          index_item.second = j;
-        else
-          break;
-      }
-
-      agg_indexes.push_back(index_item);
-    }
-
-    return agg_indexes;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
 TimeSeries area_aggregate(const TimeSeriesGroup &ts_group, const DataFunction &func)
 {
   try
@@ -206,44 +155,6 @@ TimedValue time_aggregate(const TimeSeries &ts,
   }
 }
 #endif
-
-TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
-{
-  try
-  {
-    TimeSeriesPtr ret(new TimeSeries);
-
-    std::vector<std::pair<int, int>> agg_indexes = get_aggregation_indexes(func, ts);
-
-    for (std::size_t i = 0; i < ts.size(); i++)
-    {
-      int agg_index_start(agg_indexes[i].first);
-      int agg_index_end(agg_indexes[i].second);
-
-      if (agg_index_start < 0 || agg_index_end < 0)
-      {
-        ret->emplace_back(TimedValue(ts[i].time, None()));
-        continue;
-      }
-
-      StatCalculator statcalculator;
-      statcalculator.setTimestep(ts[i].time);
-      for (int k = agg_index_start; k <= agg_index_end; k++)
-      {
-        const TimedValue &tv = ts.at(k);
-        if (include_value(tv, func))
-          statcalculator(tv);
-      }
-      ret->emplace_back(TimedValue(ts[i].time, statcalculator.getStatValue(func, true)));
-    }
-
-    return ret;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
 
 }  // namespace
 
@@ -568,6 +479,55 @@ TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group, const DataFun
   }
 }
 
+TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
+try
+{
+  const Fmi::TimeDuration& before = func.getAggregationIntervalBehind();
+  const Fmi::TimeDuration& after = func.getAggregationIntervalAhead();
+
+  TimeSeries::const_iterator agg_begin_iter = ts.begin();
+  TimeSeries::const_iterator agg_end_iter = ts.begin();
+
+  TimeSeriesPtr ret(new TimeSeries);
+
+  Fmi::LocalDateTime empty;
+
+  for (const auto& item : ts)
+  {
+    const Fmi::LocalDateTime& timestamp  = item.time;
+    Fmi::LocalDateTime agg_begin = timestamp - before;
+    Fmi::LocalDateTime agg_end = timestamp + after;
+
+    agg_begin_iter = std::find_if(agg_begin_iter, ts.end(),
+      [&agg_begin](const TimedValue& tv) { return tv.time >= agg_begin; });
+
+    agg_end_iter = std::find_if(agg_end_iter, ts.end(),
+      [&agg_end](const TimedValue& tv) { return tv.time > agg_end; });
+
+    StatCalculator statcalculator;
+    statcalculator.setTimestep(timestamp);
+
+    for (TimeSeries::const_iterator it = agg_begin_iter; it != agg_end_iter; ++it)
+    {
+      // agg_begin_iter and agg_end_iter should never be inverted. Be however a bit paranoid
+      // and check that we don't go beyond the end of the time series anyway
+      if (it == ts.end())
+      {
+        throw Fmi::Exception(BCP, "INTERNAL ERROR: Time series end reached before aggregation end");
+      }
+      if (include_value(*it, func))
+        statcalculator(*it);
+    }
+
+    ret->emplace_back(TimedValue(timestamp, statcalculator.getStatValue(func, true)));
+  }
+  return ret;
+}
+catch(...)
+{
+  throw Fmi::Exception::Trace(BCP, "Operation failed!");
+}
+
 
 TimeSeriesPtr time_aggregate(
         const TimeSeries& ts,
@@ -575,8 +535,8 @@ TimeSeriesPtr time_aggregate(
         const TimeSeriesGenerator::LocalTimeList& timesteps)
 try
 {
-  const int before_minutes = func.getAggregationIntervalBehind();
-  const int after_minutes = func.getAggregationIntervalAhead();
+  const Fmi::TimeDuration& before = func.getAggregationIntervalBehind();
+  const Fmi::TimeDuration& after = func.getAggregationIntervalAhead();
 
   TimeSeries::const_iterator agg_begin_iter = ts.begin();
   TimeSeries::const_iterator agg_end_iter = ts.begin();
@@ -592,14 +552,14 @@ try
        ++timestep_iter)
   {
     const Fmi::LocalDateTime timestamp  = *timestep_iter;
-    Fmi::LocalDateTime agg_begin = timestamp - Fmi::Minutes(before_minutes);
-    Fmi::LocalDateTime agg_end = timestamp + Fmi::Minutes(after_minutes);
+    Fmi::LocalDateTime agg_begin = timestamp - before;
+    Fmi::LocalDateTime agg_end = timestamp + after;
 
     agg_begin_iter = std::find_if(agg_begin_iter, ts.end(),
       [&agg_begin](const TimedValue& tv) { return tv.time >= agg_begin; });
 
     agg_end_iter = std::find_if(agg_end_iter, ts.end(),
-      [&agg_end](const TimedValue& tv) { return tv.time >= agg_end; });
+      [&agg_end](const TimedValue& tv) { return tv.time > agg_end; });
 
     StatCalculator statcalculator;
     statcalculator.setTimestep(timestamp);
