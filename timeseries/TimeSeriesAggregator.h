@@ -19,33 +19,17 @@ namespace TimeSeries
 {
 namespace Aggregator
 {
-[[deprecated("Use method with timesteps instead")]]
-TimeSeriesPtr aggregate(const TimeSeries& ts, const DataFunctions& pf);
-
 TimeSeriesPtr aggregate(const TimeSeries& ts,
                         const DataFunctions& pf,
                         const TimeSeriesGenerator::LocalTimeList& timesteps);
-
-[[deprecated("Use method with timesteps instead")]]
-TimeSeriesGroupPtr aggregate(const TimeSeriesGroup& ts_group, const DataFunctions& pf);
 
 TimeSeriesGroupPtr aggregate(const TimeSeriesGroup& ts_group,
                              const DataFunctions& pf,
                              const TimeSeriesGenerator::LocalTimeList& timesteps);
 
-[[deprecated("Use method with timesteps instead")]]
 TimedValue time_aggregate(const TimeSeries& ts,
                           const DataFunction& func,
                           const Fmi::LocalDateTime& timestep);
-
-/**
- * @brief Aggregate time series data (all timesteps)
- *
- * @param ts Time series data. It is assumed that the data is sorted by time.
- * @param func Data function
- */
-TimeSeriesPtr time_aggregate(const TimeSeries& ts,
-                             const DataFunction& func);
 
 /**
  * @brief Aggregate time series data (selected tiemsteps only)

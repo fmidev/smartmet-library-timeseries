@@ -36,11 +36,11 @@ std::ostream& operator<<(std::ostream& os, const TimeSeriesData& tsdata);
 std::ostream& operator<<(std::ostream& os, const OutputData& odata);
 
 template <typename T>
-T aggregate(const T& raw_data, const DataFunctions& pf)
+T aggregate(const T& raw_data, const DataFunctions& pf, const TimeSeriesGenerator::LocalTimeList& timesteps)
 {
   try
   {
-    T aggregated_data = Aggregator::aggregate(*raw_data, pf);
+    T aggregated_data = Aggregator::aggregate(*raw_data, pf, timesteps);
 
     return aggregated_data;
   }

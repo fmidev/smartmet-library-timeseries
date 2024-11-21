@@ -98,6 +98,8 @@ rpm: clean $(SPEC).spec
 obj/%.o: %.cpp
 	$(CXX) $(CFLAGS) $(INCLUDES) -c -MD -MF $(patsubst obj/%.o, obj/%.d, $@) -MT $@ -o $@ $<
 
+obj/TimeSeriesAggregator.o: CFLAGS += -Wno-deprecated-declarations
+
 ifneq ($(wildcard obj/*.d),)
 -include $(wildcard obj/*.d)
 endif

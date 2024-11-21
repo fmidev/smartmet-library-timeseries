@@ -1,6 +1,7 @@
 #include "TimeSeries.h"
 #include <boost/make_shared.hpp>
 #include <macgyver/Hash.h>
+#include <algorithm>
 
 namespace SmartMet
 {
@@ -44,6 +45,17 @@ TimeSeries& TimeSeries::operator=(const TimeSeries& ts)
   }
 
   return *this;
+}
+
+LocalTimeList TimeSeries::getTimes() const
+{
+  LocalTimeList ret;
+  std::transform(
+    begin(),
+    end(),
+    std::back_inserter(ret),
+    [](const auto& item) { return item.time; });
+  return ret;
 }
 
 }  // namespace TimeSeries

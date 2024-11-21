@@ -3,6 +3,7 @@
 #include "Stat.h"
 #include "TimeSeries.h"
 #include "TimeSeriesOutput.h"
+#include "TimeSeriesUtility.h"
 #include <boost/cast.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
@@ -457,77 +458,6 @@ Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) co
   }
 }
 
-TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group, const DataFunction &func)
-{
-  try
-  {
-    TimeSeriesGroupPtr ret(new TimeSeriesGroup());
-
-    // iterate through locations
-    for (const auto &t : ts_group)
-    {
-      TimeSeries ts(t.timeseries);
-      TimeSeriesPtr aggregated_timeseries(time_aggregate(ts, func));
-      ret->emplace_back(LonLatTimeSeries(t.lonlat, *aggregated_timeseries));
-    }
-
-    return ret;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-TimeSeriesPtr time_aggregate(const TimeSeries &ts, const DataFunction &func)
-try
-{
-  const Fmi::TimeDuration before = Fmi::Minutes(func.getAggregationIntervalBehind());
-  const Fmi::TimeDuration after = Fmi::Minutes(func.getAggregationIntervalAhead());
-
-  TimeSeries::const_iterator agg_begin_iter = ts.begin();
-  TimeSeries::const_iterator agg_end_iter = ts.begin();
-
-  TimeSeriesPtr ret(new TimeSeries);
-
-  Fmi::LocalDateTime empty;
-
-  for (const auto& item : ts)
-  {
-    const Fmi::LocalDateTime& timestamp  = item.time;
-    Fmi::LocalDateTime agg_begin = timestamp - before;
-    Fmi::LocalDateTime agg_end = timestamp + after;
-
-    agg_begin_iter = std::find_if(agg_begin_iter, ts.end(),
-      [&agg_begin](const TimedValue& tv) { return tv.time >= agg_begin; });
-
-    agg_end_iter = std::find_if(agg_end_iter, ts.end(),
-      [&agg_end](const TimedValue& tv) { return tv.time > agg_end; });
-
-    StatCalculator statcalculator;
-    statcalculator.setTimestep(timestamp);
-
-    for (TimeSeries::const_iterator it = agg_begin_iter; it != agg_end_iter; ++it)
-    {
-      // agg_begin_iter and agg_end_iter should never be inverted. Be however a bit paranoid
-      // and check that we don't go beyond the end of the time series anyway
-      if (it == ts.end())
-      {
-        throw Fmi::Exception(BCP, "INTERNAL ERROR: Time series end reached before aggregation end");
-      }
-      if (include_value(*it, func))
-        statcalculator(*it);
-    }
-
-    ret->emplace_back(TimedValue(timestamp, statcalculator.getStatValue(func, true)));
-  }
-  return ret;
-}
-catch(...)
-{
-  throw Fmi::Exception::Trace(BCP, "Operation failed!");
-}
-
 
 TimeSeriesPtr time_aggregate(
         const TimeSeries& ts,
@@ -572,7 +502,8 @@ try
       {
         throw Fmi::Exception(BCP, "INTERNAL ERROR: Time series end reached before aggregation end");
       }
-      statcalculator(*it);
+      if (include_value(*it, func))
+        statcalculator(*it);
     }
 
     ret->emplace_back(TimedValue(timestamp, statcalculator.getStatValue(func, true)));
@@ -609,64 +540,8 @@ TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group,
   }
 }
 
-
-
 // Before only time-aggregation was possible here, but since
 // filtering was added also 'area aggregation' may happen
-TimeSeriesPtr aggregate(const TimeSeries &ts, const DataFunctions &pf)
-{
-  try
-  {
-    TimeSeriesPtr ret(new TimeSeries);
-
-    if (pf.innerFunction.type() == FunctionType::AreaFunction)
-    {
-      TimeSeries local_ts;
-      // Do filtering
-      for (const auto &tv : ts)
-      {
-        if (include_value(tv, pf.innerFunction))
-          local_ts.push_back(tv);
-        else
-          local_ts.emplace_back(TimedValue(tv.time, None()));
-      }
-
-      // Do time aggregationn
-      if (pf.outerFunction.type() == FunctionType::TimeFunction)
-      {
-        ret = time_aggregate(local_ts, pf.outerFunction);
-      }
-      else
-        *ret = local_ts;
-    }
-    else if (pf.innerFunction.type() == FunctionType::TimeFunction)
-    {
-      ret = time_aggregate(ts, pf.innerFunction);
-      if (pf.outerFunction.type() == FunctionType::AreaFunction)
-      {
-        // Do filtering
-        TimeSeries local_ts = *ret;
-        ret->clear();
-        for (const auto &tv : local_ts)
-        {
-          if (include_value(tv, pf.outerFunction))
-            ret->push_back(tv);
-          else
-            ret->emplace_back(TimedValue(tv.time, None()));
-        }
-      }
-    }
-    else
-      *ret = ts;
-
-    return ret;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
 TimeSeriesPtr aggregate(const TimeSeries& ts,
                         const DataFunctions& pf,
                         const TimeSeriesGenerator::LocalTimeList& timesteps)
@@ -723,83 +598,6 @@ try
 catch (...)
 {
   throw Fmi::Exception::Trace(BCP, "Operation failed!");
-}
-
-
-
-TimeSeriesGroupPtr aggregate(const TimeSeriesGroup &ts_group, const DataFunctions &pf)
-{
-  try
-  {
-    TimeSeriesGroupPtr ret(new TimeSeriesGroup);
-
-    if (ts_group.empty())
-    {
-      return ret;
-    }
-
-    if (pf.outerFunction.type() == FunctionType::TimeFunction &&
-        pf.innerFunction.type() == FunctionType::AreaFunction)
-    {
-#ifdef MYDEBUG
-      cout << "time-area aggregation" << endl;
-#endif
-
-      // 1) do area aggregation
-      TimeSeries area_aggregated_vector = area_aggregate(ts_group, pf.innerFunction);
-
-      // 2) do time aggregation
-      TimeSeriesPtr ts = time_aggregate(area_aggregated_vector, pf.outerFunction);
-
-      ret->emplace_back(LonLatTimeSeries(ts_group[0].lonlat, *ts));
-    }
-    else if (pf.outerFunction.type() == FunctionType::AreaFunction &&
-             pf.innerFunction.type() == FunctionType::TimeFunction)
-    {
-#ifdef MYDEBUG
-      cout << "area-time aggregation" << endl;
-#endif
-      // 1) do time aggregation
-      TimeSeriesGroupPtr time_aggregated_result = time_aggregate(ts_group, pf.innerFunction);
-
-      // 2) do area aggregation
-      TimeSeries ts = area_aggregate(*time_aggregated_result, pf.outerFunction);
-
-      ret->emplace_back(LonLatTimeSeries(ts_group[0].lonlat, ts));
-    }
-    else if (pf.innerFunction.type() == FunctionType::AreaFunction)
-    {
-#ifdef MYDEBUG
-      cout << "area aggregation" << endl;
-#endif
-      // 1) do area aggregation
-      TimeSeries area_aggregated_vector = area_aggregate(ts_group, pf.innerFunction);
-
-      ret->emplace_back(LonLatTimeSeries(ts_group[0].lonlat, area_aggregated_vector));
-    }
-    else if (pf.innerFunction.type() == FunctionType::TimeFunction)
-    {
-#ifdef MYDEBUG
-      cout << "time aggregation" << endl;
-#endif
-
-      // 1) do time aggregation
-      ret = time_aggregate(ts_group, pf.innerFunction);
-    }
-    else
-    {
-#ifdef MYDEBUG
-      cout << "no aggregation" << endl;
-#endif
-      *ret = ts_group;
-    }
-
-    return ret;
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
 }
 
 TimeSeriesGroupPtr aggregate(const TimeSeriesGroup& ts_group,
@@ -876,7 +674,6 @@ catch (...)
 {
   throw Fmi::Exception::Trace(BCP, "Operation failed!");
 }
-
 
 }  // namespace Aggregator
 }  // namespace TimeSeries
