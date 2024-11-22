@@ -51,6 +51,8 @@ obj/%.o: %.cpp
 	@mkdir -p obj
 	$(CXX) $(CFLAGS) $(INCLUDES) -c -MD -MF $(patsubst obj/%.o, obj/%.d, $@) -MT $@ -o $@ $<
 
+TimeSeriesAggregatorTest: CFLAGS += -Wno-deprecated-declarations
+
 ifneq ($(wildcard obj/*.d),)
 -include $(wildcard obj/*.d)
 endif

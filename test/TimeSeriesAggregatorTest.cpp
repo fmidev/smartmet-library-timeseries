@@ -409,7 +409,8 @@ TS::TimeSeriesPtr execute_time_area_aggregation_function_with_range(TS::Function
   DataFunction pfOuter(fid_area, FunctionType::AreaFunction);
   pfs.outerFunction = pfOuter;
 
-  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
+  const auto times = timeseries.getTimes();
+  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs, times);
 
   return aggregated_timeseries;
 }
@@ -434,7 +435,8 @@ TS::TimeSeriesPtr execute_area_time_aggregation_function_with_range(TS::Function
   pfOuter.setAggregationIntervalAhead(aggIntervalAhead);
   pfs.outerFunction = pfOuter;
 
-  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
+  const auto times = timeseries.getTimes();
+  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs, times);
 
   return aggregated_timeseries;
 }
@@ -456,7 +458,8 @@ TS::TimeSeriesPtr execute_time_aggregation_function_with_range(TS::FunctionId fi
   DataFunctions pfs;
   pfs.innerFunction = pf;
 
-  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
+  const auto times = timeseries.getTimes();
+  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs, times);
 
   return aggregated_timeseries;
 }
@@ -481,7 +484,8 @@ TS::TimeSeriesPtr execute_time_aggregation_function(TS::FunctionId fid,
   DataFunctions pfs;
   pfs.innerFunction = pf;
 
-  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
+  const auto times = timeseries.getTimes();
+  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs, times);
 
   return aggregated_timeseries;
 }
@@ -501,7 +505,8 @@ TS::TimeSeriesPtr execute_time_aggregation_function_with_diverse_values(
   DataFunctions pfs;
   pfs.innerFunction = pf;
 
-  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs);
+  const auto times = timeseries.getTimes();
+  TimeSeriesPtr aggregated_timeseries = Aggregator::aggregate(timeseries, pfs, times);
 
   return aggregated_timeseries;
 }
@@ -521,7 +526,8 @@ TS::TimeSeriesGroupPtr execute_area_aggregation_function(TS::FunctionId fid)
   pfs.innerFunction = pf;
   Value missing_value("nan");
 
-  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs);
+  const auto times = timeseries_grp.front().getTimes();
+  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs, times);
 
   return aggregated_timeseries_grp;
 }
@@ -539,7 +545,8 @@ TS::TimeSeriesGroupPtr execute_area_aggregation_function_with_range(TS::Function
   pfs.innerFunction = pf;
   Value missing_value("nan");
 
-  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs);
+  const auto times = timeseries_grp.front().getTimes();
+  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs, times);
 
   return aggregated_timeseries_grp;
 }
@@ -558,7 +565,8 @@ TS::TimeSeriesGroupPtr execute_area_aggregation_function_nans(TS::FunctionId fid
   pfs.innerFunction = pf;
   Value missing_value("nan");
 
-  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs);
+  const auto times = timeseries_grp.front().getTimes();
+  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs, times);
 
   return aggregated_timeseries_grp;
 }
@@ -576,7 +584,8 @@ TS::TimeSeriesGroupPtr execute_area_aggregation_function_with_range_nans(TS::Fun
   pfs.innerFunction = pf;
   Value missing_value("nan");
 
-  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs);
+  const auto times = timeseries_grp.front().getTimes();
+  TimeSeriesGroupPtr aggregated_timeseries_grp = Aggregator::aggregate(timeseries_grp, pfs, times);
 
   return aggregated_timeseries_grp;
 }
@@ -601,7 +610,8 @@ TS::TimeSeriesGroupPtr execute_time_area_aggregation_function(TS::FunctionId tim
   time_pfs.innerFunction = time_pf;
   Value missing_value("nan");
 
-  TimeSeriesGroupPtr time_aggregated_grp = Aggregator::aggregate(timeseries_grp, time_pfs);
+  const auto times = timeseries_grp.front().getTimes();
+  TimeSeriesGroupPtr time_aggregated_grp = Aggregator::aggregate(timeseries_grp, time_pfs, times);
 
   DataFunction area_pf(area_fid, FunctionType::AreaFunction);
   // lower limit (14) and upper limit (22) are used by Percentage and Count functions
@@ -610,7 +620,7 @@ TS::TimeSeriesGroupPtr execute_time_area_aggregation_function(TS::FunctionId tim
   DataFunctions area_pfs;
   area_pfs.innerFunction = area_pf;
 
-  TimeSeriesGroupPtr area_aggregated_grp = Aggregator::aggregate(*time_aggregated_grp, area_pfs);
+  TimeSeriesGroupPtr area_aggregated_grp = Aggregator::aggregate(*time_aggregated_grp, area_pfs, times);
 
   return area_aggregated_grp;
 }
@@ -633,7 +643,8 @@ TS::TimeSeriesGroupPtr execute_area_time_aggregation_function(TS::FunctionId are
   DataFunctions area_pfs;
   area_pfs.innerFunction = area_pf;
 
-  TimeSeriesGroupPtr area_aggregated_grp = Aggregator::aggregate(timeseries_grp, area_pfs);
+  const auto times = timeseries_grp.front().getTimes();
+  TimeSeriesGroupPtr area_aggregated_grp = Aggregator::aggregate(timeseries_grp, area_pfs, times);
 
   // lower limit (3) and upper limit (4) are used by Percentage and Count functions
   DataFunction time_pf(time_fid, FunctionType::TimeFunction);
@@ -645,7 +656,7 @@ TS::TimeSeriesGroupPtr execute_area_time_aggregation_function(TS::FunctionId are
   DataFunctions time_pfs;
   time_pfs.innerFunction = time_pf;
 
-  TimeSeriesGroupPtr time_aggregated_grp = Aggregator::aggregate(*area_aggregated_grp, time_pfs);
+  TimeSeriesGroupPtr time_aggregated_grp = Aggregator::aggregate(*area_aggregated_grp, time_pfs, times);
 
   return time_aggregated_grp;
 }
@@ -665,7 +676,8 @@ void nearest_t()
 
   DataFunctions pfs;
   pfs.innerFunction = pf;
-  std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+  const auto times = timeseries.getTimes();
+  std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs, times));
 
   std::string expected_result =
       "2015-Mar-03 00:00:00 EET -> nan\n"
@@ -690,7 +702,7 @@ void nearest_t()
   pf.setAggregationIntervalBehind(10);
   pfs.innerFunction = pf;
 
-  test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+  test_result = to_string(*Aggregator::aggregate(timeseries, pfs, times));
 
   expected_result =
       "2015-Mar-03 00:00:00 EET -> 1\n"
@@ -729,7 +741,8 @@ void interpolate_t()
 
   DataFunctions pfs;
   pfs.innerFunction = pf;
-  std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+  const auto times = timeseries.getTimes();
+  std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs, times));
 
   std::string expected_result =
       "2015-Mar-03 00:00:00 EET -> nan\n"
@@ -754,7 +767,7 @@ void interpolate_t()
   pf.setAggregationIntervalBehind(15);
   pfs.innerFunction = pf;
 
-  test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+  test_result = to_string(*Aggregator::aggregate(timeseries, pfs, times));
 
   expected_result =
       "2015-Mar-03 00:00:00 EET -> -1\n"
@@ -794,7 +807,8 @@ void interpolatedir_t()
 
   DataFunctions pfs;
   pfs.innerFunction = pf;
-  std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+  const auto times = timeseries.getTimes();
+  std::string test_result = to_string(*Aggregator::aggregate(timeseries, pfs, times));
 
   std::string expected_result =
       "2015-Mar-03 00:00:00 EET -> nan\n"
@@ -819,7 +833,7 @@ void interpolatedir_t()
   pf.setAggregationIntervalBehind(15);
   pfs.innerFunction = pf;
 
-  test_result = to_string(*Aggregator::aggregate(timeseries, pfs));
+  test_result = to_string(*Aggregator::aggregate(timeseries, pfs, times));
 
   expected_result =
       "2015-Mar-03 00:00:00 EET -> 320\n"
@@ -1540,6 +1554,61 @@ void min_t_missing_value()
   TEST_PASSED();
 }
 
+void time_aggregation_with_selected_times()
+{
+  using namespace SmartMet;
+  Fmi::TimeZonePtr zone(tz_eet_name);
+
+  Fmi::LocalDateTime ldt(Fmi::Date(2015, 3, 3), Fmi::Hours(0), zone);
+
+  std::set<int> exclude = { 34, 56, 368, 722, 724, 1224, 1260 };
+  TS::TimeSeries timeseries;
+
+  // Generate timesries with some fictious minute data for 24 hours
+  Fmi::LocalDateTime currTime = ldt;
+  for (int minutes = 0; minutes < 1440; minutes++)
+  {
+    Fmi::LocalDateTime currTime = ldt + Fmi::Minutes(minutes);
+    if (exclude.find(minutes) == exclude.end())
+    {
+      // generate some fictious values
+      double value = 15 + 8 * std::sin(2 * M_PI * minutes / 1440);
+      timeseries.emplace_back(TS::TimedValue(currTime, value));
+    }
+  }
+
+  // Generate time list with 6 hour intervals for aggregation
+  TS::TimeSeriesGenerator::LocalTimeList timesteps = { };
+  for (int hours = -6; hours <= 30; hours += 6)
+  {
+    const Fmi::LocalDateTime tm = ldt + Fmi::Hours(hours);
+    timesteps.push_back(tm);
+  }
+
+  TS::DataFunction funct(TS::FunctionId::Count, TS::FunctionType::TimeFunction);
+  funct.setAggregationIntervalBehind(0);
+  funct.setAggregationIntervalAhead(59);
+  TS::TimeSeriesPtr result = TS::Aggregator::time_aggregate(timeseries, funct, timesteps);
+  std::ostringstream test_result_stream;
+  test_result_stream << *result;
+
+  const std::string expected_result =
+        "2015-Mar-02 18:00:00 EET -> nan\n"
+        "2015-Mar-03 00:00:00 EET -> 58\n"
+        "2015-Mar-03 06:00:00 EET -> 59\n"
+        "2015-Mar-03 12:00:00 EET -> 58\n"
+        "2015-Mar-03 18:00:00 EET -> 60\n"
+        "2015-Mar-04 00:00:00 EET -> nan\n"
+        "2015-Mar-04 06:00:00 EET -> nan\n";
+
+  if (expected_result != test_result_stream.str())
+  {
+    TEST_FAILED("result='" + test_result_stream.str() + "' =! '" + expected_result + "'");
+  }
+
+  TEST_PASSED();
+}
+
 // ----------------------------------------------------------------------
 /*!
  * The actual test suite
@@ -1599,6 +1668,8 @@ class tests : public tframe::tests
     TEST(max_a_with_range_nan);
     TEST(mean_a_t_with_range);
     TEST(mean_t_a_with_range);
+
+    TEST(time_aggregation_with_selected_times);
   }
 };
 

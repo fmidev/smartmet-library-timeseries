@@ -6,10 +6,9 @@
 
 #pragma once
 
+#include "TimeSeriesTypes.h"
 #include <variant>
 #include <macgyver/LocalDateTime.h>
-#include <spine/LonLat.h>
-#include <spine/None.h>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -21,17 +20,6 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-using None = ::SmartMet::Spine::None;
-using LonLat = ::SmartMet::Spine::LonLat;
-using LonLatFormat = ::SmartMet::Spine::LonLatFormat;
-
-// data variable for qengine, obsengine
-using Value_ = std::variant<Spine::None,
-                              std::string,
-                              double,
-                              int,
-                              Spine::LonLat,
-                              Fmi::LocalDateTime>;
 
 struct Value : public Value_
 {
@@ -123,6 +111,8 @@ class TimeSeries : public TimedValueVector
               TimedValueVector::const_iterator first,
               TimedValueVector::const_iterator last);
   TimeSeries& operator=(const TimeSeries& ts);
+
+  LocalTimeList getTimes() const;
 };
 
 // one time series
@@ -134,6 +124,9 @@ struct LonLatTimeSeries
   LonLatTimeSeries(const Spine::LonLat& coord, const TimeSeries& ts) : lonlat(coord), timeseries(ts)
   {
   }
+
+  inline LocalTimeList getTimes() const { return timeseries.getTimes(); }
+
   Spine::LonLat lonlat;
   TimeSeries timeseries;
 };

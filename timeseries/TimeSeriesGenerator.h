@@ -7,6 +7,7 @@
 #pragma once
 
 #include "TimeSeriesGeneratorOptions.h"
+#include "TimeSeriesTypes.h"
 
 #include <macgyver/LocalDateTime.h>
 #include <list>
@@ -18,7 +19,7 @@ namespace TimeSeries
 {
 namespace TimeSeriesGenerator
 {
-using LocalTimeList = std::list<Fmi::LocalDateTime>;
+using LocalTimeList = ::SmartMet::TimeSeries::LocalTimeList;
 
 LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
                        const Fmi::TimeZonePtr& theZone);
