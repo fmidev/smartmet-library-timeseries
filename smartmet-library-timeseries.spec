@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.11.8
+Version: 24.11.22
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Nov 22 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.22-1.fmi
+- Update TimeSeries and TimeSeriesGroup aggregation
+
 * Fri Nov  8 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.8-1.fmi
 - Repackage due to Table ABI changes. Also small error reporting improvements
 
