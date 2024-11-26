@@ -9,6 +9,7 @@
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/ValueFormatter.h>
 #include <spine/None.h>
+#include <algorithm>
 #include <locale>
 #include <set>
 
@@ -233,6 +234,28 @@ std::string x_y_param(const std::string& paramName,
 
 }  // anonymous namespace
 
+// ----------------------------------------------------------------------
+/*!
+ * \brief Returns vector containing the names of all special parameters
+ */
+// ----------------------------------------------------------------------
+std::vector<std::string> special_parameters()
+{
+  try
+  {
+    std::vector<std::string> params;
+    std::transform(special_parameter_map.begin(),
+                   special_parameter_map.end(),
+                   std::back_inserter(params),
+                   [](const auto& param) { return param.first; });
+    return params;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 bool special(const Parameter& theParam)
 {
   try
@@ -247,6 +270,52 @@ bool special(const Parameter& theParam)
     }
     // ** NOT REACHED **
     return true;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Return true if the parameter is data independent
+ */ 
+// ----------------------------------------------------------------------
+bool is_data_independent(const Spine::Parameter& theParam)
+{
+  try
+  {
+    switch (theParam.type())
+    {
+      case Spine::Parameter::Type::Data:
+      case Spine::Parameter::Type::DataDerived:
+        return false;
+      case Spine::Parameter::Type::DataIndependent:
+        return true;
+    }
+    return false;
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Return true if the query contains only data independent parameters
+ */
+// ----------------------------------------------------------------------
+bool is_data_independent_query(const OptionParsers::ParameterList& theParams)
+{
+  try
+  {
+    return std::all_of(
+      theParams.begin(),
+      theParams.end(),
+      [](const auto& param) { return is_data_independent(param); });
   }
   catch (...)
   {
