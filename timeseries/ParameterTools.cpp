@@ -32,7 +32,7 @@ const std::set<std::string> location_parameters = {
                                                    LAT_PARAM,
                                                    LATITUDE_PARAM,
                                                    LATLON_PARAM,
-                                                   LEVEL_PARAM,
+                                                   // LEVEL_PARAM,
                                                    LOCALTZ_PARAM,
                                                    LON_PARAM,
                                                    LONGITUDE_PARAM,
@@ -41,10 +41,12 @@ const std::set<std::string> location_parameters = {
                                                    // PLACE_PARAM,
                                                    POPULATION_PARAM,
                                                    REGION_PARAM,
+                                                   STATION_ELEVATION_PARAM,
                                                    STATIONLAT_PARAM,
                                                    STATIONLATITUDE_PARAM,
                                                    STATIONLON_PARAM,
                                                    STATIONLONGITUDE_PARAM,
+                                                   STATIONNAME_PARAM,
                                                    X_PARAM,
                                                    Y_PARAM
                                                    };
