@@ -5,9 +5,12 @@
 #include <macgyver/Exception.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeZones.h>
+#include <newbase/NFmiParameterName.h>
 #include <spine/Location.h>
 #include <spine/Parameter.h>
-
+#include <map>
+#include <set>
+#include <string>
 namespace Fmi
 {
 class ValueFormatter;
@@ -63,6 +66,21 @@ void transform_wgs84_coordinates(const std::string& name,
                                  const std::string& crs,
                                  TS::TimeSeriesGroup& tsg);
 std::string get_parameter_id(const Spine::Parameter& parameter);
+
+/**
+ * @brief Special parameters related definitions
+ *
+ * These are used in the implementation of the special parameters.
+ * User should generally use the methods declared above instead of these
+ * directly.
+ */
+namespace SpecialParameter
+{
+    extern const std::set<std::string> location_parameters;
+    extern const std::map<std::string, Spine::Parameter::Type> special_parameter_map;
+    extern const std::map<std::string, FmiParameterName> time_parameter_map;
+    extern const std::map<std::string, FmiParameterName> location_parameter_map;
+}  // namespace SpecialParameter
 
 }  // namespace TimeSeries
 }  // namespace SmartMet

@@ -17,7 +17,7 @@ namespace SmartMet
 {
 namespace TimeSeries
 {
-namespace
+namespace SpecialParameters
 {
 using Spine::Parameter;
 
@@ -191,6 +191,13 @@ const std::map<std::string, FmiParameterName> location_parameter_map = {
     {WMO_PARAM, kFmiWmoStationNumber},
     {WSI_PARAM, kFmiWSI}
     };
+} // namespace SpecialParameters
+
+using namespace SpecialParameters;
+
+namespace
+{
+using Spine::Parameter;
 
 // ----------------------------------------------------------------------
 /*!
