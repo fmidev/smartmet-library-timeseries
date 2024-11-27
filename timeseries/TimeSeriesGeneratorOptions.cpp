@@ -7,10 +7,10 @@
 #include "TimeSeriesGeneratorOptions.h"
 #include <macgyver/Exception.h>
 #include <macgyver/Hash.h>
+#include <macgyver/NumericCast.h>
 #include <macgyver/StringConversion.h>
 #include <spine/Convenience.h>
 #include <spine/HTTP.h>
-#include <boost/numeric/conversion/cast.hpp>
 
 namespace SmartMet
 {
@@ -348,7 +348,7 @@ void parse_startstep(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Req
 
     int timestep = (options.timeStep ? *options.timeStep : default_timestep);
 
-    options.startTime += Fmi::Minutes(boost::numeric_cast<unsigned int>(startstep) * timestep);
+    options.startTime += Fmi::Minutes(Fmi::numeric_cast<unsigned int>(startstep) * timestep);
   }
 }
 

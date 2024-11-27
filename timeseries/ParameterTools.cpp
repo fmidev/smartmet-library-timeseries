@@ -5,6 +5,7 @@
 #include <gis/SpatialReference.h>
 #include <macgyver/Astronomy.h>
 #include <macgyver/CharsetTools.h>
+#include <macgyver/NumericCast.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/ValueFormatter.h>
@@ -778,7 +779,7 @@ Value time_parameter(const std::string& paramname,
           Fmi::Astronomy::solar_time_t st =
               Fmi::Astronomy::solar_time(ldt, loc.longitude, loc.latitude);
           auto seconds = st.daylength().total_seconds();
-          int minutes = boost::numeric_cast<int>(round(static_cast<double>(seconds) / 60.0));
+          int minutes = Fmi::numeric_cast<int>(round(static_cast<double>(seconds) / 60.0));
           ret = minutes;
           break;
         }

@@ -1,7 +1,7 @@
 #include "ParameterFactory.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/numeric/conversion/cast.hpp>
 #include <macgyver/Exception.h>
+#include <macgyver/NumericCast.h>
 #include <macgyver/StringConversion.h>
 #include <spine/Convenience.h>
 #include <spine/Parameter.h>
@@ -223,7 +223,7 @@ void parse_intervals(std::string& paramname,
         aggregation_interval_string_behind.resize(
             aggregation_interval_string_behind.find(intervalSeparator));
         agg_interval_ahead = Spine::duration_string_to_minutes(aggregation_interval_string_ahead);
-        aggregation_interval_ahead = boost::numeric_cast<unsigned int>(agg_interval_ahead);
+        aggregation_interval_ahead = Fmi::numeric_cast<unsigned int>(agg_interval_ahead);
       }
 
       agg_interval_behind = Spine::duration_string_to_minutes(aggregation_interval_string_behind);
@@ -233,7 +233,7 @@ void parse_intervals(std::string& paramname,
         throw Fmi::Exception(BCP,
                              "The 'interval' option for '" + paramname + "' must be positive!");
       }
-      aggregation_interval_behind = boost::numeric_cast<unsigned int>(agg_interval_behind);
+      aggregation_interval_behind = Fmi::numeric_cast<unsigned int>(agg_interval_behind);
     }
   }
   catch (...)
