@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.11.27
+Version: 24.11.28
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Nov 28 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.28-1.fmi
+- Fix location parameter handling
+
 * Wed Nov 27 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.27-1.fmi
 - Special parameter handling update
 
