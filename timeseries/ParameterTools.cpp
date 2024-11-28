@@ -42,12 +42,13 @@ const std::set<std::string> location_parameters = {
                                                    // PLACE_PARAM,
                                                    POPULATION_PARAM,
                                                    REGION_PARAM,
-                                                   STATION_ELEVATION_PARAM,
-                                                   STATIONLAT_PARAM,
-                                                   STATIONLATITUDE_PARAM,
-                                                   STATIONLON_PARAM,
-                                                   STATIONLONGITUDE_PARAM,
-                                                   STATIONNAME_PARAM,
+                                                   // Not present in Spine::Location (so leave then out)
+                                                   //STATION_ELEVATION_PARAM,
+                                                   //STATIONLAT_PARAM,
+                                                   //STATIONLATITUDE_PARAM,
+                                                   //STATIONLON_PARAM,
+                                                   //STATIONLONGITUDE_PARAM,
+                                                   //STATIONNAME_PARAM,
                                                    X_PARAM,
                                                    Y_PARAM
                                                    };
