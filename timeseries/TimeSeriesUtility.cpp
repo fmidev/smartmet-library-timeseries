@@ -314,6 +314,10 @@ TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
   {
     TimeSeriesByLocation ret;
 
+    if(observation_result->empty())
+      return ret;
+
+    
 	/*
     if (UtilityFunctions::is_flash_or_mobile_producer(producer))
     {
