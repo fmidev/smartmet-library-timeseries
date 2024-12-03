@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.11.28
+Version: 24.12.3
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -24,14 +24,14 @@ BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 24.9.10
 BuildRequires: smartmet-library-macgyver-devel >= 24.11.27
-BuildRequires: smartmet-library-newbase-devel >= 24.10.15
-BuildRequires: smartmet-library-spine-devel >= 24.11.8
+BuildRequires: smartmet-library-newbase-devel >= 24.12.3
+BuildRequires: smartmet-library-spine-devel >= 24.11.27
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 24.11.8
+Requires: smartmet-library-spine >= 24.11.27
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,8 +51,8 @@ Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
 Requires: smartmet-library-macgyver-devel >= 24.11.27
-Requires: smartmet-library-newbase-devel >= 24.10.15
-Requires: smartmet-library-spine-devel >= 24.11.8
+Requires: smartmet-library-newbase-devel >= 24.12.3
+Requires: smartmet-library-spine-devel >= 24.11.27
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue Dec  3 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.12.3-1.fmi
+- Fix empty fetches not to throw
+
 * Thu Nov 28 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.28-1.fmi
 - Fix location parameter handling
 
