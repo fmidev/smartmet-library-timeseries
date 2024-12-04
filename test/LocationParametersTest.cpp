@@ -40,7 +40,7 @@ namespace
         Fmi::ValueFormatterParam vfparam;
         Fmi::ValueFormatter vf(vfparam);
         TS::OStreamVisitor visitor(os, vf, 6);
-        std::visit(visitor, value);
+        std::visit(visitor, dynamic_cast<const TS::Value_&>(value));
         return os.str();
     }
 }
