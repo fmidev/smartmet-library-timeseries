@@ -23,7 +23,7 @@ LIBS += \
 	-lsmartmet-spine \
 	-lsmartmet-macgyver \
 	$(REQUIRED_LIBS) \
-	-lboost_date_time \
+	-lboost_regex \
 	-lboost_system \
 	-lpthread
 

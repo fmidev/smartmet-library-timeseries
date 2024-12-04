@@ -354,7 +354,7 @@ TimeParameters::TimeParameters()
             return Value(Fmi::to_iso_extended_string(args.ldt.local_time()));
         });
 
-    add("date(format)", std::regex("date\\(([^)]+)\\)"),
+    add("date(format)", boost::regex("date\\(([^)]+)\\)"),
         [](const std::vector<std::string>& r_arg, TimeParameterArgs& args)
         {
             const std::string fmt = r_arg.at(0);
