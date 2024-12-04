@@ -1,6 +1,8 @@
 /DataFilterTest
+/LocationParametersTest
 /ParameterToolsTest
 /StatTest
+/TimeParametersTest
 /TimeSeriesAggregatorTest
 /TimeSeriesGeneratorTest
 /ValueTest

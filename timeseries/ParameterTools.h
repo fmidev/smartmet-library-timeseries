@@ -2,7 +2,8 @@
 
 #include "OptionParsers.h"
 #include "TimeSeriesInclude.h"
-#include <macgyver/Exception.h>
+#include "LocationParameters.h"
+#include "TimeParameters.h"
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeZones.h>
 #include <newbase/NFmiParameterName.h>
@@ -26,12 +27,6 @@ std::vector<std::string> special_parameters();
 
 bool parameter_is_arithmetic(const Spine::Parameter& theParameter);
 
-bool is_plain_location_query(const OptionParsers::ParameterList& theParams);
-
-bool is_location_parameter(const std::string& paramname);
-
-bool is_time_parameter(std::string paramname);
-
 bool is_data_independent(const Spine::Parameter& theParam);
 
 bool is_data_independent_query(const OptionParsers::ParameterList& theParams);
@@ -42,16 +37,6 @@ std::string location_parameter(const Spine::LocationPtr& loc,
                                const std::string& timezone,
                                int precision,
                                const std::string& crs = "EPSG:4326");
-
-TS::Value time_parameter(const std::string& paramname,
-                         const Fmi::LocalDateTime& ldt,
-                         const Fmi::DateTime& now,
-                         const Spine::Location& loc,
-                         const std::string& timezone,
-                         const Fmi::TimeZones& timezones,
-                         const std::locale& outlocale,
-                         const Fmi::TimeFormatter& timeformatter,
-                         const std::string& timestring);
 
 Spine::Parameter makeParameter(const std::string& name);
 
@@ -76,7 +61,7 @@ std::string get_parameter_id(const Spine::Parameter& parameter);
  */
 namespace SpecialParameter
 {
-    extern const std::set<std::string> location_parameters;
+    //extern const std::set<std::string> location_parameters;
     extern const std::map<std::string, Spine::Parameter::Type> special_parameter_map;
     extern const std::map<std::string, FmiParameterName> time_parameter_map;
     extern const std::map<std::string, FmiParameterName> location_parameter_map;
