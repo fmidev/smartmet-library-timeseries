@@ -31,8 +31,15 @@ Value time_parameter(const std::string& paramname,
                          const std::string& timestring)
 try
 {
+    // Special case for date() parameters (we should not lowercase the format string)
+    std::string name = Fmi::ascii_tolower_copy(paramname);
+    if (strncasecmp(paramname.c_str(), "date(", 5) == 0)
+        name = "date(" + paramname.substr(5);
+    else
+        name = Fmi::ascii_tolower_copy(paramname);
+
     TimeParameterArgs args(ldt, now, loc, timezone, timezones, outlocale, timeformatter, timestring);
-    return TimeParameters::instance(Fmi::ascii_tolower_copy(paramname), args);
+    return TimeParameters::instance(name, args);
 }
 catch (...)
 {
