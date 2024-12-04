@@ -73,7 +73,7 @@ try
             args,
             precision);
 
-  return std::visit(visitor, result);
+  return std::visit(visitor, dynamic_cast<Value_&>(result));
 }
 catch (...)
 {
