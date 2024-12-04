@@ -70,6 +70,7 @@ const std::string LPNN_PARAM = "lpnn";
 const std::string GEOID_PARAM = "geoid";
 const std::string RWSID_PARAM = "rwsid";
 const std::string SENSOR_NO_PARAM = "sensor_no";
+const std::string MODIFIED_LAST_PARAM = "modifiedlast";
 const std::string STATIONNAME_PARAM = "stationname";
 const std::string STATION_NAME_PARAM = "station_name";
 const std::string STATIONLON_PARAM = "stationlon";
