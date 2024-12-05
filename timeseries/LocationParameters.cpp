@@ -181,14 +181,16 @@ LocationParameters::LocationParameters()
     add({LAT_PARAM, LATITUDE_PARAM},
         [](LocationParameterArgs& args, int precision) -> Value
         {
-            return args.value_formatter.format(args.loc.latitude, precision);
+            int latlon_precision = std::max(5, precision);
+            return args.value_formatter.format(args.loc.latitude, latlon_precision);
         });
 
     add(LATLON_PARAM,
         [](LocationParameterArgs& args, int precision) -> Value
         {
-            return args.value_formatter.format(args.loc.latitude, precision) + ", " +
-                   args.value_formatter.format(args.loc.longitude, precision);
+            int latlon_precision = std::max(5, precision);
+            return args.value_formatter.format(args.loc.latitude, latlon_precision) + ", " +
+                   args.value_formatter.format(args.loc.longitude, latlon_precision);
         });
 
     add(LOCALTZ_PARAM,
@@ -200,15 +202,17 @@ LocationParameters::LocationParameters()
     add({LON_PARAM, LONGITUDE_PARAM},
         [](LocationParameterArgs& args, int precision) -> Value
         {
-            return args.value_formatter.format(args.loc.longitude, precision);
+            int latlon_precision = std::max(5, precision);
+            return args.value_formatter.format(args.loc.longitude, latlon_precision);
         });
 
 
     add(LONLAT_PARAM,
         [](LocationParameterArgs& args, int precision) -> Value
         {
-            return args.value_formatter.format(args.loc.longitude, precision) + ", " +
-                   args.value_formatter.format(args.loc.latitude, precision);
+            int latlon_precision = std::max(5, precision);
+            return args.value_formatter.format(args.loc.longitude, latlon_precision) + ", " +
+                   args.value_formatter.format(args.loc.latitude, latlon_precision);
         });
 
     add(NAME_PARAM,
