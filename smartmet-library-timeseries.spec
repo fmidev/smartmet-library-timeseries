@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 24.12.3
+Version: 24.12.5
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Dec  5 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.12.5-1.fmi
+- Reimplement special parameter support
+
 * Tue Dec  3 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.12.3-1.fmi
 - Fix empty fetches not to throw
 
