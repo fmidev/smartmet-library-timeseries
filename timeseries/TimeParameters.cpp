@@ -236,7 +236,8 @@ TimeParameters::TimeParameters()
     add (ORIGINTIME_PARAM,
         [](TimeParameterArgs& args)
         {
-            Fmi::LocalDateTime ldt_now(args.now, args.timezone);
+            Fmi::TimeZonePtr tz = args.timezones.time_zone_from_string(args.timezone);
+            Fmi::LocalDateTime ldt_now(args.now, tz);
             return Value(Fmi::to_iso_string(ldt_now.local_time()));
         });
 
