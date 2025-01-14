@@ -238,7 +238,7 @@ TimeParameters::TimeParameters()
         {
             Fmi::TimeZonePtr tz = args.timezones.time_zone_from_string(args.timezone);
             Fmi::LocalDateTime ldt_now(args.now, tz);
-            return Value(Fmi::to_iso_string(ldt_now.local_time()));
+            return Value(Fmi::to_iso_extended_string(ldt_now.local_time()));
         });
 
     add (SUNAZIMUTH_PARAM,
