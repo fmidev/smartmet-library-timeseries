@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 25.1.14
+Version: 25.1.15
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Wed Jan 15 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.1.15-1.fmi
+- LocationParameters: return geoid as such fithout formatting
+
 * Tue Jan 14 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.1.14-1.fmi
 - TimeParameters: fix origintime formating
 
