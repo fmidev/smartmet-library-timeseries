@@ -129,13 +129,8 @@ LocationParameters::LocationParameters()
         [](LocationParameterArgs& args, int) -> Value
         {
             return args.loc.country;
-        });
-
-    add(COUNTRY_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            return args.loc.country;
-        });
+        },
+        "Full country name in requested language (e.g. 'Finland')");
 
     add(DEM_PARAM,
         [](LocationParameterArgs& args, int precision) -> Value
@@ -143,14 +138,15 @@ LocationParameters::LocationParameters()
             if (std::isnan(args.loc.dem))
                 return Spine::None();
             return args.value_formatter.format(args.loc.dem, precision);
-        }
-    );
+        },
+        "");
 
     add(ELEVATION_PARAM,
         [](LocationParameterArgs& args, int precision) -> Value
         {
             return args.value_formatter.format(args.loc.elevation, precision);
-        });
+        },
+        "Elevation of site in meters");
 
     add(FEATURE_PARAM,
         [](LocationParameterArgs& args, int) -> Value
@@ -164,26 +160,30 @@ LocationParameters::LocationParameters()
             if (args.loc.fmisid)
                 return *args.loc.fmisid;
             return Spine::None();
-        });
+        },
+        "FMISID");
 
     add(GEOID_PARAM,
         [](LocationParameterArgs& args, int) -> Value
         {
             return args.loc.geoid;
-        });
+        },
+        "GEOID value");
 
     add(ISO2_PARAM,
         [](LocationParameterArgs& args, int) -> Value
         {
             return args.loc.iso2;
-        });
+        },
+        "Country code in ISO 3166-1 alpha-2 format");
 
     add({LAT_PARAM, LATITUDE_PARAM},
         [](LocationParameterArgs& args, int precision) -> Value
         {
             int latlon_precision = std::max(5, precision);
             return args.value_formatter.format(args.loc.latitude, latlon_precision);
-        });
+        },
+        "Site latitude in degrees");
 
     add(LATLON_PARAM,
         [](LocationParameterArgs& args, int precision) -> Value
@@ -191,20 +191,23 @@ LocationParameters::LocationParameters()
             int latlon_precision = std::max(5, precision);
             return args.value_formatter.format(args.loc.latitude, latlon_precision) + ", " +
                    args.value_formatter.format(args.loc.longitude, latlon_precision);
-        });
+        },
+        "Site latitude and longitude in degrees separated by comma");
 
     add(LOCALTZ_PARAM,
         [](LocationParameterArgs& args, int) -> Value
         {
             return args.loc.timezone;
-        });
+        },
+        "Timezone for location");
 
     add({LON_PARAM, LONGITUDE_PARAM},
         [](LocationParameterArgs& args, int precision) -> Value
         {
             int latlon_precision = std::max(5, precision);
             return args.value_formatter.format(args.loc.longitude, latlon_precision);
-        });
+        },
+        "Site longitude in degrees");
 
 
     add(LONLAT_PARAM,
@@ -213,13 +216,15 @@ LocationParameters::LocationParameters()
             int latlon_precision = std::max(5, precision);
             return args.value_formatter.format(args.loc.longitude, latlon_precision) + ", " +
                    args.value_formatter.format(args.loc.latitude, latlon_precision);
-        });
+        },
+        "Site longitude and latitude in degrees separated by comma");
 
     add(NAME_PARAM,
         [](LocationParameterArgs& args, int) -> Value
         {
             return args.loc.name;
-        });
+        },
+        "Name of the location");
 
     add(POPULATION_PARAM,
         [](LocationParameterArgs& args, int) -> Value
@@ -227,7 +232,8 @@ LocationParameters::LocationParameters()
             if (args.loc.population >= 0)
                 return args.loc.population;
             return Spine::None();
-        });
+        },
+        "Population of the location (if available)");
 
     add(REGION_PARAM,
         [](LocationParameterArgs& args, int) -> Value
@@ -244,21 +250,24 @@ LocationParameters::LocationParameters()
             }
             // Administrative region known.
             return args.loc.area;
-        });
+        },
+        "Region/area name of the location if available, name otherwise");
 
     add(X_PARAM,
         [](LocationParameterArgs& args, int precision) -> Value
         {
             const auto [x_param, _] = x_y_param(args.loc, args.crs);
             return args.value_formatter.format(x_param, precision);
-        });
+        },
+        "");
 
     add(Y_PARAM,
         [](LocationParameterArgs& args, int precision) -> Value
         {
             const auto [_, y_param] = x_y_param(args.loc, args.crs);
             return args.value_formatter.format(y_param, precision);
-        });
+        },
+        "");
 
 }
 
