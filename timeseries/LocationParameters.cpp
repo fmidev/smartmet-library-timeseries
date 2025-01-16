@@ -1,9 +1,9 @@
 #include "LocationParameters.h"
 #include "ParameterKeywords.h"
 #include "TimeSeriesOutput.h"
-#include <macgyver/StringConversion.h>
 #include <gis/CoordinateTransformation.h>
 #include <gis/SpatialReference.h>
+#include <macgyver/StringConversion.h>
 #include <spine/None.h>
 #include <cmath>
 #include <tuple>
@@ -68,10 +68,7 @@ try
   StringVisitor visitor(valueformatter, precision);
   LocationParameterArgs args(*loc, valueformatter, timezone, crs);
 
-  Value result = LocationParameters::instance(
-            Fmi::ascii_tolower_copy(paramName),
-            args,
-            precision);
+  Value result = LocationParameters::instance(Fmi::ascii_tolower_copy(paramName), args, precision);
 
   return std::visit(visitor, dynamic_cast<Value_&>(result));
 }
@@ -107,168 +104,162 @@ auto x_y_param(const Spine::Location& loc, const std::string& crs) -> std::tuple
   }
 }
 
-} // anonymous namespace
-
+}  // anonymous namespace
 
 const LocationParameters LocationParameters::instance;
 
 struct LocationParameterArgs::State
 {
-    // Add member variables here
+  // Add member variables here
 };
 
 LocationParameterArgs::~LocationParameterArgs()
 {
-    delete state;
+  delete state;
 }
-
 
 LocationParameters::LocationParameters()
 {
-    add(COUNTRY_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
+  add(
+      COUNTRY_PARAM,
+      [](LocationParameterArgs& args, int) -> Value { return args.loc.country; },
+      "Full country name in requested language (e.g. 'Finland')");
+
+  add(
+      DEM_PARAM,
+      [](LocationParameterArgs& args, int precision) -> Value
+      {
+        if (std::isnan(args.loc.dem))
+          return Spine::None();
+        return args.value_formatter.format(args.loc.dem, precision);
+      },
+      "Digital Elevation Model height value for the coordinate, model may vary");
+
+  add(
+      ELEVATION_PARAM,
+      [](LocationParameterArgs& args, int precision) -> Value
+      { return args.value_formatter.format(args.loc.elevation, precision); },
+      "Elevation of site in meters from GeoNames database");
+
+  add(
+      FEATURE_PARAM,
+      [](LocationParameterArgs& args, int) -> Value { return args.loc.feature; },
+      "GeoNames feature code for the location");
+
+  add(
+      FMISID_PARAM,
+      [](LocationParameterArgs& args, int) -> Value
+      {
+        if (args.loc.fmisid)
+          return *args.loc.fmisid;
+        return Spine::None();
+      },
+      "Finnish Meteorological Institute numeric ID for the station");
+
+  add(
+      GEOID_PARAM,
+      [](LocationParameterArgs& args, int) -> Value { return args.loc.geoid; },
+      "GeoNames ID for the location");
+
+  add(
+      ISO2_PARAM,
+      [](LocationParameterArgs& args, int) -> Value { return args.loc.iso2; },
+      "Country code in ISO 3166-1 alpha-2 format");
+
+  add(
+      {LAT_PARAM, LATITUDE_PARAM},
+      [](LocationParameterArgs& args, int precision) -> Value
+      {
+        int latlon_precision = std::max(5, precision);
+        return args.value_formatter.format(args.loc.latitude, latlon_precision);
+      },
+      "Site latitude in degrees");
+
+  add(
+      LATLON_PARAM,
+      [](LocationParameterArgs& args, int precision) -> Value
+      {
+        int latlon_precision = std::max(5, precision);
+        return args.value_formatter.format(args.loc.latitude, latlon_precision) + ", " +
+               args.value_formatter.format(args.loc.longitude, latlon_precision);
+      },
+      "Site latitude and longitude in degrees separated by comma");
+
+  add(
+      LOCALTZ_PARAM,
+      [](LocationParameterArgs& args, int) -> Value { return args.loc.timezone; },
+      "Location timezone");
+
+  add(
+      {LON_PARAM, LONGITUDE_PARAM},
+      [](LocationParameterArgs& args, int precision) -> Value
+      {
+        int latlon_precision = std::max(5, precision);
+        return args.value_formatter.format(args.loc.longitude, latlon_precision);
+      },
+      "Site longitude in degrees");
+
+  add(
+      LONLAT_PARAM,
+      [](LocationParameterArgs& args, int precision) -> Value
+      {
+        int latlon_precision = std::max(5, precision);
+        return args.value_formatter.format(args.loc.longitude, latlon_precision) + ", " +
+               args.value_formatter.format(args.loc.latitude, latlon_precision);
+      },
+      "Site longitude and latitude in degrees separated by comma");
+
+  add(
+      NAME_PARAM,
+      [](LocationParameterArgs& args, int) -> Value { return args.loc.name; },
+      "GeoNames name of the location");
+
+  add(
+      POPULATION_PARAM,
+      [](LocationParameterArgs& args, int) -> Value
+      {
+        if (args.loc.population >= 0)
+          return args.loc.population;
+        return Spine::None();
+      },
+      "Population of the location (if available)");
+
+  add(
+      REGION_PARAM,
+      [](LocationParameterArgs& args, int) -> Value
+      {
+        if (args.loc.area.empty())
         {
-            return args.loc.country;
-        },
-        "Full country name in requested language (e.g. 'Finland')");
+          if (args.loc.name.empty())
+          {
+            // No area (administrative region) nor name known.
+            return args.value_formatter.missing();
+          }
+          // Place name known, administrative region unknown.
+          return args.loc.name;
+        }
+        // Administrative region known.
+        return args.loc.area;
+      },
+      "Region/area name of the location if available, name otherwise");
 
-    add(DEM_PARAM,
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            if (std::isnan(args.loc.dem))
-                return Spine::None();
-            return args.value_formatter.format(args.loc.dem, precision);
-        },
-        "");
+  add(
+      X_PARAM,
+      [](LocationParameterArgs& args, int precision) -> Value
+      {
+        const auto [x_param, _] = x_y_param(args.loc, args.crs);
+        return args.value_formatter.format(x_param, precision);
+      },
+      "X-coordinate in the requested projection");
 
-    add(ELEVATION_PARAM,
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            return args.value_formatter.format(args.loc.elevation, precision);
-        },
-        "Elevation of site in meters");
-
-    add(FEATURE_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            return args.loc.feature;
-        });
-
-    add(FMISID_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            if (args.loc.fmisid)
-                return *args.loc.fmisid;
-            return Spine::None();
-        },
-        "FMISID");
-
-    add(GEOID_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            return args.loc.geoid;
-        },
-        "GEOID value");
-
-    add(ISO2_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            return args.loc.iso2;
-        },
-        "Country code in ISO 3166-1 alpha-2 format");
-
-    add({LAT_PARAM, LATITUDE_PARAM},
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            int latlon_precision = std::max(5, precision);
-            return args.value_formatter.format(args.loc.latitude, latlon_precision);
-        },
-        "Site latitude in degrees");
-
-    add(LATLON_PARAM,
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            int latlon_precision = std::max(5, precision);
-            return args.value_formatter.format(args.loc.latitude, latlon_precision) + ", " +
-                   args.value_formatter.format(args.loc.longitude, latlon_precision);
-        },
-        "Site latitude and longitude in degrees separated by comma");
-
-    add(LOCALTZ_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            return args.loc.timezone;
-        },
-        "Timezone for location");
-
-    add({LON_PARAM, LONGITUDE_PARAM},
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            int latlon_precision = std::max(5, precision);
-            return args.value_formatter.format(args.loc.longitude, latlon_precision);
-        },
-        "Site longitude in degrees");
-
-
-    add(LONLAT_PARAM,
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            int latlon_precision = std::max(5, precision);
-            return args.value_formatter.format(args.loc.longitude, latlon_precision) + ", " +
-                   args.value_formatter.format(args.loc.latitude, latlon_precision);
-        },
-        "Site longitude and latitude in degrees separated by comma");
-
-    add(NAME_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            return args.loc.name;
-        },
-        "Name of the location");
-
-    add(POPULATION_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            if (args.loc.population >= 0)
-                return args.loc.population;
-            return Spine::None();
-        },
-        "Population of the location (if available)");
-
-    add(REGION_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
-        {
-            if (args.loc.area.empty())
-            {
-                if (args.loc.name.empty())
-                {
-                    // No area (administrative region) nor name known.
-                    return args.value_formatter.missing();
-                }
-                // Place name known, administrative region unknown.
-                return args.loc.name;
-            }
-            // Administrative region known.
-            return args.loc.area;
-        },
-        "Region/area name of the location if available, name otherwise");
-
-    add(X_PARAM,
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            const auto [x_param, _] = x_y_param(args.loc, args.crs);
-            return args.value_formatter.format(x_param, precision);
-        },
-        "");
-
-    add(Y_PARAM,
-        [](LocationParameterArgs& args, int precision) -> Value
-        {
-            const auto [_, y_param] = x_y_param(args.loc, args.crs);
-            return args.value_formatter.format(y_param, precision);
-        },
-        "");
-
+  add(
+      Y_PARAM,
+      [](LocationParameterArgs& args, int precision) -> Value
+      {
+        const auto [_, y_param] = x_y_param(args.loc, args.crs);
+        return args.value_formatter.format(y_param, precision);
+      },
+      "Y-coordinate in the requested projection");
 }
 
 }  // namespace SpecialParameters
