@@ -167,9 +167,9 @@ LocationParameters::LocationParameters()
         });
 
     add(GEOID_PARAM,
-        [](LocationParameterArgs& args, int) -> Value
+        [](LocationParameterArgs& args, int precision) -> Value
         {
-            return args.loc.geoid;
+            return args.value_formatter.format(args.loc.geoid, precision);
         });
 
     add(ISO2_PARAM,
