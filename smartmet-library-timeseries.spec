@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 25.2.18
+Version: 25.5.22
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -23,15 +23,15 @@ BuildRequires: imake
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 25.2.18
-BuildRequires: smartmet-library-macgyver-devel >= 25.2.18
-BuildRequires: smartmet-library-newbase-devel >= 25.2.18
-BuildRequires: smartmet-library-spine-devel >= 25.2.18
+BuildRequires: smartmet-library-macgyver-devel >= 25.5.22
+BuildRequires: smartmet-library-newbase-devel >= 25.3.20
+BuildRequires: smartmet-library-spine-devel >= 25.5.13
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 25.2.18
+Requires: smartmet-library-spine >= 25.5.13
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -50,9 +50,9 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 25.2.18
-Requires: smartmet-library-newbase-devel >= 25.2.18
-Requires: smartmet-library-spine-devel >= 25.2.18
+Requires: smartmet-library-macgyver-devel >= 25.5.22
+Requires: smartmet-library-newbase-devel >= 25.3.20
+Requires: smartmet-library-spine-devel >= 25.5.13
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu May 22 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.5.22-1.fmi
+- Repackaged to hide dark() implementation details
+
 * Tue Feb 18 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.2.18-1.fmi
 - Update to gdal-3.10, geos-3.13 and proj-9.5
 
