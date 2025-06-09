@@ -570,7 +570,10 @@ double Stat::circlemean(const Fmi::DateTime& startTime /*= not_a_date_time */,
     if (r < bad_variance_radius_limit)
       return itsMissingValue;
 
-    return cmean * 180 / M_PI;
+    auto deg = cmean * 180 / M_PI;
+    if (deg < 0)
+      deg += 360;
+    return deg;
   }
   catch (...)
   {
