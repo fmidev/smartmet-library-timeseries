@@ -4,7 +4,7 @@
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
 Version: 25.6.9
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -80,6 +80,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Mon Jun  9 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.6.9-2.fmi
+- Fixed circlemean to return values in the range 0...360
+
 * Mon Jun  9 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.6.9-1.fmi
 - Fixed circlemean parsing
 
