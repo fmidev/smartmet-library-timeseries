@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 25.6.9
+Version: 25.8.1
 Release: 2%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Aug  1 2025 Pertti Kinnia <pertti.kinnia@fmi.fi> - 25.8.1-1.fmi
+- Support float values in DataFilter Comparison; BRAINSTORM-3116
+
 * Mon Jun  9 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.6.9-2.fmi
 - Fixed circlemean to return values in the range 0...360
 
