@@ -66,6 +66,18 @@ JoinType parse_join(const std::string& str)
 }
 }  // namespace
 
+int str2number(const std::string &numstr)
+{
+  try
+  {
+    return Fmi::stoi(numstr);
+  }
+  catch (...)
+  {
+    return floor(Fmi::stod(numstr));
+  }
+}
+
 class DataFilter::Impl
 {
  public:
@@ -78,18 +90,18 @@ class DataFilter::Impl
 
       if (parts.size() == 1)
         filtermap[name].push_back(
-            Comparison{Fmi::stoi(parts[0]), ComparisonType::EQ, JoinType::OR});
+            Comparison{str2number(parts[0]), ComparisonType::EQ, JoinType::OR});
       else if (parts.size() == 2)
         filtermap[name].push_back(
-            Comparison{Fmi::stoi(parts[1]), parse_comparison(parts[0]), JoinType::OR});
+            Comparison{str2number(parts[1]), parse_comparison(parts[0]), JoinType::OR});
       else if (parts.size() == 5)
       {
         // "lt X OR gt X" etc
         auto cmp1 = parse_comparison(parts[0]);
-        auto val1 = Fmi::stoi(parts[1]);
+        auto val1 = str2number(parts[1]);
         auto join = parse_join(parts[2]);
         auto cmp2 = parse_comparison(parts[3]);
-        auto val2 = Fmi::stoi(parts[4]);
+        auto val2 = str2number(parts[4]);
         // keep AND conditions at the front so that the loop in valueOK works correctly
         if (join == JoinType::AND)
         {
