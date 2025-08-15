@@ -470,36 +470,17 @@ void offset()
   opt.timeStep = 60;
   opt.timeSteps = 2;
 
-  bool success = false;
   auto tz = timezones.time_zone_from_string("Europe/Helsinki");
+  auto series = TimeSeriesGenerator::generate(opt, tz);
+  if (series.size() != 2)
+    TEST_FAILED("Expected two times in the result");
 
-  for (int cnt = 0; !success && cnt < 10; cnt++)
-  {
-    auto before = Fmi::SecondClock::universal_time();
-    auto series = TimeSeriesGenerator::generate(opt, tz);
-    if (series.size() != 2)
-      TEST_FAILED("Expected two times in the result");
+  auto diff = Fmi::SecondClock::universal_time() - series.front().utc_time();
 
-    auto diff = Fmi::SecondClock::universal_time() - series.front().utc_time();
-    auto after = Fmi::SecondClock::universal_time();
-    // CHeck whether hour has changed in the meantime. Repeat the test if so
-    // (but restrict to 10 attempts - there should really be no more than 2)
-    if (before.time_of_day().hours() != after.time_of_day().hours())
-       continue;
+  // We expect to get the current time rounded down to the exact hour
 
-    // We expect to get the current time rounded down to the exact hour
-    if (diff < Fmi::Minutes(0) || diff > Fmi::Minutes(60))
-    {
-      TEST_FAILED("Too large time difference to current time: " + Fmi::to_simple_string(diff));
-    }
-    else
-    {
-      success = true;
-    }
-  }
-
-  if (not success)
-    TEST_FAILED("Failed to generate the correct times with tz=Europe/Helsinki:\n");
+  if (diff < Fmi::Minutes(0) || diff > Fmi::Minutes(60))
+    TEST_FAILED("Too large time difference to current time: " + Fmi::to_simple_string(diff));
 
   TEST_PASSED();
 }
