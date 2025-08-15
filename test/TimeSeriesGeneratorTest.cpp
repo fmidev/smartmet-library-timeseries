@@ -460,11 +460,28 @@ void offset()
 {
   using namespace SmartMet::TimeSeries;
 
+  const auto prevExactHour = []() {
+    auto now = Fmi::SecondClock::universal_time();
+    return Fmi::DateTime(now.date(), Fmi::Hours(now.time_of_day().hours()));
+  };
+
   std::string starttime = "-1h";
+
+  Fmi::DateTime before;
 
   TimeSeriesGeneratorOptions opt;
   opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
-  opt.startTime = Fmi::TimeParser::parse(starttime);
+  for (int cnt = 0; cnt < 10; ++cnt)
+  {
+    before = prevExactHour();
+    opt.startTime = Fmi::TimeParser::parse(starttime);
+    if (before.time_of_day().hours() == opt.startTime.time_of_day().hours())
+    {
+      // Hour has not changed in the meantime, continue with the test
+      // Otherwise we have to try again
+      break;
+    }
+  }
   opt.startTimeUTC = Fmi::TimeParser::looks_utc(starttime);
   opt.endTime = opt.startTime + Fmi::Hours(24);
   opt.timeStep = 60;
@@ -475,12 +492,15 @@ void offset()
   if (series.size() != 2)
     TEST_FAILED("Expected two times in the result");
 
-  auto diff = Fmi::SecondClock::universal_time() - series.front().utc_time();
-
   // We expect to get the current time rounded down to the exact hour
 
-  if (diff < Fmi::Minutes(0) || diff > Fmi::Minutes(60))
-    TEST_FAILED("Too large time difference to current time: " + Fmi::to_simple_string(diff));
+  auto diff = before - series.front().utc_time();
+  if (diff != Fmi::Seconds(0))
+    TEST_FAILED("Too large time difference to current time rounded down to exact hour: " + Fmi::to_simple_string(diff));
+
+  diff = series.back().utc_time() - before;
+  if (diff != Fmi::Hours(1))
+    TEST_FAILED("Too large time difference to current time rounded down to exact hour + 1: " + Fmi::to_simple_string(diff));
 
   TEST_PASSED();
 }
