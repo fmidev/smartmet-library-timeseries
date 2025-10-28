@@ -24,7 +24,6 @@ LIBS += \
 	-lsmartmet-macgyver \
 	$(REQUIRED_LIBS) \
 	-lboost_regex \
-	-lboost_system \
 	-lpthread
 
 all: $(PROG)

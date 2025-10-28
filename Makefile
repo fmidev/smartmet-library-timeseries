@@ -24,7 +24,6 @@ LIBS += \
 	-lsmartmet-macgyver \
 	-lsmartmet-spine \
 	-lboost_regex \
-	-lboost_system \
 	-lpthread
 
 # What to install
