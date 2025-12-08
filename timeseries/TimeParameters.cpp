@@ -60,6 +60,8 @@ TimeParameterArgs::~TimeParameterArgs()
   delete state;
 }
 
+TimeParameters::~TimeParameters() = default;
+
 TimeParameters::TimeParameters()
 {
   add(

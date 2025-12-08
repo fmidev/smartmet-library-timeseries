@@ -75,12 +75,15 @@ struct TimeParameterArgs final
 /**
  *  @brief Class for time dependent special parameter support
  */
-class TimeParameters final :
-    // HUOM: fully quallified names of TimeSeries::Value is being used here to avoid
-    //       possible ambiguity with SmartMet::Spine::Value when both namespaces
-    //       are included in the same scope.
-    public Fmi::FunctionMap<::SmartMet::TimeSeries::Value, TimeParameterArgs&>
+
+// HUOM: fully quallified names of TimeSeries::Value is being used here to avoid
+//       possible ambiguity with SmartMet::Spine::Value when both namespaces
+//       are included in the same scope.
+
+class TimeParameters final
+    : public Fmi::FunctionMap<::SmartMet::TimeSeries::Value, TimeParameterArgs&>
 {
+  ~TimeParameters() override;
   TimeParameters();
 
  public:
