@@ -24,7 +24,6 @@ std::string location_parameter(const Spine::LocationPtr& loc,
                                int precision,
                                const std::string& crs /*="EPSG:4326"*/);
 
-
 namespace SpecialParameters
 {
 
@@ -34,48 +33,41 @@ namespace SpecialParameters
  */
 struct LocationParameterArgs final
 {
-    const Spine::Location& loc;
-    const Fmi::ValueFormatter& value_formatter;
-    const std::string& timezone;
-    const std::string& crs;
+  const Spine::Location& loc;
+  const Fmi::ValueFormatter& value_formatter;
+  const std::string& timezone;
+  const std::string& crs;
 
-    LocationParameterArgs(const Spine::Location& loc,
-                          const Fmi::ValueFormatter& value_formatter,
-                          const std::string& timezone,
-                          const std::string& crs)
-        : loc(loc)
-        , value_formatter(value_formatter)
-        , timezone(timezone)
-        , crs(crs)
-        , state(nullptr)
-        {
-        }
+  LocationParameterArgs(const Spine::Location& loc,
+                        const Fmi::ValueFormatter& value_formatter,
+                        const std::string& timezone,
+                        const std::string& crs)
+      : loc(loc), value_formatter(value_formatter), timezone(timezone), crs(crs)
+  {
+  }
 
-    ~LocationParameterArgs();
+  ~LocationParameterArgs();
 
-private:
-    // Currently unused, but can be used for internal caching.
-    // This way changes to this class do not break the API.
-    struct State;
+ private:
+  // Currently unused, but can be used for internal caching.
+  // This way changes to this class do not break the API.
+  struct State;
 
-    // std::unique_ptr does not work with incomplete types. I preffered not to
-    // use std::shared_ptr<> here, because it would be an overkill (AP)
-    mutable State* state;
+  // std::unique_ptr does not work with incomplete types. I preffered not to
+  // use std::shared_ptr<> here, because it would be an overkill (AP)
+  mutable State* state = nullptr;
 
-    // Not imlemented now
-    State* get_mutable_state() const;
+  // Not imlemented now
+  State* get_mutable_state() const;
 };
-
-
 
 class LocationParameters final
     : public Fmi::FunctionMap<::SmartMet::TimeSeries::Value, LocationParameterArgs&, int>
 {
+  LocationParameters();
 
-    LocationParameters();
  public:
-
-    static const LocationParameters instance;
+  static const LocationParameters instance;
 };
 
 }  // namespace SpecialParameters
