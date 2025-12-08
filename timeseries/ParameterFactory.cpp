@@ -915,11 +915,10 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
 
     Parameter::Type type = Parameter::Type::Data;
 
-    if (Spine::Parameters::IsDataIndependent(number))
-      type = Parameter::Type::DataIndependent;
-    else if (Spine::Parameters::IsDataDerived(number))
+    if (Spine::Parameters::IsDataDerived(number))
       type = Parameter::Type::DataDerived;
-    else if (pname.substr(0, 5) == "date(" && paramname[pname.size() - 1] == ')')
+    else if (Spine::Parameters::IsDataIndependent(number) ||
+             (pname.substr(0, 5) == "date(" && paramname[pname.size() - 1] == ')'))
       type = Parameter::Type::DataIndependent;
     else if (boost::algorithm::iends_with(pname, ".raw"))
       number = FmiParameterName(converter.ToEnum(pname.substr(0, pname.size() - 4)));
