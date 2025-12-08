@@ -59,8 +59,7 @@ class Stat
        double theMissingValue = std::numeric_limits<double>::quiet_NaN());
   Stat(const TimeValueVector& theValues,
        double theMissingValue = std::numeric_limits<double>::quiet_NaN());
-  Stat(const DataVector& theValues,
-       double theMissingValue = std::numeric_limits<double>::quiet_NaN());
+  Stat(DataVector theValues, double theMissingValue = std::numeric_limits<double>::quiet_NaN());
 
   void setData(const DataVector& theValues);
   void addData(double theValue);

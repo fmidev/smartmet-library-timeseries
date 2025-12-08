@@ -230,9 +230,8 @@ Stat::Stat(double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
 {
 }
 
-Stat::Stat(const DataVector& theValues,
-           double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
-    : itsData(theValues), itsMissingValue(theMissingValue), itsWeights(true)
+Stat::Stat(DataVector theValues, double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
+    : itsData(std::move(theValues)), itsMissingValue(theMissingValue), itsWeights(true)
 {
   try
   {
