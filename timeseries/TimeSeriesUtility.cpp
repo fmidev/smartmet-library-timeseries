@@ -247,7 +247,6 @@ struct FmisidVisitor
     throw Fmi::Exception(BCP, "Station with LocalDateTime as fmisid encountered!");
   }
 };
-}  // namespace
 
 int get_fmisid_value(const Value& value)
 {
@@ -260,21 +259,6 @@ int get_fmisid_value(const Value& value)
   {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
-}
-
-int get_fmisid_value(const TimeSeries& ts)
-{
-  for (const auto& tv : ts)
-  {
-    try
-    {
-      return get_fmisid_value(tv.value);
-    }
-    catch (...)
-    {
-    }
-  }
-  return -1;
 }
 
 void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeList& tlist)
@@ -307,6 +291,23 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
     ++it;
   }
   ts = ts2;
+}
+
+}  // namespace
+
+int get_fmisid_value(const TimeSeries& ts)
+{
+  for (const auto& tv : ts)
+  {
+    try
+    {
+      return get_fmisid_value(tv.value);
+    }
+    catch (...)
+    {
+    }
+  }
+  return -1;
 }
 
 TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
