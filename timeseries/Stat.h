@@ -34,9 +34,9 @@ namespace Stat
 {
 struct DataItem
 {
-  DataItem(Fmi::DateTime t, double v, double w = 1.0) : time(t), value(v), weight(w) {}
+  DataItem(Fmi::DateTime t, double v, double w = 1.0) : time(std::move(t)), value(v), weight(w) {}
 
-  Fmi::DateTime time{Fmi::DateTime::NOT_A_DATE_TIME};
+  Fmi::DateTime time = Fmi::DateTime::NOT_A_DATE_TIME;
   double value = std::numeric_limits<double>::quiet_NaN();
   double weight = 1.0;
 };

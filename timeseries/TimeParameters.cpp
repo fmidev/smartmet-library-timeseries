@@ -11,7 +11,7 @@ namespace TimeSeries
 
 using namespace SpecialParameters;
 
-bool is_time_parameter(std::string paramname)
+bool is_time_parameter(const std::string& paramname)
 {
   const std::string p = Fmi::ascii_tolower_copy(paramname);
   if (TimeParameters::instance.contains(p))
@@ -412,7 +412,7 @@ TimeParameters::TimeParameters()
       boost::regex("date\\(([^)]+)\\)"),
       [](const std::vector<std::string>& r_arg, TimeParameterArgs& args)
       {
-        const std::string fmt = r_arg.at(0);
+        const std::string& fmt = r_arg.at(0);
         return Value(Fmi::format_time(args.outlocale, fmt, args.ldt));
       },
       "Date in the specified format");

@@ -477,7 +477,7 @@ try
 
   for (auto timestep_iter = timesteps.begin(); timestep_iter != timesteps.end(); ++timestep_iter)
   {
-    const Fmi::LocalDateTime timestamp = *timestep_iter;
+    const Fmi::LocalDateTime &timestamp = *timestep_iter;
     Fmi::LocalDateTime agg_begin = timestamp - before;
     Fmi::LocalDateTime agg_end = timestamp + after;
 
