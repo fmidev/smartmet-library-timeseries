@@ -145,19 +145,17 @@ void extract_subvector_weighted_segment(DataVector& subvector,
       Fmi::TimePeriod first_part_period(intersection_period.begin(),
                                         halfway_time + Microseconds(1));
       Fmi::TimePeriod second_part_period(halfway_time, intersection_period.end());
-      subvector.push_back(
-          DataItem(item1.time, item1.value, first_part_period.length().total_seconds()));
-      subvector.push_back(
-          DataItem(item2.time, item2.value, second_part_period.length().total_seconds()));
+      subvector.emplace_back(item1.time, item1.value, first_part_period.length().total_seconds());
+      subvector.emplace_back(item2.time, item2.value, second_part_period.length().total_seconds());
     }
     else
     {
       if (intersection_period.begin() > halfway_time)  // intersection_period is in the second half
-        subvector.push_back(
-            DataItem(item2.time, item2.value, intersection_period.length().total_seconds()));
+        subvector.emplace_back(
+            item2.time, item2.value, intersection_period.length().total_seconds());
       else  // intersection_period must be in the first half
-        subvector.push_back(
-            DataItem(item1.time, item1.value, intersection_period.length().total_seconds()));
+        subvector.emplace_back(
+            item1.time, item1.value, intersection_period.length().total_seconds());
     }
   }
 }
@@ -184,7 +182,7 @@ bool extract_subvector(const DataVector& data,
       {
         if (data[0].value == itsMissingValue)
           return false;
-        subvector.push_back(DataItem(data[0].time, data[0].value, 1.0));
+        subvector.emplace_back(data[0].time, data[0].value, 1.0);
       }
       return true;
     }
@@ -269,7 +267,7 @@ Stat::Stat(const LocalTimeValueVector& theValues,
   {
     for (const LocalTimeValue& item : theValues)
     {
-      itsData.push_back(DataItem(item.first.utc_time(), item.second));
+      itsData.emplace_back(item.first.utc_time(), item.second);
     }
     calculate_weights();
   }
@@ -287,7 +285,7 @@ Stat::Stat(const TimeValueVector& theValues,
   {
     for (const TimeValue& item : theValues)
     {
-      itsData.push_back(DataItem(item.first, item.second));
+      itsData.emplace_back(item.first, item.second);
     }
     calculate_weights();
   }
@@ -314,7 +312,7 @@ void Stat::addData(double theValue)
 {
   try
   {
-    itsData.push_back(DataItem(not_a_date_time, theValue));
+    itsData.emplace_back(not_a_date_time, theValue);
     calculate_weights();
   }
   catch (...)
@@ -327,7 +325,7 @@ void Stat::addData(const Fmi::LocalDateTime& theTime, double theValue)
 {
   try
   {
-    itsData.push_back(DataItem(theTime.utc_time(), theValue));
+    itsData.emplace_back(theTime.utc_time(), theValue);
     calculate_weights();
   }
   catch (...)
@@ -340,7 +338,7 @@ void Stat::addData(const Fmi::DateTime& theTime, double theValue)
 {
   try
   {
-    itsData.push_back(DataItem(theTime, theValue));
+    itsData.emplace_back(theTime, theValue);
     calculate_weights();
   }
   catch (...)
@@ -354,7 +352,7 @@ void Stat::addData(const vector<double>& theValues)
   try
   {
     for (double value : theValues)
-      itsData.push_back(DataItem(not_a_date_time, value));
+      itsData.emplace_back(not_a_date_time, value);
 
     calculate_weights();
   }

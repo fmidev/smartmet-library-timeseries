@@ -277,7 +277,7 @@ std::string StatCalculator::getStringStatValue(const DataFunction &func) const
         // then call Stat::count-function
         Stat::DataVector dataVector;
         for (const auto &item : itsTimeSeries)
-          dataVector.emplace_back(Stat::DataItem(item.time.utc_time(), 1.0));
+          dataVector.emplace_back(item.time.utc_time(), 1.0);
         Stat::Stat stat(dataVector, kFloatMissing);
         return Fmi::to_string(stat.count(func.lowerLimit(), func.upperLimit()));
       }
@@ -383,12 +383,12 @@ void StatCalculator::operator()(const TimedValue &tv)
   {
     if (const double *d = std::get_if<double>(&(tv.value)))
     {
-      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), *d));
+      itsDataVector.emplace_back(tv.time.utc_time(), *d);
     }
     else if (const int *i = std::get_if<int>(&(tv.value)))
     {
       double d = *i;
-      itsDataVector.emplace_back(Stat::DataItem(tv.time.utc_time(), d));
+      itsDataVector.emplace_back(tv.time.utc_time(), d);
     }
     else
     {
@@ -526,7 +526,7 @@ TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group,
     {
       TimeSeries ts(t.timeseries);
       TimeSeriesPtr aggregated_timeseries(time_aggregate(ts, func, timesteps));
-      ret->emplace_back(LonLatTimeSeries(t.lonlat, *aggregated_timeseries));
+      ret->emplace_back(t.lonlat, *aggregated_timeseries);
     }
 
     return ret;
@@ -622,7 +622,7 @@ try
     // 2) do time aggregation
     TimeSeriesPtr ts = time_aggregate(area_aggregated_vector, pf.outerFunction, timesteps);
 
-    ret->emplace_back(LonLatTimeSeries(ts_group[0].lonlat, *ts));
+    ret->emplace_back(ts_group[0].lonlat, *ts);
   }
   else if (pf.outerFunction.type() == FunctionType::AreaFunction &&
            pf.innerFunction.type() == FunctionType::TimeFunction)
@@ -637,7 +637,7 @@ try
     // 2) do area aggregation
     TimeSeries ts = area_aggregate(*time_aggregated_result, pf.outerFunction);
 
-    ret->emplace_back(LonLatTimeSeries(ts_group[0].lonlat, ts));
+    ret->emplace_back(ts_group[0].lonlat, ts);
   }
   else if (pf.innerFunction.type() == FunctionType::AreaFunction)
   {
@@ -647,7 +647,7 @@ try
     // 1) do area aggregation
     TimeSeries area_aggregated_vector = area_aggregate(ts_group, pf.innerFunction);
 
-    ret->emplace_back(LonLatTimeSeries(ts_group[0].lonlat, area_aggregated_vector));
+    ret->emplace_back(ts_group[0].lonlat, area_aggregated_vector);
   }
   else if (pf.innerFunction.type() == FunctionType::TimeFunction)
   {

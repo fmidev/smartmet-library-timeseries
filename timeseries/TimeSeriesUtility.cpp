@@ -353,11 +353,11 @@ if (UtilityFunctions::is_flash_or_mobile_producer(producer))
         continue;
 
       end_index = i;
-      location_indexes.emplace_back(std::pair<unsigned int, unsigned int>(start_index, end_index));
+      location_indexes.emplace_back(start_index, end_index);
       start_index = i;
     }
     end_index = fmisid_ts.size();
-    location_indexes.emplace_back(std::pair<unsigned int, unsigned int>(start_index, end_index));
+    location_indexes.emplace_back(start_index, end_index);
 
     // Iterate through locations
     for (const auto& location_index : location_indexes)
