@@ -64,6 +64,7 @@ struct LocationParameterArgs final
 class LocationParameters final
     : public Fmi::FunctionMap<::SmartMet::TimeSeries::Value, LocationParameterArgs&, int>
 {
+  ~LocationParameters() override;
   LocationParameters();
 
  public:
