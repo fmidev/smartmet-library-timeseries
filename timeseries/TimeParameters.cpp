@@ -14,9 +14,7 @@ using namespace SpecialParameters;
 bool is_time_parameter(const std::string& paramname)
 {
   const std::string p = Fmi::ascii_tolower_copy(paramname);
-  if (TimeParameters::instance.contains(p))
-    return true;
-  return false;
+  return TimeParameters::instance.contains(p);
 }
 
 Value time_parameter(const std::string& paramname,
