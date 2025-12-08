@@ -693,7 +693,7 @@ int ParameterFactory::number(const std::string& name) const
 std::string ParameterFactory::parse_parameter_functions(const std::string& theParameterRequest,
                                                         std::string& theOriginalName,
                                                         DataFunction& theInnerDataFunction,
-                                                        DataFunction& theOuterDataFunction) const
+                                                        DataFunction& theOuterDataFunction)
 {
   try
   {

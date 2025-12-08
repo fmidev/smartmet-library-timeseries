@@ -37,10 +37,10 @@ class ParameterFactory
   ParameterFactory();
   mutable NFmiEnumConverter converter;
 
-  std::string parse_parameter_functions(const std::string& theParameterRequest,
-                                        std::string& theOriginalName,
-                                        DataFunction& theInnerDataFunction,
-                                        DataFunction& theOuterDataFunction) const;
+  static std::string parse_parameter_functions(const std::string& theParameterRequest,
+                                               std::string& theOriginalName,
+                                               DataFunction& theInnerDataFunction,
+                                               DataFunction& theOuterDataFunction);
 
  public:
   static const ParameterFactory& instance();
