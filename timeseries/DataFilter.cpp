@@ -1,3 +1,4 @@
+
 #include "DataFilter.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/Exception.h>
@@ -64,7 +65,6 @@ JoinType parse_join(const std::string& str)
     return JoinType::AND;
   throw Fmi::Exception(BCP, "Invalid logical expression '" + str + "'");
 }
-}  // namespace
 
 int str2number(const std::string& numstr)
 {
@@ -77,6 +77,8 @@ int str2number(const std::string& numstr)
     return floor(Fmi::stod(numstr));
   }
 }
+
+}  // namespace
 
 class DataFilter::Impl
 {

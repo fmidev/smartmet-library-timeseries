@@ -8,26 +8,6 @@ namespace SmartMet
 namespace TimeSeries
 {
 
-bool is_station_parameter(const std::string& paramname)
-{
-  return SpecialParameters::StationParameters::instance.contains(paramname);
-}
-
-Value station_parameter(const std::string& paramname,
-                        const Spine::Station& station,
-                        const std::string& timezone,
-                        const std::string& language_code)
-try
-{
-  const std::string name = Fmi::ascii_tolower_copy(paramname);
-  SpecialParameters::StationParameterArgs args(station, timezone, language_code);
-  return SpecialParameters::StationParameters::instance(name, args);
-}
-catch (...)
-{
-  throw Fmi::Exception::Trace(BCP, "Operation failed!");
-}
-
 namespace SpecialParameters
 {
 
