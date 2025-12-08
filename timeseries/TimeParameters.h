@@ -12,7 +12,7 @@ namespace SmartMet
 namespace TimeSeries
 {
 
-bool is_time_parameter(std::string paramname);
+bool is_time_parameter(const std::string& paramname);
 
 Value time_parameter(const std::string& paramname,
                      const Fmi::LocalDateTime& ldt,
