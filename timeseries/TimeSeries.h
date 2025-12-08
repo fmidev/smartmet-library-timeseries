@@ -30,14 +30,12 @@ struct Value : public Value_
   Value(const char* s) : Value_(std::string(s)) {}
 
   template <typename ArgType>
-  Value(ArgType x, typename std::enable_if<std::is_integral<ArgType>::value, int>::type = 0)
-      : Value_(int(x))
+  Value(ArgType x, std::enable_if_t<std::is_integral_v<ArgType>, int> = 0) : Value_(int(x))
   {
   }
 
   template <typename ArgType>
-  Value(ArgType x, typename std::enable_if<std::is_floating_point<ArgType>::value, int>::type = 0)
-      : Value_(double(x))
+  Value(ArgType x, std::enable_if_t<std::is_floating_point_v<ArgType>, int> = 0) : Value_(double(x))
   {
   }
 
