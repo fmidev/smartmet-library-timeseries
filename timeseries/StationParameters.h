@@ -34,7 +34,7 @@ class StationParameters
  public:
   StationParameters();
 
-  ~StationParameters();
+  ~StationParameters() override;
 
   static const StationParameters instance;
 };
