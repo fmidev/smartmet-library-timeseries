@@ -37,10 +37,10 @@ std::ostream& operator<<(std::ostream& os, const OutputData& odata)
   {
     for (const auto& item : odata)
     {
-      os << item.first << " -> " << std::endl;
+      os << item.first << " -> \n";
       unsigned int counter = 0;
       for (const auto& item2 : item.second)
-        os << "#" << counter++ << "\n" << item2 << std::endl;
+        os << "#" << counter++ << '\n' << item2 << '\n';
     }
 
     return os;

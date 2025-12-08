@@ -88,7 +88,7 @@ double interpolate_normal(double first_value,
             << ", timestep: " << timestep << ", first_value: " << first_value
             << ", second_value: " << second_value << ",slope: " << slope
             << ", time_diff_to_timestep: " << time_diff_to_timestep_sec << " -> "
-            << interpolated_value << std::endl;
+            << interpolated_value << '\n';
 #endif
   return interpolated_value;
 }
@@ -188,7 +188,7 @@ bool extract_subvector(const DataVector& data,
     }
 
 #ifdef MYDEBUG
-    std::cout << "query_period: " << query_period << std::endl;
+    std::cout << "query_period: " << query_period << '\n';
 #endif
 
     for (auto iter = data.begin(); iter != data.end(); iter++)
@@ -393,7 +393,7 @@ double Stat::integ(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "integ(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "integ(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -425,7 +425,7 @@ double Stat::sum(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "sum(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "sum(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -456,7 +456,7 @@ double Stat::min(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "min(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "min(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -477,7 +477,7 @@ double Stat::mean(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "mean(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "mean(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -533,7 +533,7 @@ double Stat::circlemean(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "circlemean(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "circlemean(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -585,7 +585,7 @@ double Stat::max(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "max(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "max(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -606,7 +606,7 @@ double Stat::change(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "change(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "change(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -651,7 +651,7 @@ double Stat::trend(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "trend(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "trend(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -707,7 +707,7 @@ unsigned int Stat::count(double lowerLimit,
   {
 #ifdef MYDEBUG
     std::cout << "count(" << lowerLimit << ", " << upperLimit << ", " << startTime << ", "
-              << endTime << ")" << std::endl;
+              << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -737,7 +737,7 @@ double Stat::percentage(double lowerLimit,
   {
 #ifdef MYDEBUG
     std::cout << "percentage(" << lowerLimit << ", " << upperLimit << ", " << startTime << ", "
-              << endTime << ")" << std::endl;
+              << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -775,7 +775,7 @@ double Stat::median(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "median(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "median(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -823,7 +823,7 @@ double Stat::variance(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "variance(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "variance(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -855,7 +855,7 @@ double Stat::stddev(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "stddev(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "stddev(" << startTime << ", " << endTime << ")\n";
 #endif
     if (itsDegrees)
       return stddev_dir(startTime, endTime);
@@ -886,7 +886,7 @@ double Stat::stddev_dir(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "stddev_dir(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "stddev_dir(" << startTime << ", " << endTime << ")\n";
 #endif
 
     DataVector subvector;
@@ -944,7 +944,7 @@ double Stat::nearest(const Fmi::DateTime& timestep,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "nearest(" << timestep << ", " << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "nearest(" << timestep << ", " << startTime << ", " << endTime << ")\n";
 #endif
 
     if (timestep == not_a_date_time)
@@ -986,8 +986,7 @@ double Stat::interpolate(const Fmi::DateTime& timestep,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "interpolate(" << timestep << ", " << startTime << ", " << endTime << ")"
-              << std::endl;
+    std::cout << "interpolate(" << timestep << ", " << startTime << ", " << endTime << ")\n";
 #endif
 
     if (timestep == not_a_date_time)
@@ -1180,9 +1179,8 @@ std::ostream& operator<<(std::ostream& os, const DataItem& item)
 {
   try
   {
-    os << "timestamp = " << item.time << std::endl
-       << "value = " << item.value << std::endl
-       << "weight = " << item.weight << std::endl;
+    os << "timestamp = " << item.time << "\nvalue = " << item.value << "ņweight = " << item.weight
+       << '\n';
 
     return os;
   }
