@@ -69,7 +69,7 @@ double GetDoubleVisitor::operator()(const std::string& arg) const
 struct GetIntVisitor
 {
   template <typename Type>
-  int operator()(const Type& arg) const
+  int operator()(const Type& /* arg */) const
   {
     report_bad_conversion<Type, int>();
   }

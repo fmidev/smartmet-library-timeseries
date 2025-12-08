@@ -79,7 +79,7 @@ try : Fmi
         });
 
     // FIXME: is this correct?
-    add(SENSOR_NO_PARAM, [](const StationParameterArgs& args) -> Value { return 1; });
+    add(SENSOR_NO_PARAM, [](const StationParameterArgs& /* args */) -> Value { return 1; });
 
     add(STATIONARY_PARAM,
         [](const StationParameterArgs& args) -> Value { return int(args.station.isStationary); });
