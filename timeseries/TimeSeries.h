@@ -7,7 +7,6 @@
 #pragma once
 
 #include "TimeSeriesTypes.h"
-#include <variant>
 #include <macgyver/LocalDateTime.h>
 #include <memory>
 #include <string>
@@ -60,7 +59,7 @@ struct Value : public Value_
 
   bool operator==(const Value& x) const; /* { return this->Value_::operator==((Value_&)x); } */
 
-  bool operator!=(const Value& x) const { return ! operator == (x); }
+  bool operator!=(const Value& x) const { return !operator==(x); }
 
   /**
    *   @brief Get double value using supported conversions
@@ -76,8 +75,7 @@ struct TimedValue
       : time(const_cast<Fmi::LocalDateTime&>(timestamp)), value(val)
   {
   }
-  TimedValue(const TimedValue& tv)
-      : time(const_cast<Fmi::LocalDateTime&>(tv.time)), value(tv.value)
+  TimedValue(const TimedValue& tv) : time(const_cast<Fmi::LocalDateTime&>(tv.time)), value(tv.value)
   {
   }
   TimedValue& operator=(const TimedValue& tv)

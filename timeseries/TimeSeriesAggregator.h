@@ -40,10 +40,9 @@ TimedValue time_aggregate(const TimeSeries& ts,
  *                  that the list is sorted by time. Empty list means that the
  *                  result will be also empty.
  */
-TimeSeriesPtr time_aggregate(
-        const TimeSeries& ts,
-        const DataFunction& func,
-        const TimeSeriesGenerator::LocalTimeList& timesteps);
+TimeSeriesPtr time_aggregate(const TimeSeries& ts,
+                             const DataFunction& func,
+                             const TimeSeriesGenerator::LocalTimeList& timesteps);
 
 }  // namespace Aggregator
 }  // namespace TimeSeries

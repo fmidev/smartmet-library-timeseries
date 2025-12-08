@@ -227,22 +227,29 @@ size_t number_of_elements(const OutputData& outputData)
 
 namespace
 {
-  struct FmisidVisitor
+struct FmisidVisitor
+{
+  // fmisid can be std::string, int or double
+  int operator()(const std::string& fmisid_str)
   {
-    // fmisid can be std::string, int or double
-    int operator() (const std::string& fmisid_str)
-    {
-      if (fmisid_str.empty()) throw Fmi::Exception(BCP, "fmisid value is an empty string");
-      return std::stoi(fmisid_str);
-    }
+    if (fmisid_str.empty())
+      throw Fmi::Exception(BCP, "fmisid value is an empty string");
+    return std::stoi(fmisid_str);
+  }
 
-    int operator() (int fmisid) { return fmisid; }
-    int operator() (double fmisid ) { return int(std::floor(fmisid)); }
-    int operator() (None) { throw Fmi::Exception(BCP, "Station with null fmisid encountered!"); }
-    int operator() (const LonLat&) { throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!"); }
-    int operator() (const Fmi::LocalDateTime&) { throw Fmi::Exception(BCP, "Station with LocalDateTime as fmisid encountered!"); }
-  };
-}
+  int operator()(int fmisid) { return fmisid; }
+  int operator()(double fmisid) { return int(std::floor(fmisid)); }
+  int operator()(None) { throw Fmi::Exception(BCP, "Station with null fmisid encountered!"); }
+  int operator()(const LonLat&)
+  {
+    throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!");
+  }
+  int operator()(const Fmi::LocalDateTime&)
+  {
+    throw Fmi::Exception(BCP, "Station with LocalDateTime as fmisid encountered!");
+  }
+};
+}  // namespace
 
 int get_fmisid_value(const Value& value)
 {
@@ -271,7 +278,6 @@ int get_fmisid_value(const TimeSeries& ts)
   }
   return -1;
 }
-
 
 void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeList& tlist)
 {
@@ -306,28 +312,28 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
 }
 
 TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
-											  const TimeSeriesVectorPtr& observation_result,
-											  const TimeSeriesGeneratorCache::TimeList& tlist,
-											  int fmisid_index)
+                                              const TimeSeriesVectorPtr& observation_result,
+                                              const TimeSeriesGeneratorCache::TimeList& tlist,
+                                              int fmisid_index)
 {
   try
   {
     TimeSeriesByLocation ret;
 
-    if(observation_result->empty())
+    if (observation_result->empty())
       return ret;
 
-    
-	/*
-    if (UtilityFunctions::is_flash_or_mobile_producer(producer))
-    {
-      ret.emplace_back(make_pair(0, observation_result));
-      return ret;
-    }
-	*/
+    /*
+if (UtilityFunctions::is_flash_or_mobile_producer(producer))
+{
+  ret.emplace_back(make_pair(0, observation_result));
+  return ret;
+}
+    */
 
     // find fmisid time series
-    if (fmisid_index < 0 || fmisid_index >= static_cast<int>(observation_result->size())) {
+    if (fmisid_index < 0 || fmisid_index >= static_cast<int>(observation_result->size()))
+    {
       Fmi::Exception err(BCP, "fmisid index out of range ");
       err.addParameter("fmisid_index", Fmi::to_string(fmisid_index));
       err.addParameter("observation_result size", Fmi::to_string(observation_result->size()));
@@ -386,8 +392,6 @@ TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
-
-
 
 }  // namespace TimeSeries
 }  // namespace SmartMet

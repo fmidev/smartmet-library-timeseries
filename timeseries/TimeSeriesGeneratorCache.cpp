@@ -36,8 +36,7 @@ void TimeSeriesGeneratorCache::resize(std::size_t theSize) const
 // ----------------------------------------------------------------------
 
 TimeSeriesGeneratorCache::TimeList TimeSeriesGeneratorCache::generate(
-    const TimeSeriesGeneratorOptions& theOptions,
-    const Fmi::TimeZonePtr& theZone) const
+    const TimeSeriesGeneratorOptions& theOptions, const Fmi::TimeZonePtr& theZone) const
 {
   try
   {

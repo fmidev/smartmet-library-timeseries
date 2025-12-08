@@ -27,16 +27,18 @@ TimeSeriesGroupPtr erase_redundant_timesteps(TimeSeriesGroupPtr tsg,
                                              const TimeSeriesGenerator::LocalTimeList& timesteps);
 size_t number_of_elements(const OutputData& outputData);
 TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
-											  const TimeSeriesVectorPtr& observation_result,
-											  const TimeSeriesGeneratorCache::TimeList& tlist,
-											  int fmisid_index);
+                                              const TimeSeriesVectorPtr& observation_result,
+                                              const TimeSeriesGeneratorCache::TimeList& tlist,
+                                              int fmisid_index);
 int get_fmisid_value(const TimeSeries& ts);
 
 std::ostream& operator<<(std::ostream& os, const TimeSeriesData& tsdata);
 std::ostream& operator<<(std::ostream& os, const OutputData& odata);
 
 template <typename T>
-T aggregate(const T& raw_data, const DataFunctions& pf, const TimeSeriesGenerator::LocalTimeList& timesteps)
+T aggregate(const T& raw_data,
+            const DataFunctions& pf,
+            const TimeSeriesGenerator::LocalTimeList& timesteps)
 {
   try
   {

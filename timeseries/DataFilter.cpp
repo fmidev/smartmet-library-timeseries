@@ -66,7 +66,7 @@ JoinType parse_join(const std::string& str)
 }
 }  // namespace
 
-int str2number(const std::string &numstr)
+int str2number(const std::string& numstr)
 {
   try
   {

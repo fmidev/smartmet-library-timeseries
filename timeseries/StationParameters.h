@@ -2,9 +2,9 @@
 
 #include "TimeSeries.h"
 #include "TimeSeriesOutput.h"
-#include <string>
 #include <macgyver/FunctionMap.h>
 #include <spine/Station.h>
+#include <string>
 
 namespace SmartMet
 {
@@ -16,18 +16,16 @@ namespace SpecialParameters
 
 struct StationParameterArgs
 {
-    StationParameterArgs(const Spine::Station& station,
-                         const std::string& timezone,
-                         const std::string& language_code)
-        : station(station)
-        , timezone(timezone)
-        , language_code(language_code)
-    {
-    }
+  StationParameterArgs(const Spine::Station& station,
+                       const std::string& timezone,
+                       const std::string& language_code)
+      : station(station), timezone(timezone), language_code(language_code)
+  {
+  }
 
-    const Spine::Station& station;
-    const std::string& timezone;
-    const std::string& language_code;
+  const Spine::Station& station;
+  const std::string& timezone;
+  const std::string& language_code;
 };
 
 class StationParameters
@@ -41,6 +39,6 @@ class StationParameters
   static const StationParameters instance;
 };
 
-} // namespace SpecialParameters
+}  // namespace SpecialParameters
 }  // namespace TimeSeries
 }  // namespace SmartMet

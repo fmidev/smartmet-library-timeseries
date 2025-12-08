@@ -1,9 +1,9 @@
 #pragma once
 
-#include "OptionParsers.h"
-#include "TimeSeriesInclude.h"
 #include "LocationParameters.h"
+#include "OptionParsers.h"
 #include "TimeParameters.h"
+#include "TimeSeriesInclude.h"
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeZones.h>
 #include <newbase/NFmiParameterName.h>
@@ -61,10 +61,10 @@ std::string get_parameter_id(const Spine::Parameter& parameter);
  */
 namespace SpecialParameter
 {
-    //extern const std::set<std::string> location_parameters;
-    extern const std::map<std::string, Spine::Parameter::Type> special_parameter_map;
-    extern const std::map<std::string, FmiParameterName> time_parameter_map;
-    extern const std::map<std::string, FmiParameterName> location_parameter_map;
+// extern const std::set<std::string> location_parameters;
+extern const std::map<std::string, Spine::Parameter::Type> special_parameter_map;
+extern const std::map<std::string, FmiParameterName> time_parameter_map;
+extern const std::map<std::string, FmiParameterName> location_parameter_map;
 }  // namespace SpecialParameter
 
 }  // namespace TimeSeries

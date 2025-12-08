@@ -22,7 +22,6 @@ namespace SpecialParameters
 {
 using Spine::Parameter;
 
-
 const std::map<std::string, Parameter::Type> special_parameter_map = {
     {"cloudceiling", Parameter::Type::DataDerived},
     {"cloudceilingft", Parameter::Type::DataDerived},
@@ -93,8 +92,7 @@ const std::map<std::string, Parameter::Type> special_parameter_map = {
     {WSI_PARAM, Parameter::Type::DataIndependent},
     {X_PARAM, Parameter::Type::DataIndependent},
     {XMLTIME_PARAM, Parameter::Type::DataIndependent},
-    {Y_PARAM, Parameter::Type::DataIndependent}
-    };
+    {Y_PARAM, Parameter::Type::DataIndependent}};
 
 const std::map<std::string, FmiParameterName> time_parameter_map = {
     {DARK_PARAM, kFmiDark},
@@ -131,8 +129,7 @@ const std::map<std::string, FmiParameterName> time_parameter_map = {
     {UTCTIME_PARAM, kFmiUTCTime},
     {WDAY_PARAM, kFmiWDay},
     {WEEKDAY_PARAM, kFmiWeekday},
-    {XMLTIME_PARAM, kFmiXMLTime}
-    };
+    {XMLTIME_PARAM, kFmiXMLTime}};
 
 const std::map<std::string, FmiParameterName> location_parameter_map = {
     {COUNTRY_PARAM, kFmiCountry},
@@ -160,9 +157,8 @@ const std::map<std::string, FmiParameterName> location_parameter_map = {
     {STATIONLONGITUDE_PARAM, kFmiStationLongitude},
     {STATIONNAME_PARAM, kFmiStationName},
     {WMO_PARAM, kFmiWmoStationNumber},
-    {WSI_PARAM, kFmiWSI}
-    };
-} // namespace SpecialParameters
+    {WSI_PARAM, kFmiWSI}};
+}  // namespace SpecialParameters
 
 using namespace SpecialParameters;
 
@@ -212,7 +208,7 @@ bool special(const Parameter& theParam)
 // ----------------------------------------------------------------------
 /*!
  * \brief Return true if the parameter is data independent
- */ 
+ */
 // ----------------------------------------------------------------------
 bool is_data_independent(const Spine::Parameter& theParam)
 {
@@ -234,7 +230,6 @@ bool is_data_independent(const Spine::Parameter& theParam)
   }
 }
 
-
 // ----------------------------------------------------------------------
 /*!
  * \brief Return true if the query contains only data independent parameters
@@ -244,10 +239,9 @@ bool is_data_independent_query(const OptionParsers::ParameterList& theParams)
 {
   try
   {
-    return std::all_of(
-      theParams.begin(),
-      theParams.end(),
-      [](const auto& param) { return is_data_independent(param); });
+    return std::all_of(theParams.begin(),
+                       theParams.end(),
+                       [](const auto& param) { return is_data_independent(param); });
   }
   catch (...)
   {

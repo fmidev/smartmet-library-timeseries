@@ -382,8 +382,7 @@ TimeParameters::TimeParameters()
       { return Value(Fmi::format_time(args.outlocale, args.timestring, args.ldt)); },
       "Time formatted according to the given format string");
 
-  add(
-      TZ_PARAM, [](TimeParameterArgs& args) { return Value(args.timezone); }, "Timezone");
+  add(TZ_PARAM, [](TimeParameterArgs& args) { return Value(args.timezone); }, "Timezone");
 
   add(
       UTCTIME_PARAM,
