@@ -760,8 +760,7 @@ double Stat::percentage(double lowerLimit,
     if (occurances == 0)
       return 0.0;
 
-    return static_cast<double>(
-        (static_cast<double>(occurances) / static_cast<double>(total_count)) * 100.0);
+    return 100.0 * occurances / total_count;
   }
   catch (...)
   {
