@@ -44,7 +44,7 @@ template <typename From, typename To>
 struct GetDoubleVisitor
 {
   template <typename Type>
-  double operator()(const Type&) const
+  double operator()(const Type& /* arg */) const
   {
     report_bad_conversion<Type, double>();
   }

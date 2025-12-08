@@ -237,12 +237,15 @@ struct FmisidVisitor
 
   int operator()(int fmisid) { return fmisid; }
   int operator()(double fmisid) { return int(std::floor(fmisid)); }
-  int operator()(None) { throw Fmi::Exception(BCP, "Station with null fmisid encountered!"); }
-  int operator()(const LonLat&)
+  int operator()(None /* arg */)
+  {
+    throw Fmi::Exception(BCP, "Station with null fmisid encountered!");
+  }
+  int operator()(const LonLat& /* arg */)
   {
     throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!");
   }
-  int operator()(const Fmi::LocalDateTime&)
+  int operator()(const Fmi::LocalDateTime& /* arg */)
   {
     throw Fmi::Exception(BCP, "Station with LocalDateTime as fmisid encountered!");
   }

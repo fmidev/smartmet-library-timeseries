@@ -30,12 +30,14 @@ struct Value : public Value_
   Value(const char* s) : Value_(std::string(s)) {}
 
   template <typename ArgType>
-  Value(ArgType x, std::enable_if_t<std::is_integral_v<ArgType>, int> = 0) : Value_(int(x))
+  Value(ArgType x, std::enable_if_t<std::is_integral_v<ArgType>, int> /* tmp */ = 0)
+      : Value_(int(x))
   {
   }
 
   template <typename ArgType>
-  Value(ArgType x, std::enable_if_t<std::is_floating_point_v<ArgType>, int> = 0) : Value_(double(x))
+  Value(ArgType x, std::enable_if_t<std::is_floating_point_v<ArgType>, int> /* tmp */ = 0)
+      : Value_(double(x))
   {
   }
 
@@ -53,9 +55,9 @@ struct Value : public Value_
 
   Value& operator=(const Value&) = default;
 
-  bool operator==(const Value& x) const; /* { return this->Value_::operator==((Value_&)x); } */
+  bool operator==(const Value& other) const;
 
-  bool operator!=(const Value& x) const { return !operator==(x); }
+  bool operator!=(const Value& other) const { return !operator==(other); }
 
   /**
    *   @brief Get double value using supported conversions

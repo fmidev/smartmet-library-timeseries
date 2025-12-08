@@ -361,11 +361,11 @@ void Stat::addData(const vector<double>& theValues)
   }
 }
 
-void Stat::addData(const DataItem& theData)
+void Stat::addData(const DataItem& theValue)
 {
   try
   {
-    itsData.push_back(theData);
+    itsData.push_back(theValue);
     calculate_weights();
   }
   catch (...)
