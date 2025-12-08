@@ -191,10 +191,8 @@ size_t number_of_elements(const OutputData& outputData)
       const std::vector<TimeSeriesData>& outdata = output.second;
 
       // iterate columns (parameters)
-      for (unsigned int j = 0; j < outdata.size(); j++)
+      for (const auto& tsdata : outdata)
       {
-        const TimeSeriesData& tsdata = outdata[j];
-
         if (const auto* ptr = std::get_if<TimeSeriesPtr>(&tsdata))
         {
           const TimeSeriesPtr ts = *ptr;

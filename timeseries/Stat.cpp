@@ -551,9 +551,9 @@ double Stat::circlemean(const Fmi::DateTime& startTime /*= not_a_date_time */,
     double ysum = 0;
     int n = 0;
 
-    for (unsigned int i = 0; i < subvector.size(); i++)
+    for (auto& i : subvector)
     {
-      auto rad = subvector[i].value * M_PI / 180;
+      auto rad = i.value * M_PI / 180;
       xsum += cos(rad);
       ysum += sin(rad);
       ++n;
