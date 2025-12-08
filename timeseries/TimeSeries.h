@@ -23,21 +23,20 @@ struct Value : public Value_
 {
   Value() = default;
 
-  inline Value(const Spine::None& /* none */) : Value() {}
+  Value(const Spine::None& /* none */) : Value() {}
 
-  inline Value(const std::string& s) : Value_(s) {}
+  Value(const std::string& s) : Value_(s) {}
 
-  inline Value(const char* s) : Value_(std::string(s)) {}
+  Value(const char* s) : Value_(std::string(s)) {}
 
   template <typename ArgType>
-  inline Value(ArgType x, typename std::enable_if<std::is_integral<ArgType>::value, int>::type = 0)
+  Value(ArgType x, typename std::enable_if<std::is_integral<ArgType>::value, int>::type = 0)
       : Value_(int(x))
   {
   }
 
   template <typename ArgType>
-  inline Value(ArgType x,
-               typename std::enable_if<std::is_floating_point<ArgType>::value, int>::type = 0)
+  Value(ArgType x, typename std::enable_if<std::is_floating_point<ArgType>::value, int>::type = 0)
       : Value_(double(x))
   {
   }
@@ -48,13 +47,13 @@ struct Value : public Value_
     return std::visit(visitor, dynamic_cast<const Value_&>(*this));
   }
 
-  inline Value(const Spine::LonLat& x) : Value_(x) {}
+  Value(const Spine::LonLat& x) : Value_(x) {}
 
-  inline Value(const Fmi::LocalDateTime& x) : Value_(x) {}
+  Value(const Fmi::LocalDateTime& x) : Value_(x) {}
 
-  inline Value(const Value&) = default;
+  Value(const Value&) = default;
 
-  inline Value& operator=(const Value&) = default;
+  Value& operator=(const Value&) = default;
 
   bool operator==(const Value& x) const; /* { return this->Value_::operator==((Value_&)x); } */
 
@@ -122,7 +121,7 @@ struct LonLatTimeSeries
   {
   }
 
-  inline LocalTimeList getTimes() const { return timeseries.getTimes(); }
+  LocalTimeList getTimes() const { return timeseries.getTimes(); }
 
   Spine::LonLat lonlat;
   TimeSeries timeseries;
