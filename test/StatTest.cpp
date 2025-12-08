@@ -1,3 +1,4 @@
+
 // ======================================================================
 /*!
  * \file
@@ -16,7 +17,7 @@ using Fmi::date_time::time_from_string;
 
 namespace
 {
-    constexpr auto not_a_date_time = Fmi::date_time::Base::NOT_A_DATE_TIME;
+constexpr auto not_a_date_time = Fmi::date_time::Base::NOT_A_DATE_TIME;
 }
 
 // Protection against conflicts with global functions
@@ -159,8 +160,7 @@ void sum()
   }
 
   // sum in the middle of time series, note! starttime between timesteps
-  sum = stat.sum(time_from_string("2013-12-02 14:05:00"),
-                 time_from_string("2013-12-02 20:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 14:05:00"), time_from_string("2013-12-02 20:00:00"));
   if (sum != 9)
   {
     std::stringstream ss;
@@ -169,8 +169,7 @@ void sum()
   }
 
   // sum in the middle of time series, note! endtime between timesteps
-  sum = stat.sum(time_from_string("2013-12-02 15:00:00"),
-                 time_from_string("2013-12-02 21:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 15:00:00"), time_from_string("2013-12-02 21:00:00"));
   if (sum != 9)
   {
     std::stringstream ss;
@@ -179,8 +178,7 @@ void sum()
   }
 
   // just one timestamp
-  sum = stat.sum(time_from_string("2013-12-02 15:00:00"),
-                 time_from_string("2013-12-02 15:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 15:00:00"), time_from_string("2013-12-02 15:00:00"));
   if (sum != 1)
   {
     std::stringstream ss;
@@ -189,8 +187,7 @@ void sum()
   }
 
   // sum from the start till 17:00
-  sum = stat.sum(not_a_date_time,
-                 time_from_string("2013-12-02 17:00:00"));
+  sum = stat.sum(not_a_date_time, time_from_string("2013-12-02 17:00:00"));
   if (sum != 8)
   {
     std::stringstream ss;
@@ -199,8 +196,7 @@ void sum()
   }
 
   // sum from 15:00 to the end of time series
-  sum = stat.sum(time_from_string("2013-12-02 15:00:00"),
-                 not_a_date_time);
+  sum = stat.sum(time_from_string("2013-12-02 15:00:00"), not_a_date_time);
 
   if (sum != 13)
   {
@@ -210,8 +206,7 @@ void sum()
   }
 
   // starttime later than endtime
-  sum = stat.sum(time_from_string("2013-12-02 17:00:00"),
-                 time_from_string("2013-12-02 15:00:00"));
+  sum = stat.sum(time_from_string("2013-12-02 17:00:00"), time_from_string("2013-12-02 15:00:00"));
   if (!std::isnan(sum))
   {
     std::stringstream ss;
@@ -305,8 +300,8 @@ void change()
   }
 
   // change between 15:00 and 20:00
-  change = stat.change(time_from_string("2013-12-02 15:00:00"),
-                       time_from_string("2013-12-02 17:00:00"));
+  change =
+      stat.change(time_from_string("2013-12-02 15:00:00"), time_from_string("2013-12-02 17:00:00"));
   if (change != 4)
   {
     std::stringstream ss;
@@ -315,8 +310,7 @@ void change()
   }
 
   // change from start till 17:00
-  change = stat.change(not_a_date_time,
-                       time_from_string("2013-12-02 17:00:00"));
+  change = stat.change(not_a_date_time, time_from_string("2013-12-02 17:00:00"));
   if (change != 3)
   {
     std::stringstream ss;
@@ -325,8 +319,7 @@ void change()
   }
 
   // change from 20:00 to the end
-  change = stat.change(time_from_string("2013-12-02 20:00:00"),
-                       not_a_date_time);
+  change = stat.change(time_from_string("2013-12-02 20:00:00"), not_a_date_time);
 
   if (change != 1)
   {
@@ -353,8 +346,7 @@ void trend()
   }
 
   // trend from start till 20
-  trend = stat.trend(not_a_date_time,
-                     time_from_string("2013-12-02 20:00:00"));
+  trend = stat.trend(not_a_date_time, time_from_string("2013-12-02 20:00:00"));
 
   if (trend != -((1.0 / 3.0) * 100.0))
   {
@@ -364,8 +356,7 @@ void trend()
   }
 
   // trend from 20:00 to the end
-  trend = stat.trend(time_from_string("2013-12-02 20:00:00"),
-                     not_a_date_time);
+  trend = stat.trend(time_from_string("2013-12-02 20:00:00"), not_a_date_time);
 
   if (trend != 100.0)
   {
@@ -430,10 +421,8 @@ void count()
 
   // count of occurances between 15:00 and 20:00 where value is between
   // [2.9, 4.1]
-  count = stat.count(2.9,
-                     4.1,
-                     time_from_string("2013-12-02 15:00:00"),
-                     time_from_string("2013-12-02 20:00:00"));
+  count = stat.count(
+      2.9, 4.1, time_from_string("2013-12-02 15:00:00"), time_from_string("2013-12-02 20:00:00"));
 
   if (count != 1)
   {
@@ -467,10 +456,8 @@ void percentage()
 
   // #2 weighted percentage of occurances between 17:00 and 22:00  where value
   // is between 3.5 and 5.5
-  percentage = stat.percentage(3.5,
-                               5.5,
-                               time_from_string("2013-12-02 17:00:00"),
-                               time_from_string("2013-12-02 22:00:00"));
+  percentage = stat.percentage(
+      3.5, 5.5, time_from_string("2013-12-02 17:00:00"), time_from_string("2013-12-02 22:00:00"));
 
   if (percentage != 50.0)
   {
@@ -499,16 +486,14 @@ void percentage()
 
   // #3 raw percentage of occurances between 17:00 and 22:00  where value is
   // between 3.5 and 5.5
-  percentage = stat.percentage(3.5,
-                               5.5,
-                               time_from_string("2013-12-02 17:00:00"),
-                               time_from_string("2013-12-02 22:00:00"));
+  percentage = stat.percentage(
+      3.5, 5.5, time_from_string("2013-12-02 17:00:00"), time_from_string("2013-12-02 22:00:00"));
 
-  if (percentage != ((2.0 / 3.0) * 100.0))
+  if (percentage != 100.0 * 2 / 3)
   {
     std::stringstream ss;
     ss << "Percentage of {5.0, 3.0, 4.0} where value is between [3.5, 5.5] is "
-          "67.6667, not "
+          "66.6667, not "
        << percentage;
     TEST_FAILED(ss.str());
   }
@@ -531,8 +516,8 @@ void median()
   }
 
   // #2 weighted median between 14:00-17:00
-  median = stat.median(time_from_string("2013-12-02 14:00:00"),
-                       time_from_string("2013-12-02 17:00:00"));
+  median =
+      stat.median(time_from_string("2013-12-02 14:00:00"), time_from_string("2013-12-02 17:00:00"));
 
   if (median != 1.5)
   {
@@ -542,8 +527,8 @@ void median()
   }
 
   // #3 weighted median between 14:00-20:00
-  median = stat.median(time_from_string("2013-12-02 14:00:00"),
-                       time_from_string("2013-12-02 20:00:00"));
+  median =
+      stat.median(time_from_string("2013-12-02 14:00:00"), time_from_string("2013-12-02 20:00:00"));
 
   if (median != 3)
   {
@@ -565,8 +550,8 @@ void median()
 
   stat.useWeights(false);
   // #5 raw median between 14:00-17:00
-  median = stat.median(time_from_string("2013-12-02 14:00:00"),
-                       time_from_string("2013-12-02 17:00:00"));
+  median =
+      stat.median(time_from_string("2013-12-02 14:00:00"), time_from_string("2013-12-02 17:00:00"));
 
   if (median != 2)
   {
@@ -576,8 +561,8 @@ void median()
   }
 
   // #6 raw median between 14:00-20:00
-  median = stat.median(time_from_string("2013-12-02 14:00:00"),
-                       time_from_string("2013-12-02 20:00:00"));
+  median =
+      stat.median(time_from_string("2013-12-02 14:00:00"), time_from_string("2013-12-02 20:00:00"));
 
   if (median != 2.5)
   {
@@ -636,8 +621,8 @@ void stddev()
   }
 
   // #2 raw standard deviation between 14:00-17:00
-  stddev = stat.stddev(time_from_string("2013-12-02 14:00:00"),
-                       time_from_string("2013-12-02 17:00:00"));
+  stddev =
+      stat.stddev(time_from_string("2013-12-02 14:00:00"), time_from_string("2013-12-02 17:00:00"));
 
   if (stddev != sqrt((pow(5.0 / 3.0, 2.0) + pow(2.0 / 3.0, 2.0) + pow(7.0 / 3.0, 2.0)) / 2.0))
   {
@@ -829,10 +814,8 @@ void missing_value()
   stat.addData(time_from_string("2013-12-02 17:00:00"), 3);
 
   // #1 startTime after endTime, default missing value is NaN
-  double value = stat.percentage(1,
-                                 10,
-                                 time_from_string("2013-12-02 17:00:00"),
-                                 time_from_string("2013-12-02 14:00:00"));
+  double value = stat.percentage(
+      1, 10, time_from_string("2013-12-02 17:00:00"), time_from_string("2013-12-02 14:00:00"));
 
   if (!std::isnan(value))
   {
