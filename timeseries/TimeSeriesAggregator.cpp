@@ -458,18 +458,16 @@ Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) co
   }
 }
 
-
-TimeSeriesPtr time_aggregate(
-        const TimeSeries& ts,
-        const DataFunction& func,
-        const TimeSeriesGenerator::LocalTimeList& timesteps)
+TimeSeriesPtr time_aggregate(const TimeSeries &ts,
+                             const DataFunction &func,
+                             const TimeSeriesGenerator::LocalTimeList &timesteps)
 try
 {
-  const Fmi::TimeDuration& before = Fmi::Minutes(func.getAggregationIntervalBehind());
-  const Fmi::TimeDuration& after = Fmi::Minutes(func.getAggregationIntervalAhead());
+  const Fmi::TimeDuration &before = Fmi::Minutes(func.getAggregationIntervalBehind());
+  const Fmi::TimeDuration &after = Fmi::Minutes(func.getAggregationIntervalAhead());
 
-  TimeSeries::const_iterator agg_begin_iter = ts.begin();
-  TimeSeries::const_iterator agg_end_iter = ts.begin();
+  auto agg_begin_iter = ts.begin();
+  auto agg_end_iter = ts.begin();
 
   TimeSeriesPtr ret(new TimeSeries);
 
@@ -477,24 +475,24 @@ try
   if (ts.empty())
     return ret;
 
-  for (TimeSeriesGenerator::LocalTimeList::const_iterator timestep_iter = timesteps.begin();
-       timestep_iter != timesteps.end();
-       ++timestep_iter)
+  for (auto timestep_iter = timesteps.begin(); timestep_iter != timesteps.end(); ++timestep_iter)
   {
-    const Fmi::LocalDateTime timestamp  = *timestep_iter;
+    const Fmi::LocalDateTime timestamp = *timestep_iter;
     Fmi::LocalDateTime agg_begin = timestamp - before;
     Fmi::LocalDateTime agg_end = timestamp + after;
 
-    agg_begin_iter = std::find_if(agg_begin_iter, ts.end(),
-      [&agg_begin](const TimedValue& tv) { return tv.time >= agg_begin; });
+    agg_begin_iter =
+        std::find_if(agg_begin_iter,
+                     ts.end(),
+                     [&agg_begin](const TimedValue &tv) { return tv.time >= agg_begin; });
 
-    agg_end_iter = std::find_if(agg_end_iter, ts.end(),
-      [&agg_end](const TimedValue& tv) { return tv.time > agg_end; });
+    agg_end_iter = std::find_if(
+        agg_end_iter, ts.end(), [&agg_end](const TimedValue &tv) { return tv.time > agg_end; });
 
     StatCalculator statcalculator;
     statcalculator.setTimestep(timestamp);
 
-    for (TimeSeries::const_iterator it = agg_begin_iter; it != agg_end_iter; ++it)
+    for (auto it = agg_begin_iter; it != agg_end_iter; ++it)
     {
       // Be a bit paranoid and check that we don't go beyond the end of the time series
       // Should never happen, but better safe than sorry
@@ -510,11 +508,10 @@ try
   }
   return ret;
 }
-catch(...)
+catch (...)
 {
   throw Fmi::Exception::Trace(BCP, "Operation failed!");
 }
-
 
 TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group,
                                   const DataFunction &func,
@@ -542,9 +539,9 @@ TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group,
 
 // Before only time-aggregation was possible here, but since
 // filtering was added also 'area aggregation' may happen
-TimeSeriesPtr aggregate(const TimeSeries& ts,
-                        const DataFunctions& pf,
-                        const TimeSeriesGenerator::LocalTimeList& timesteps)
+TimeSeriesPtr aggregate(const TimeSeries &ts,
+                        const DataFunctions &pf,
+                        const TimeSeriesGenerator::LocalTimeList &timesteps)
 try
 {
   TimeSeriesPtr ret(new TimeSeries);
@@ -600,9 +597,9 @@ catch (...)
   throw Fmi::Exception::Trace(BCP, "Operation failed!");
 }
 
-TimeSeriesGroupPtr aggregate(const TimeSeriesGroup& ts_group,
-                             const DataFunctions& pf,
-                             const TimeSeriesGenerator::LocalTimeList& timesteps)
+TimeSeriesGroupPtr aggregate(const TimeSeriesGroup &ts_group,
+                             const DataFunctions &pf,
+                             const TimeSeriesGenerator::LocalTimeList &timesteps)
 try
 {
   TimeSeriesGroupPtr ret(new TimeSeriesGroup);
@@ -634,7 +631,8 @@ try
     cout << "area-time aggregation" << endl;
 #endif
     // 1) do time aggregation
-    TimeSeriesGroupPtr time_aggregated_result = time_aggregate(ts_group, pf.innerFunction, timesteps);
+    TimeSeriesGroupPtr time_aggregated_result =
+        time_aggregate(ts_group, pf.innerFunction, timesteps);
 
     // 2) do area aggregation
     TimeSeries ts = area_aggregate(*time_aggregated_result, pf.outerFunction);
