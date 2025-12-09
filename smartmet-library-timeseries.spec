@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 25.8.1
-Release: 2%{?dist}.fmi
+Version: 25.12.9
+Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -21,16 +21,16 @@ BuildRequires: %{smartmet_boost}-devel
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: rpm-build
-BuildRequires: smartmet-utils-devel >= 25.2.18
-BuildRequires: smartmet-library-macgyver-devel >= 25.5.22
+BuildRequires: smartmet-utils-devel >= 25.11.27
+BuildRequires: smartmet-library-macgyver-devel >= 25.12.2
 BuildRequires: smartmet-library-newbase-devel >= 25.3.20
-BuildRequires: smartmet-library-spine-devel >= 25.5.13
+BuildRequires: smartmet-library-spine-devel >= 25.11.19
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 25.5.13
+Requires: smartmet-library-spine >= 25.11.19
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -49,9 +49,9 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 25.5.22
+Requires: smartmet-library-macgyver-devel >= 25.12.2
 Requires: smartmet-library-newbase-devel >= 25.3.20
-Requires: smartmet-library-spine-devel >= 25.5.13
+Requires: smartmet-library-spine-devel >= 25.11.19
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue Dec  9 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.12.9-1.fmi
+- Silenced several compiler warnings
+
 * Fri Aug  1 2025 Pertti Kinnia <pertti.kinnia@fmi.fi> - 25.8.1-1.fmi
 - Support float values in DataFilter Comparison; BRAINSTORM-3116
 
