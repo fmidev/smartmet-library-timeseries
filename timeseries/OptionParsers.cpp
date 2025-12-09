@@ -72,13 +72,13 @@ void ParameterOptions::expandParameter(const std::string& paramname)
 void ParameterOptions::add(const Spine::Parameter& theParam)
 {
   itsParameters.push_back(theParam);
-  itsParameterFunctions.push_back(ParameterAndFunctions(theParam, DataFunctions()));
+  itsParameterFunctions.emplace_back(theParam, DataFunctions());
 }
 
 void ParameterOptions::add(const Spine::Parameter& theParam, const DataFunctions& theParamFunctions)
 {
   itsParameters.push_back(theParam);
-  itsParameterFunctions.push_back(ParameterAndFunctions(theParam, theParamFunctions));
+  itsParameterFunctions.emplace_back(theParam, theParamFunctions);
 }
 
 ParameterOptions parseParameters(const Spine::HTTP::Request& theReq)

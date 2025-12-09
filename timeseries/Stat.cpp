@@ -88,7 +88,7 @@ double interpolate_normal(double first_value,
             << ", timestep: " << timestep << ", first_value: " << first_value
             << ", second_value: " << second_value << ",slope: " << slope
             << ", time_diff_to_timestep: " << time_diff_to_timestep_sec << " -> "
-            << interpolated_value << std::endl;
+            << interpolated_value << '\n';
 #endif
   return interpolated_value;
 }
@@ -145,19 +145,17 @@ void extract_subvector_weighted_segment(DataVector& subvector,
       Fmi::TimePeriod first_part_period(intersection_period.begin(),
                                         halfway_time + Microseconds(1));
       Fmi::TimePeriod second_part_period(halfway_time, intersection_period.end());
-      subvector.push_back(
-          DataItem(item1.time, item1.value, first_part_period.length().total_seconds()));
-      subvector.push_back(
-          DataItem(item2.time, item2.value, second_part_period.length().total_seconds()));
+      subvector.emplace_back(item1.time, item1.value, first_part_period.length().total_seconds());
+      subvector.emplace_back(item2.time, item2.value, second_part_period.length().total_seconds());
     }
     else
     {
       if (intersection_period.begin() > halfway_time)  // intersection_period is in the second half
-        subvector.push_back(
-            DataItem(item2.time, item2.value, intersection_period.length().total_seconds()));
+        subvector.emplace_back(
+            item2.time, item2.value, intersection_period.length().total_seconds());
       else  // intersection_period must be in the first half
-        subvector.push_back(
-            DataItem(item1.time, item1.value, intersection_period.length().total_seconds()));
+        subvector.emplace_back(
+            item1.time, item1.value, intersection_period.length().total_seconds());
     }
   }
 }
@@ -184,13 +182,13 @@ bool extract_subvector(const DataVector& data,
       {
         if (data[0].value == itsMissingValue)
           return false;
-        subvector.push_back(DataItem(data[0].time, data[0].value, 1.0));
+        subvector.emplace_back(data[0].time, data[0].value, 1.0);
       }
       return true;
     }
 
 #ifdef MYDEBUG
-    std::cout << "query_period: " << query_period << std::endl;
+    std::cout << "query_period: " << query_period << '\n';
 #endif
 
     for (auto iter = data.begin(); iter != data.end(); iter++)
@@ -232,9 +230,8 @@ Stat::Stat(double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
 {
 }
 
-Stat::Stat(const DataVector& theValues,
-           double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
-    : itsData(theValues), itsMissingValue(theMissingValue), itsWeights(true)
+Stat::Stat(DataVector theValues, double theMissingValue /*= numeric_limits<double>::quiet_NaN()*/)
+    : itsData(std::move(theValues)), itsMissingValue(theMissingValue), itsWeights(true)
 {
   try
   {
@@ -269,7 +266,7 @@ Stat::Stat(const LocalTimeValueVector& theValues,
   {
     for (const LocalTimeValue& item : theValues)
     {
-      itsData.push_back(DataItem(item.first.utc_time(), item.second));
+      itsData.emplace_back(item.first.utc_time(), item.second);
     }
     calculate_weights();
   }
@@ -287,7 +284,7 @@ Stat::Stat(const TimeValueVector& theValues,
   {
     for (const TimeValue& item : theValues)
     {
-      itsData.push_back(DataItem(item.first, item.second));
+      itsData.emplace_back(item.first, item.second);
     }
     calculate_weights();
   }
@@ -314,7 +311,7 @@ void Stat::addData(double theValue)
 {
   try
   {
-    itsData.push_back(DataItem(not_a_date_time, theValue));
+    itsData.emplace_back(not_a_date_time, theValue);
     calculate_weights();
   }
   catch (...)
@@ -327,7 +324,7 @@ void Stat::addData(const Fmi::LocalDateTime& theTime, double theValue)
 {
   try
   {
-    itsData.push_back(DataItem(theTime.utc_time(), theValue));
+    itsData.emplace_back(theTime.utc_time(), theValue);
     calculate_weights();
   }
   catch (...)
@@ -340,7 +337,7 @@ void Stat::addData(const Fmi::DateTime& theTime, double theValue)
 {
   try
   {
-    itsData.push_back(DataItem(theTime, theValue));
+    itsData.emplace_back(theTime, theValue);
     calculate_weights();
   }
   catch (...)
@@ -354,7 +351,7 @@ void Stat::addData(const vector<double>& theValues)
   try
   {
     for (double value : theValues)
-      itsData.push_back(DataItem(not_a_date_time, value));
+      itsData.emplace_back(not_a_date_time, value);
 
     calculate_weights();
   }
@@ -364,11 +361,11 @@ void Stat::addData(const vector<double>& theValues)
   }
 }
 
-void Stat::addData(const DataItem& theData)
+void Stat::addData(const DataItem& theValue)
 {
   try
   {
-    itsData.push_back(theData);
+    itsData.push_back(theValue);
     calculate_weights();
   }
   catch (...)
@@ -395,7 +392,7 @@ double Stat::integ(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "integ(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "integ(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -427,7 +424,7 @@ double Stat::sum(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "sum(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "sum(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -458,7 +455,7 @@ double Stat::min(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "min(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "min(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -479,7 +476,7 @@ double Stat::mean(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "mean(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "mean(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -535,7 +532,7 @@ double Stat::circlemean(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "circlemean(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "circlemean(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -553,9 +550,9 @@ double Stat::circlemean(const Fmi::DateTime& startTime /*= not_a_date_time */,
     double ysum = 0;
     int n = 0;
 
-    for (unsigned int i = 0; i < subvector.size(); i++)
+    for (auto& i : subvector)
     {
-      auto rad = subvector[i].value * M_PI / 180;
+      auto rad = i.value * M_PI / 180;
       xsum += cos(rad);
       ysum += sin(rad);
       ++n;
@@ -587,7 +584,7 @@ double Stat::max(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "max(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "max(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -608,7 +605,7 @@ double Stat::change(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "change(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "change(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -653,7 +650,7 @@ double Stat::trend(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "trend(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "trend(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -709,20 +706,20 @@ unsigned int Stat::count(double lowerLimit,
   {
 #ifdef MYDEBUG
     std::cout << "count(" << lowerLimit << ", " << upperLimit << ", " << startTime << ", "
-              << endTime << ")" << std::endl;
+              << endTime << ")\n";
 #endif
     DataVector subvector;
 
     if (!get_subvector(subvector, startTime, endTime, false))
       return static_cast<unsigned int>(itsMissingValue);
 
-    unsigned int occurances(0);
+    unsigned int occurrances = 0;
 
     for (const DataItem& item : subvector)
       if (item.value >= lowerLimit && item.value <= upperLimit)
-        occurances++;
+        occurrances++;
 
-    return occurances;
+    return occurrances;
   }
   catch (...)
   {
@@ -739,31 +736,30 @@ double Stat::percentage(double lowerLimit,
   {
 #ifdef MYDEBUG
     std::cout << "percentage(" << lowerLimit << ", " << upperLimit << ", " << startTime << ", "
-              << endTime << ")" << std::endl;
+              << endTime << ")\n";
 #endif
     DataVector subvector;
 
     if (!get_subvector(subvector, startTime, endTime))
       return itsMissingValue;
 
-    int occurances = 0;
+    int occurrances = 0;
     int total_count = 0;
 
     for (const DataItem& item : subvector)
     {
       if (item.value >= lowerLimit && item.value <= upperLimit)
-        occurances += (itsWeights ? item.weight : 1);
+        occurrances += (itsWeights ? item.weight : 1);
       total_count += (itsWeights ? item.weight : 1);
     }
 
     if (total_count == 0)
       return itsMissingValue;
 
-    if (occurances == 0)
+    if (occurrances == 0)
       return 0.0;
 
-    return static_cast<double>(
-        (static_cast<double>(occurances) / static_cast<double>(total_count)) * 100.0);
+    return 100.0 * occurrances / total_count;
   }
   catch (...)
   {
@@ -777,7 +773,7 @@ double Stat::median(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "median(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "median(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -825,7 +821,7 @@ double Stat::variance(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "variance(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "variance(" << startTime << ", " << endTime << ")\n";
 #endif
     DataVector subvector;
 
@@ -857,7 +853,7 @@ double Stat::stddev(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "stddev(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "stddev(" << startTime << ", " << endTime << ")\n";
 #endif
     if (itsDegrees)
       return stddev_dir(startTime, endTime);
@@ -888,7 +884,7 @@ double Stat::stddev_dir(const Fmi::DateTime& startTime /*= not_a_date_time */,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "stddev_dir(" << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "stddev_dir(" << startTime << ", " << endTime << ")\n";
 #endif
 
     DataVector subvector;
@@ -946,7 +942,7 @@ double Stat::nearest(const Fmi::DateTime& timestep,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "nearest(" << timestep << ", " << startTime << ", " << endTime << ")" << std::endl;
+    std::cout << "nearest(" << timestep << ", " << startTime << ", " << endTime << ")\n";
 #endif
 
     if (timestep == not_a_date_time)
@@ -988,8 +984,7 @@ double Stat::interpolate(const Fmi::DateTime& timestep,
   try
   {
 #ifdef MYDEBUG
-    std::cout << "interpolate(" << timestep << ", " << startTime << ", " << endTime << ")"
-              << std::endl;
+    std::cout << "interpolate(" << timestep << ", " << startTime << ", " << endTime << ")\n";
 #endif
 
     if (timestep == not_a_date_time)
@@ -1182,9 +1177,8 @@ std::ostream& operator<<(std::ostream& os, const DataItem& item)
 {
   try
   {
-    os << "timestamp = " << item.time << std::endl
-       << "value = " << item.value << std::endl
-       << "weight = " << item.weight << std::endl;
+    os << "timestamp = " << item.time << "\nvalue = " << item.value << "ņweight = " << item.weight
+       << '\n';
 
     return os;
   }

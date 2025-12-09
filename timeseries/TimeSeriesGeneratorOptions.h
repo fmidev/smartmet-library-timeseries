@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <optional>
-#include <memory>
 #include <macgyver/DateTime.h>
+#include <memory>
+#include <optional>
 
 #include <list>
 #include <ostream>
@@ -47,14 +47,14 @@ struct TimeSeriesGeneratorOptions
   void setDataTimes(const TimeList& times, bool climatology = false);
   const TimeList& getDataTimes() const;
 
-  Mode mode = Mode::TimeSteps;              // algorithm selection
-  Fmi::DateTime startTime;                  // start time
-  Fmi::DateTime endTime;                    // end time
-  bool startTimeUTC = true;                 // timestamps can be interpreted to be in
-  bool endTimeUTC = true;                   // UTC time or in some specific time zone
+  Mode mode = Mode::TimeSteps;            // algorithm selection
+  Fmi::DateTime startTime;                // start time
+  Fmi::DateTime endTime;                  // end time
+  bool startTimeUTC = true;               // timestamps can be interpreted to be in
+  bool endTimeUTC = true;                 // UTC time or in some specific time zone
   std::optional<unsigned int> timeSteps;  // number of time steps
   std::optional<unsigned int> timeStep;   // Mode:TimeSteps, timestep in Fmi::Minutes
-  std::set<unsigned int> timeList;          // Mode:FixedTimes,  integers of form HHMM
+  std::set<unsigned int> timeList;        // Mode:FixedTimes,  integers of form HHMM
   std::set<unsigned int> days;
 
  private:

@@ -21,8 +21,8 @@ struct ParameterAndFunctions
   Spine::Parameter parameter;
   DataFunctions functions;
 
-  ParameterAndFunctions(const Spine::Parameter& param, const DataFunctions& pfs)
-      : parameter(param), functions(pfs)
+  ParameterAndFunctions(Spine::Parameter param, const DataFunctions& pfs)
+      : parameter(std::move(param)), functions(pfs)
   {
   }
 
@@ -37,10 +37,10 @@ class ParameterFactory
   ParameterFactory();
   mutable NFmiEnumConverter converter;
 
-  std::string parse_parameter_functions(const std::string& theParameterRequest,
-                                        std::string& theOriginalName,
-                                        DataFunction& theInnerDataFunction,
-                                        DataFunction& theOuterDataFunction) const;
+  static std::string parse_parameter_functions(const std::string& theParameterRequest,
+                                               std::string& theOriginalName,
+                                               DataFunction& theInnerDataFunction,
+                                               DataFunction& theOuterDataFunction);
 
  public:
   static const ParameterFactory& instance();

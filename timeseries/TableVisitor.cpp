@@ -5,8 +5,6 @@
 
 namespace SmartMet
 {
-using Spine::LonLat;
-
 namespace TimeSeries
 {
 

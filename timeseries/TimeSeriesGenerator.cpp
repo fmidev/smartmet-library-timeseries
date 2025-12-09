@@ -186,7 +186,7 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
       if (mins >= 24 * 60)
       {
         mins -= 24 * 60;
-        day ++;
+        day++;
       }
 
       Fmi::LocalDateTime t = Fmi::TimeParser::make_time(day, Fmi::Minutes(mins), theZone);

@@ -11,12 +11,10 @@ namespace TimeSeries
 
 using namespace SpecialParameters;
 
-bool is_time_parameter(std::string paramname)
+bool is_time_parameter(const std::string& paramname)
 {
   const std::string p = Fmi::ascii_tolower_copy(paramname);
-  if (TimeParameters::instance.contains(p))
-    return true;
-  return false;
+  return TimeParameters::instance.contains(p);
 }
 
 Value time_parameter(const std::string& paramname,
@@ -61,6 +59,8 @@ TimeParameterArgs::~TimeParameterArgs()
 {
   delete state;
 }
+
+TimeParameters::~TimeParameters() = default;
 
 TimeParameters::TimeParameters()
 {
@@ -382,8 +382,7 @@ TimeParameters::TimeParameters()
       { return Value(Fmi::format_time(args.outlocale, args.timestring, args.ldt)); },
       "Time formatted according to the given format string");
 
-  add(
-      TZ_PARAM, [](TimeParameterArgs& args) { return Value(args.timezone); }, "Timezone");
+  add(TZ_PARAM, [](TimeParameterArgs& args) { return Value(args.timezone); }, "Timezone");
 
   add(
       UTCTIME_PARAM,
@@ -413,7 +412,7 @@ TimeParameters::TimeParameters()
       boost::regex("date\\(([^)]+)\\)"),
       [](const std::vector<std::string>& r_arg, TimeParameterArgs& args)
       {
-        const std::string fmt = r_arg.at(0);
+        const std::string& fmt = r_arg.at(0);
         return Value(Fmi::format_time(args.outlocale, fmt, args.ldt));
       },
       "Date in the specified format");

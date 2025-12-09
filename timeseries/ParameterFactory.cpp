@@ -29,68 +29,67 @@ namespace
 {
 int get_function_index(const std::string& theFunction)
 {
-  static const char* names[] = {"mean_a",
-                                "mean_t",
-                                "amean_t",
-                                "nanmean_a",
-                                "nanmean_t",
-                                "nanamean_t",
-                                "max_a",
-                                "max_t",
-                                "nanmax_a",
-                                "nanmax_t",
-                                "min_a",
-                                "min_t",
-                                "nanmin_a",
-                                "nanmin_t",
-                                "median_a",
-                                "median_t",
-                                "nanmedian_a",
-                                "nanmedian_t",
-                                "sum_a",
-                                "sum_t",
-                                "nansum_a",
-                                "nansum_t",
-                                "integ_a",
-                                "integ_t",
-                                "naninteg_a",
-                                "naninteg_t",
-                                "sdev_a",
-                                "sdev_t",
-                                "nansdev_a",
-                                "nansdev_t",
-                                "percentage_a",
-                                "percentage_t",
-                                "nanpercentage_a",
-                                "nanpercentage_t",
-                                "count_a",
-                                "count_t",
-                                "nancount_a",
-                                "nancount_t",
-                                "change_a",
-                                "change_t",
-                                "nanchange_a",
-                                "nanchange_t",
-                                "trend_a",
-                                "trend_t",
-                                "nantrend_a",
-                                "nantrend_t",
-                                "nearest_t",
-                                "nannearest_t",
-                                "interpolate_t",
-                                "naninterpolate_t",
-
-                                "interpolatedir_t",
-                                "naninterpolatedir_t",
-                                "meandir_t",
-                                "nanmeandir_t",
-                                "sdevdir_t",
-                                "nansdevdir_t",
-                                "circlemean_a",
-                                "nancirclemean_a",
-                                "circlemean_t",
-                                "nancirclemean_t",
-                                ""};
+  constexpr std::array<const char*, 63> names = {{"mean_a",
+                                                  "mean_t",
+                                                  "amean_t",
+                                                  "nanmean_a",
+                                                  "nanmean_t",
+                                                  "nanamean_t",
+                                                  "max_a",
+                                                  "max_t",
+                                                  "nanmax_a",
+                                                  "nanmax_t",
+                                                  "min_a",
+                                                  "min_t",
+                                                  "nanmin_a",
+                                                  "nanmin_t",
+                                                  "median_a",
+                                                  "median_t",
+                                                  "nanmedian_a",
+                                                  "nanmedian_t",
+                                                  "sum_a",
+                                                  "sum_t",
+                                                  "nansum_a",
+                                                  "nansum_t",
+                                                  "integ_a",
+                                                  "integ_t",
+                                                  "naninteg_a",
+                                                  "naninteg_t",
+                                                  "sdev_a",
+                                                  "sdev_t",
+                                                  "nansdev_a",
+                                                  "nansdev_t",
+                                                  "percentage_a",
+                                                  "percentage_t",
+                                                  "nanpercentage_a",
+                                                  "nanpercentage_t",
+                                                  "count_a",
+                                                  "count_t",
+                                                  "nancount_a",
+                                                  "nancount_t",
+                                                  "change_a",
+                                                  "change_t",
+                                                  "nanchange_a",
+                                                  "nanchange_t",
+                                                  "trend_a",
+                                                  "trend_t",
+                                                  "nantrend_a",
+                                                  "nantrend_t",
+                                                  "nearest_t",
+                                                  "nannearest_t",
+                                                  "interpolate_t",
+                                                  "naninterpolate_t",
+                                                  "interpolatedir_t",
+                                                  "naninterpolatedir_t",
+                                                  "meandir_t",
+                                                  "nanmeandir_t",
+                                                  "sdevdir_t",
+                                                  "nansdevdir_t",
+                                                  "circlemean_a",
+                                                  "nancirclemean_a",
+                                                  "circlemean_t",
+                                                  "nancirclemean_t",
+                                                  ""}};
 
   std::string func_name(theFunction);
 
@@ -122,67 +121,67 @@ FunctionId parse_function(const std::string& theFunction)
 {
   try
   {
-    static const FunctionId functions[] = {FunctionId::Mean,
-                                           FunctionId::Mean,
-                                           FunctionId::Amean,
-                                           FunctionId::Mean,
-                                           FunctionId::Mean,
-                                           FunctionId::Amean,
-                                           FunctionId::Maximum,
-                                           FunctionId::Maximum,
-                                           FunctionId::Maximum,
-                                           FunctionId::Maximum,
-                                           FunctionId::Minimum,
-                                           FunctionId::Minimum,
-                                           FunctionId::Minimum,
-                                           FunctionId::Minimum,
-                                           FunctionId::Median,
-                                           FunctionId::Median,
-                                           FunctionId::Median,
-                                           FunctionId::Median,
-                                           FunctionId::Sum,
-                                           FunctionId::Sum,
-                                           FunctionId::Sum,
-                                           FunctionId::Sum,
-                                           FunctionId::Sum,
-                                           FunctionId::Integ,
-                                           FunctionId::Sum,
-                                           FunctionId::Integ,
-                                           FunctionId::StandardDeviation,
-                                           FunctionId::StandardDeviation,
-                                           FunctionId::StandardDeviation,
-                                           FunctionId::StandardDeviation,
-                                           FunctionId::Percentage,
-                                           FunctionId::Percentage,
-                                           FunctionId::Percentage,
-                                           FunctionId::Percentage,
-                                           FunctionId::Count,
-                                           FunctionId::Count,
-                                           FunctionId::Count,
-                                           FunctionId::Count,
-                                           FunctionId::Change,
-                                           FunctionId::Change,
-                                           FunctionId::Change,
-                                           FunctionId::Change,
-                                           FunctionId::Trend,
-                                           FunctionId::Trend,
-                                           FunctionId::Trend,
-                                           FunctionId::Trend,
-                                           FunctionId::Nearest,
-                                           FunctionId::Nearest,
-                                           FunctionId::Interpolate,
-                                           FunctionId::Interpolate,
+    constexpr std::array<FunctionId, 62> functions = {{FunctionId::Mean,
+                                                       FunctionId::Mean,
+                                                       FunctionId::Amean,
+                                                       FunctionId::Mean,
+                                                       FunctionId::Mean,
+                                                       FunctionId::Amean,
+                                                       FunctionId::Maximum,
+                                                       FunctionId::Maximum,
+                                                       FunctionId::Maximum,
+                                                       FunctionId::Maximum,
+                                                       FunctionId::Minimum,
+                                                       FunctionId::Minimum,
+                                                       FunctionId::Minimum,
+                                                       FunctionId::Minimum,
+                                                       FunctionId::Median,
+                                                       FunctionId::Median,
+                                                       FunctionId::Median,
+                                                       FunctionId::Median,
+                                                       FunctionId::Sum,
+                                                       FunctionId::Sum,
+                                                       FunctionId::Sum,
+                                                       FunctionId::Sum,
+                                                       FunctionId::Sum,
+                                                       FunctionId::Integ,
+                                                       FunctionId::Sum,
+                                                       FunctionId::Integ,
+                                                       FunctionId::StandardDeviation,
+                                                       FunctionId::StandardDeviation,
+                                                       FunctionId::StandardDeviation,
+                                                       FunctionId::StandardDeviation,
+                                                       FunctionId::Percentage,
+                                                       FunctionId::Percentage,
+                                                       FunctionId::Percentage,
+                                                       FunctionId::Percentage,
+                                                       FunctionId::Count,
+                                                       FunctionId::Count,
+                                                       FunctionId::Count,
+                                                       FunctionId::Count,
+                                                       FunctionId::Change,
+                                                       FunctionId::Change,
+                                                       FunctionId::Change,
+                                                       FunctionId::Change,
+                                                       FunctionId::Trend,
+                                                       FunctionId::Trend,
+                                                       FunctionId::Trend,
+                                                       FunctionId::Trend,
+                                                       FunctionId::Nearest,
+                                                       FunctionId::Nearest,
+                                                       FunctionId::Interpolate,
+                                                       FunctionId::Interpolate,
 
-                                           FunctionId::Interpolate,
-                                           FunctionId::Interpolate,
-                                           FunctionId::Mean,
-                                           FunctionId::Mean,
-                                           FunctionId::StandardDeviation,
-                                           FunctionId::StandardDeviation,
-                                           FunctionId::CircleMean,
-                                           FunctionId::CircleMean,
-                                           FunctionId::CircleMean,
-                                           FunctionId::CircleMean};
+                                                       FunctionId::Interpolate,
+                                                       FunctionId::Interpolate,
+                                                       FunctionId::Mean,
+                                                       FunctionId::Mean,
+                                                       FunctionId::StandardDeviation,
+                                                       FunctionId::StandardDeviation,
+                                                       FunctionId::CircleMean,
+                                                       FunctionId::CircleMean,
+                                                       FunctionId::CircleMean,
+                                                       FunctionId::CircleMean}};
 
     int function_index = get_function_index(theFunction);
     if (function_index >= 0)
@@ -356,110 +355,110 @@ std::string parse_parameter_name(const std::string& param_name)
 {
   try
   {
-    static const char* names[] = {"temperature",
-                                  "t2m",
-                                  "t",
-                                  "precipitation",
-                                  "precipitation1h",
-                                  "rr1h",
-                                  "radarprecipitation1h",
-                                  "precipitationtype",
-                                  "rtype",
-                                  "precipitationform",
-                                  "rform",
-                                  "precipitationprobability",
-                                  "pop",
-                                  "totalcloudcover",
-                                  "cloudiness",
-                                  "n",
-                                  "humidity",
-                                  "windspeed",
-                                  "windspeedms",
-                                  "wspd",
-                                  "ff",
-                                  "winddirection",
-                                  "dd",
-                                  "wdir",
-                                  "thunder",
-                                  "probabilitythunderstorm",
-                                  "pot",
-                                  "roadtemperature",
-                                  "troad",
-                                  "roadcondition",
-                                  "wroad",
-                                  "waveheight",
-                                  "wavedirection",
-                                  "relativehumidity",
-                                  "rh",
-                                  "forestfirewarning",
-                                  "forestfireindex",
-                                  "mpi",
-                                  "evaporation",
-                                  "evap",
-                                  "dewpoint",
-                                  "tdew",
-                                  "windgust",
-                                  "gustspeed",
-                                  "gust",
-                                  "fogintensity",
-                                  "fog",
-                                  "maximumwind",
-                                  "hourlymaximumwindspeed",
-                                  "wmax",
-                                  ""};
+    constexpr std::array<const char*, 51> names = {{"temperature",
+                                                    "t2m",
+                                                    "t",
+                                                    "precipitation",
+                                                    "precipitation1h",
+                                                    "rr1h",
+                                                    "radarprecipitation1h",
+                                                    "precipitationtype",
+                                                    "rtype",
+                                                    "precipitationform",
+                                                    "rform",
+                                                    "precipitationprobability",
+                                                    "pop",
+                                                    "totalcloudcover",
+                                                    "cloudiness",
+                                                    "n",
+                                                    "humidity",
+                                                    "windspeed",
+                                                    "windspeedms",
+                                                    "wspd",
+                                                    "ff",
+                                                    "winddirection",
+                                                    "dd",
+                                                    "wdir",
+                                                    "thunder",
+                                                    "probabilitythunderstorm",
+                                                    "pot",
+                                                    "roadtemperature",
+                                                    "troad",
+                                                    "roadcondition",
+                                                    "wroad",
+                                                    "waveheight",
+                                                    "wavedirection",
+                                                    "relativehumidity",
+                                                    "rh",
+                                                    "forestfirewarning",
+                                                    "forestfireindex",
+                                                    "mpi",
+                                                    "evaporation",
+                                                    "evap",
+                                                    "dewpoint",
+                                                    "tdew",
+                                                    "windgust",
+                                                    "gustspeed",
+                                                    "gust",
+                                                    "fogintensity",
+                                                    "fog",
+                                                    "maximumwind",
+                                                    "hourlymaximumwindspeed",
+                                                    "wmax",
+                                                    ""}};
 
-    static const char* parameters[] = {
-        "Temperature",              // "Temperature"
+    constexpr std::array<const char*, 50> parameters = {{
+        "Temperature",              // "temperature"
         "Temperature",              // "t2m"
         "Temperature",              // "t"
-        "Precipitation1h",          // "Precipitation"
-        "Precipitation1h",          // "Precipitation1h"
+        "Precipitation1h",          // "precipitation"
+        "Precipitation1h",          // "precipitation1h"
         "Precipitation1h",          // "rr1h"
         "RadarPrecipitation1h",     // "radarprecipitation1h"
-        "PrecipitationType",        // "PrecipitationType"
+        "PrecipitationType",        // "precipitationtype"
         "PrecipitationType",        // "rtype"
-        "PrecipitationForm",        // "PrecipitationForm"
+        "PrecipitationForm",        // "precipitationform"
         "PrecipitationForm",        // "rform"
-        "PoP",                      // "PrecipitationProbability"
+        "PoP",                      // "precipitationprobability"
         "PoP",                      // "pop"
-        "TotalCloudCover",          // "TotalCloudCover"
-        "TotalCloudCover",          // "Cloudiness"
+        "TotalCloudCover",          // "totalcloudcover"
+        "TotalCloudCover",          // "cloudiness"
         "TotalCloudCover",          // "n"
-        "Humidity",                 // "Humidity"
-        "WindSpeedMS",              // "WindSpeed"
-        "WindSpeedMS",              // "WindSpeedMS"
+        "Humidity",                 // "humidity"
+        "WindSpeedMS",              // "windspeed"
+        "WindSpeedMS",              // "windspeedms"
         "WindSpeedMS",              // "wspd"
         "WindSpeedMS",              // "ff"
-        "WindDirection",            // "WindDirection"
+        "WindDirection",            // "winddirection"
         "WindDirection",            // "dd"
         "WindDirection",            // "wdir"
-        "ProbabilityThunderstorm",  // "Thunder"
-        "ProbabilityThunderstorm",  // "ProbabilityThunderstorm"
+        "ProbabilityThunderstorm",  // "thunder"
+        "ProbabilityThunderstorm",  // "probabilitythunderstorm"
         "ProbabilityThunderstorm",  // "pot"
-        "RoadTemperature",          // "RoadTemperature"
+        "RoadTemperature",          // "roadtemperature"
         "RoadTemperature",          // "troad"
-        "RoadCondition",            // "RoadCondition"
+        "RoadCondition",            // "roadcondition"
         "RoadCondition",            // "wroad"
-        "SigWaveHeight",            // "WaveHeight"
-        "WaveDirection",            // "WaveDirection"
-        "RelativeHumidity",         // "RelativeHumidity"
+        "SigWaveHeight",            // "waveheight"
+        "WaveDirection",            // "wavedirection"
+        "RelativeHumidity",         // "relativehumidity"
         "RelativeHumidity",         // "rh"
-        "ForestFireWarning",        // "ForestFireWarning"
-        "ForestFireWarning",        // "ForestFireIndex"
+        "ForestFireWarning",        // "forestfirewarning"
+        "ForestFireWarning",        // "forestfireindex"
         "ForestFireWarning",        // "mpi"
-        "Evaporation",              // "Evaporation"
+        "Evaporation",              // "evaporation"
         "Evaporation",              // "evap"
-        "DewPoint",                 // "DewPoint"
+        "DewPoint",                 // "dewpoint"
         "DewPoint",                 // "tdew"
-        "WindGust",                 // "WindGust"
-        "WindGust",                 // "GustSpeed"
+        "WindGust",                 // "windgust"
+        "WindGust",                 // "gustspeed"
         "WindGust",                 // "gust"
-        "FogIntensity",             // "FogIntensity"
+        "FogIntensity",             // "fogintensity"
         "FogIntensity",             // "fog"
-        "MaximumWind",              // "MaximumWind"
-        "HourlyMaximumWindSpeed",   // "HourlyMaximumWindSpeed"
+        "MaximumWind",              // "maximumwind"
+        "HourlyMaximumWindSpeed",   // "hourlymaximumwindspeed"
         "MaximumWind"               // "wmax"
-    };
+    }};
 
     for (unsigned int i = 0; names[i][0] != 0; i++)
     {
@@ -693,7 +692,7 @@ int ParameterFactory::number(const std::string& name) const
 std::string ParameterFactory::parse_parameter_functions(const std::string& theParameterRequest,
                                                         std::string& theOriginalName,
                                                         DataFunction& theInnerDataFunction,
-                                                        DataFunction& theOuterDataFunction) const
+                                                        DataFunction& theOuterDataFunction)
 {
   try
   {
@@ -915,11 +914,10 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
 
     Parameter::Type type = Parameter::Type::Data;
 
-    if (Spine::Parameters::IsDataIndependent(number))
-      type = Parameter::Type::DataIndependent;
-    else if (Spine::Parameters::IsDataDerived(number))
+    if (Spine::Parameters::IsDataDerived(number))
       type = Parameter::Type::DataDerived;
-    else if (pname.substr(0, 5) == "date(" && paramname[pname.size() - 1] == ')')
+    else if (Spine::Parameters::IsDataIndependent(number) ||
+             (pname.substr(0, 5) == "date(" && paramname[pname.size() - 1] == ')'))
       type = Parameter::Type::DataIndependent;
     else if (boost::algorithm::iends_with(pname, ".raw"))
       number = FmiParameterName(converter.ToEnum(pname.substr(0, pname.size() - 4)));

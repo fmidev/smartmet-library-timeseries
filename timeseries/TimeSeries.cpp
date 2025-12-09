@@ -51,10 +51,7 @@ LocalTimeList TimeSeries::getTimes() const
 {
   LocalTimeList ret;
   std::transform(
-    begin(),
-    end(),
-    std::back_inserter(ret),
-    [](const auto& item) { return item.time; });
+      begin(), end(), std::back_inserter(ret), [](const auto& item) { return item.time; });
   return ret;
 }
 

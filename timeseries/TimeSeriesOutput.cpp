@@ -50,7 +50,7 @@ std::ostream& operator<<(std::ostream& os, const TimeSeries& ts)
   try
   {
     for (const auto& t : ts)
-      os << t.time << " -> " << t.value << std::endl;
+      os << t.time << " -> " << t.value << '\n';
 
     return os;
   }
@@ -67,9 +67,9 @@ std::ostream& operator<<(std::ostream& os, const TimeSeriesGroup& tsg)
     for (unsigned int i = 0; i < tsg.size(); i++)
     {
       if (i > 0)
-        os << std::endl;
+        os << '\n';
       //		  os << "location #" << i << " (lon, lat): " << tsg[i].lonlat.lon << ", " <<
-      // tsg[i].lonlat.lat  << std::endl;
+      // tsg[i].lonlat.lat  << '\n';
       os << tsg[i].timeseries;
     }
 
@@ -87,7 +87,7 @@ std::ostream& operator<<(std::ostream& os, const TimeSeriesVector& tsv)
   {
     for (unsigned int i = 0; i < tsv.size(); i++)
     {
-      os << "column #" << i << std::endl;
+      os << "column #" << i << '\n';
       os << tsv[i];
     }
 

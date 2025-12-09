@@ -118,6 +118,8 @@ LocationParameterArgs::~LocationParameterArgs()
   delete state;
 }
 
+LocationParameters::~LocationParameters() = default;
+
 LocationParameters::LocationParameters()
 {
   add(

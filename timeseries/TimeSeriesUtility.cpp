@@ -37,10 +37,10 @@ std::ostream& operator<<(std::ostream& os, const OutputData& odata)
   {
     for (const auto& item : odata)
     {
-      os << item.first << " -> " << std::endl;
+      os << item.first << " -> \n";
       unsigned int counter = 0;
       for (const auto& item2 : item.second)
-        os << "#" << counter++ << "\n" << item2 << std::endl;
+        os << "#" << counter++ << '\n' << item2 << '\n';
     }
 
     return os;
@@ -191,10 +191,8 @@ size_t number_of_elements(const OutputData& outputData)
       const std::vector<TimeSeriesData>& outdata = output.second;
 
       // iterate columns (parameters)
-      for (unsigned int j = 0; j < outdata.size(); j++)
+      for (const auto& tsdata : outdata)
       {
-        const TimeSeriesData& tsdata = outdata[j];
-
         if (const auto* ptr = std::get_if<TimeSeriesPtr>(&tsdata))
         {
           const TimeSeriesPtr ts = *ptr;
@@ -227,22 +225,31 @@ size_t number_of_elements(const OutputData& outputData)
 
 namespace
 {
-  struct FmisidVisitor
+struct FmisidVisitor
+{
+  // fmisid can be std::string, int or double
+  int operator()(const std::string& fmisid_str)
   {
-    // fmisid can be std::string, int or double
-    int operator() (const std::string& fmisid_str)
-    {
-      if (fmisid_str.empty()) throw Fmi::Exception(BCP, "fmisid value is an empty string");
-      return std::stoi(fmisid_str);
-    }
+    if (fmisid_str.empty())
+      throw Fmi::Exception(BCP, "fmisid value is an empty string");
+    return std::stoi(fmisid_str);
+  }
 
-    int operator() (int fmisid) { return fmisid; }
-    int operator() (double fmisid ) { return int(std::floor(fmisid)); }
-    int operator() (None) { throw Fmi::Exception(BCP, "Station with null fmisid encountered!"); }
-    int operator() (const LonLat&) { throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!"); }
-    int operator() (const Fmi::LocalDateTime&) { throw Fmi::Exception(BCP, "Station with LocalDateTime as fmisid encountered!"); }
-  };
-}
+  int operator()(int fmisid) { return fmisid; }
+  int operator()(double fmisid) { return int(std::floor(fmisid)); }
+  int operator()(None /* arg */)
+  {
+    throw Fmi::Exception(BCP, "Station with null fmisid encountered!");
+  }
+  int operator()(const LonLat& /* arg */)
+  {
+    throw Fmi::Exception(BCP, "Station with latlon as fmisid encountered!");
+  }
+  int operator()(const Fmi::LocalDateTime& /* arg */)
+  {
+    throw Fmi::Exception(BCP, "Station with LocalDateTime as fmisid encountered!");
+  }
+};
 
 int get_fmisid_value(const Value& value)
 {
@@ -256,22 +263,6 @@ int get_fmisid_value(const Value& value)
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
-
-int get_fmisid_value(const TimeSeries& ts)
-{
-  for (const auto& tv : ts)
-  {
-    try
-    {
-      return get_fmisid_value(tv.value);
-    }
-    catch (...)
-    {
-    }
-  }
-  return -1;
-}
-
 
 void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeList& tlist)
 {
@@ -305,29 +296,46 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
   ts = ts2;
 }
 
+}  // namespace
+
+int get_fmisid_value(const TimeSeries& ts)
+{
+  for (const auto& tv : ts)
+  {
+    try
+    {
+      return get_fmisid_value(tv.value);
+    }
+    catch (...)
+    {
+    }
+  }
+  return -1;
+}
+
 TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
-											  const TimeSeriesVectorPtr& observation_result,
-											  const TimeSeriesGeneratorCache::TimeList& tlist,
-											  int fmisid_index)
+                                              const TimeSeriesVectorPtr& observation_result,
+                                              const TimeSeriesGeneratorCache::TimeList& tlist,
+                                              int fmisid_index)
 {
   try
   {
     TimeSeriesByLocation ret;
 
-    if(observation_result->empty())
+    if (observation_result->empty())
       return ret;
 
-    
-	/*
-    if (UtilityFunctions::is_flash_or_mobile_producer(producer))
-    {
-      ret.emplace_back(make_pair(0, observation_result));
-      return ret;
-    }
-	*/
+    /*
+if (UtilityFunctions::is_flash_or_mobile_producer(producer))
+{
+  ret.emplace_back(make_pair(0, observation_result));
+  return ret;
+}
+    */
 
     // find fmisid time series
-    if (fmisid_index < 0 || fmisid_index >= static_cast<int>(observation_result->size())) {
+    if (fmisid_index < 0 || fmisid_index >= static_cast<int>(observation_result->size()))
+    {
       Fmi::Exception err(BCP, "fmisid index out of range ");
       err.addParameter("fmisid_index", Fmi::to_string(fmisid_index));
       err.addParameter("observation_result size", Fmi::to_string(observation_result->size()));
@@ -347,11 +355,11 @@ TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
         continue;
 
       end_index = i;
-      location_indexes.emplace_back(std::pair<unsigned int, unsigned int>(start_index, end_index));
+      location_indexes.emplace_back(start_index, end_index);
       start_index = i;
     }
     end_index = fmisid_ts.size();
-    location_indexes.emplace_back(std::pair<unsigned int, unsigned int>(start_index, end_index));
+    location_indexes.emplace_back(start_index, end_index);
 
     // Iterate through locations
     for (const auto& location_index : location_indexes)
@@ -386,8 +394,6 @@ TimeSeriesByLocation get_timeseries_by_fmisid(const std::string& producer,
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
-
-
 
 }  // namespace TimeSeries
 }  // namespace SmartMet
