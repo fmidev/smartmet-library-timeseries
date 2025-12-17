@@ -476,8 +476,8 @@ void offset()
     opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
     for (int cnt = 0; cnt < 10; ++cnt)
     {
-      before = prevExactHour();
       opt.startTime = Fmi::TimeParser::parse(starttime);
+      before = prevExactHour();
       if (before.time_of_day().hours() == opt.startTime.time_of_day().hours())
       {
         // Hour has not changed in the meantime, continue with the test
