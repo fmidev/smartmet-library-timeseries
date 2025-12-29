@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 25.12.9
+Version: 25.12.29
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -24,13 +24,13 @@ BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 25.11.27
 BuildRequires: smartmet-library-macgyver-devel >= 25.12.2
 BuildRequires: smartmet-library-newbase-devel >= 25.3.20
-BuildRequires: smartmet-library-spine-devel >= 25.11.19
+BuildRequires: smartmet-library-spine-devel >= 25.12.12
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 25.11.19
+Requires: smartmet-library-spine >= 25.12.12
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,7 +51,7 @@ Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
 Requires: smartmet-library-macgyver-devel >= 25.12.2
 Requires: smartmet-library-newbase-devel >= 25.3.20
-Requires: smartmet-library-spine-devel >= 25.11.19
+Requires: smartmet-library-spine-devel >= 25.12.12
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Mon Dec 29 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.12.29-1.fmi
+- Several fixes to compiler warnings
+
 * Tue Dec  9 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.12.9-1.fmi
 - Silenced several compiler warnings
 
