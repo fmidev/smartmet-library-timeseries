@@ -464,7 +464,8 @@ void offset()
     using namespace SmartMet::TimeSeries;
 
     const auto prevExactHour = []() {
-      auto now = Fmi::SecondClock::universal_time();
+      // Use same  way of getting curent time as when setting opt.startTime
+      auto now = Fmi::TimeParser::parse("0s");
       return Fmi::DateTime(now.date(), Fmi::Hours(now.time_of_day().hours()));
     };
 
@@ -494,6 +495,7 @@ void offset()
     auto tz = timezones.time_zone_from_string("Europe/Helsinki");
     auto series = TimeSeriesGenerator::generate(opt, tz);
 
+    msg << "Current time: " << Fmi::SecondClock::universal_time() << "\n";
     msg << "Start time: " << Fmi::LocalDateTime(opt.startTime, tz) << "\n";
     msg << "Expected first time: " << before << "\n";
     msg << "Generated times:\n";
