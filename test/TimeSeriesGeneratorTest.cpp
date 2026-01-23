@@ -458,70 +458,86 @@ void epochtime()
 
 void offset()
 {
-  std::ostringstream msg;
-  try
+  // Earlier version used offset "-1h" with Fmi::TimeParser. Fmi::TimeParser testing
+  // is done elsewhere, here we just test that TimeSeriesGenerator generated times
+  // are correctly offsetted.
+  using namespace SmartMet::TimeSeries;
+
+  int numErrors = 0;
+  constexpr const int MAX_ERRORS = 10;
+
+  auto tz = timezones.time_zone_from_string("Europe/Helsinki");
+
+  const Fmi::DateTime now = Fmi::SecondClock::universal_time();
+  const Fmi::DateTime start = Fmi::DateTime(now.date(), Fmi::Seconds(0));
+
+  for (unsigned seconds = 0; seconds < 86400 && numErrors < MAX_ERRORS; seconds += 1)
   {
-    using namespace SmartMet::TimeSeries;
+    std::ostringstream msg;
 
-    const auto prevExactHour = []() {
-      // Use same  way of getting curent time as when setting opt.startTime
-      auto now = Fmi::TimeParser::parse("0s");
-      return Fmi::DateTime(now.date(), Fmi::Hours(now.time_of_day().hours()));
-    };
-
-    std::string starttime = "-1h";
-
-    Fmi::DateTime before;
-
+    bool isError = false;
+    // Expect full hours. Take rounding down to full minutes into account
+    // (TimeSeriesGenerator ignores seconds and takes only full minutes into account)
+    const unsigned tmp = (seconds + 59) / 60;
+    const Fmi::DateTime next_full_hour = start + Fmi::Hours((59 + tmp) / 60);
+    //
     TimeSeriesGeneratorOptions opt;
     opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
-    for (int cnt = 0; cnt < 10; ++cnt)
-    {
-      before = prevExactHour();
-      opt.startTime = Fmi::TimeParser::parse(starttime);
-      auto after = prevExactHour();
-      if (before == after)
-      {
-        // Hour has not changed in the meantime, continue with the test
-        // Otherwise we have to try again
-        break;
-      }
-    }
-    opt.startTimeUTC = Fmi::TimeParser::looks_utc(starttime);
+    opt.startTime = start + Fmi::Seconds(seconds);
+    opt.startTimeUTC = true;
     opt.endTime = opt.startTime + Fmi::Hours(24);
     opt.timeStep = 60;
     opt.timeSteps = 2;
 
-    auto tz = timezones.time_zone_from_string("Europe/Helsinki");
     auto series = TimeSeriesGenerator::generate(opt, tz);
 
-    msg << "Current time: " << Fmi::SecondClock::universal_time() << "\n";
-    msg << "Start time: " << Fmi::LocalDateTime(opt.startTime, tz) << "\n";
-    msg << "Expected first time: " << before << "\n";
+    msg << "Start time: " << opt.startTime << "\n";
+    msg << "Next full hour: " << Fmi::LocalDateTime(next_full_hour, tz) << "\n";
     msg << "Generated times:\n";
     for (const auto& t : series)
       msg << "  " << t << "\n";
 
     if (series.size() != 2)
-      TEST_FAILED("Expected two times in the result");
+    {
+      isError = true;
+      msg << "  Expected two times in the result\n";
+    }
 
-    // We expect to get the current time rounded down to the exact hour
+    // We expect to get the start time and start time + 1h
 
-    auto diff = before - series.front().utc_time();
+    auto diff = next_full_hour - series.front().utc_time();
     if (diff != Fmi::Seconds(0))
-      TEST_FAILED("Too large time difference to current time rounded down to exact hour: " + Fmi::to_simple_string(diff));
+    {
+      isError = true;
+      msg << "  Too large time difference to start time: " << Fmi::to_simple_string(diff) << "\n";
+    }
 
-    diff = series.back().utc_time() - before;
-    if (diff != Fmi::Hours(1))
-      TEST_FAILED("Too large time difference to current time rounded down to exact hour + 1: " + Fmi::to_simple_string(diff));
+    diff = series.back().utc_time() - (next_full_hour + Fmi::Hours(1));
+    if (diff != Fmi::Seconds(0))
+    {
+      isError = true;
+      msg << "  Too large time difference to start time + 1h: " << Fmi::to_simple_string(diff) << "\n";
+    }
 
+    if (isError)
+    {
+      numErrors++;
+      std::cout << '\n' << msg.str();
+      msg.str("");
+    }
   }
-  catch (...)
+
+  if (numErrors > 0)
   {
-    std::cerr << '\n' << msg.str();
-    throw;
+    if (numErrors >= MAX_ERRORS)
+    {
+      TEST_FAILED("Maximum number of errors (" + Fmi::to_string(MAX_ERRORS) + ") reached, stopping test");
+    }
+    else
+    {
+      TEST_FAILED("Encountered " + Fmi::to_string(numErrors) + " exceptions in offset test");
+    }
   }
-
   TEST_PASSED();
 }
 
