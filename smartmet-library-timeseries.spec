@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 25.12.29
+Version: 26.2.4
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Wed Feb  4 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.2.4-1.fmi
+- Update to proj-9.7, gdal-3.12, fmt-12
+
 * Mon Dec 29 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.12.29-1.fmi
 - Several fixes to compiler warnings
 
