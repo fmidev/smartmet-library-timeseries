@@ -149,6 +149,30 @@ void generate_fixedtimes(std::set<Fmi::LocalDateTime>& theTimes,
 
 // ----------------------------------------------------------------------
 /*!
+ * \brief Insert a timestep if valid, return true if the step limit was reached.
+ */
+// ----------------------------------------------------------------------
+
+bool insert_timestep_if_valid(std::set<Fmi::LocalDateTime>& theTimes,
+                              const TimeSeriesGeneratorOptions& theOptions,
+                              const Fmi::LocalDateTime& t,
+                              const Fmi::LocalTimePeriod& period,
+                              const Fmi::LocalDateTime& theStartTime,
+                              const Fmi::LocalDateTime& theEndTime)
+{
+  if (!!theOptions.timeSteps)
+  {
+    if (!t.is_not_a_date_time() && t >= theStartTime)
+      theTimes.insert(t);
+    return theTimes.size() >= *theOptions.timeSteps;
+  }
+  if (!t.is_not_a_date_time() && (period.contains(t) || t == theEndTime))
+    theTimes.insert(t);
+  return false;
+}
+
+// ----------------------------------------------------------------------
+/*!
  * \brief Generate time step series
  *
  * There may be a fixed number of timesteps or a fixed end time.
@@ -194,31 +218,19 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
       if (t > theEndTime)
         break;
 
-      if (!theOptions.days.empty())
-        if (theOptions.days.find(day.day()) == theOptions.days.end())
-        {
-          mins += timestep;
-          continue;
-        }
+      if (!theOptions.days.empty() && theOptions.days.find(day.day()) == theOptions.days.end())
+      {
+        mins += timestep;
+        continue;
+      }
 
       // In the first case we can test after the insert if
       // we should break based on the number of times, in
       // the latter case we must validate the time first
       // to prevent its inclusion.
 
-      if (!!theOptions.timeSteps)
-      {
-        if (!t.is_not_a_date_time() && t >= theStartTime)
-          theTimes.insert(t);
-
-        if (theTimes.size() >= *theOptions.timeSteps)
-          break;
-      }
-      else
-      {
-        if (!t.is_not_a_date_time() && (period.contains(t) || t == theEndTime))
-          theTimes.insert(t);
-      }
+      if (insert_timestep_if_valid(theTimes, theOptions, t, period, theStartTime, theEndTime))
+        break;
 
       mins += timestep;
     }
@@ -289,6 +301,62 @@ void generate_datatimes_climatology(std::set<Fmi::LocalDateTime>& theTimes,
 
 // ----------------------------------------------------------------------
 /*!
+ * \brief Check whether a local time passes the day-of-month filter.
+ */
+// ----------------------------------------------------------------------
+
+bool passes_day_filter(const Fmi::LocalDateTime& lt, const std::set<unsigned int>& days)
+{
+  return days.empty() || days.find(lt.date().day()) != days.end();
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Collect data times up to a maximum count.
+ */
+// ----------------------------------------------------------------------
+
+void collect_datatimes_with_limit(std::set<Fmi::LocalDateTime>& theTimes,
+                                  const TimeSeriesGeneratorOptions& theOptions,
+                                  const Fmi::LocalDateTime& theStartTime,
+                                  const Fmi::TimeZonePtr& theZone)
+{
+  for (const Fmi::DateTime& t : *theOptions.getDataTimes())
+  {
+    Fmi::LocalDateTime lt(t, theZone);
+    if (!passes_day_filter(lt, theOptions.days))
+      continue;
+    if (lt >= theStartTime && theTimes.size() < *theOptions.timeSteps)
+      theTimes.insert(lt);
+    if (theTimes.size() >= *theOptions.timeSteps)
+      break;
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Collect data times within a time period.
+ */
+// ----------------------------------------------------------------------
+
+void collect_datatimes_in_period(std::set<Fmi::LocalDateTime>& theTimes,
+                                 const TimeSeriesGeneratorOptions& theOptions,
+                                 const Fmi::LocalTimePeriod& period,
+                                 const Fmi::LocalDateTime& theEndTime,
+                                 const Fmi::TimeZonePtr& theZone)
+{
+  for (const Fmi::DateTime& t : *theOptions.getDataTimes())
+  {
+    Fmi::LocalDateTime lt(t, theZone);
+    if (!passes_day_filter(lt, theOptions.days))
+      continue;
+    if (period.contains(lt) || lt == theEndTime)
+      theTimes.insert(lt);
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
  * \brief Generate data steps
  */
 // ----------------------------------------------------------------------
@@ -303,41 +371,11 @@ void generate_datatimes_normal(std::set<Fmi::LocalDateTime>& theTimes,
   {
     Fmi::LocalTimePeriod period(theStartTime, theEndTime);
 
-    // The timesteps available in the data itself
-
-    bool use_timesteps = !!theOptions.timeSteps;
-
-    // Normal data - no need to fiddle with years
-    if (use_timesteps)
-    {
-      for (const Fmi::DateTime& t : *theOptions.getDataTimes())
-      {
-        Fmi::LocalDateTime lt(t, theZone);
-
-        if (!theOptions.days.empty())
-          if (theOptions.days.find(lt.date().day()) == theOptions.days.end())
-            continue;
-
-        if (lt >= theStartTime && theTimes.size() < *theOptions.timeSteps)
-          theTimes.insert(lt);
-        if (theTimes.size() >= *theOptions.timeSteps)
-          break;
-      }
-    }
+    // The timesteps available in the data itself - Normal data, no need to fiddle with years
+    if (!!theOptions.timeSteps)
+      collect_datatimes_with_limit(theTimes, theOptions, theStartTime, theZone);
     else
-    {
-      for (const Fmi::DateTime& t : *theOptions.getDataTimes())
-      {
-        Fmi::LocalDateTime lt(t, theZone);
-
-        if (!theOptions.days.empty())
-          if (theOptions.days.find(lt.date().day()) == theOptions.days.end())
-            continue;
-
-        if (period.contains(lt) || lt == theEndTime)
-          theTimes.insert(lt);
-      }
-    }
+      collect_datatimes_in_period(theTimes, theOptions, period, theEndTime, theZone);
   }
   catch (...)
   {

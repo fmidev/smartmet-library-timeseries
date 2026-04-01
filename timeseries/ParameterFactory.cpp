@@ -602,6 +602,65 @@ void parse_function(const std::string& functionname1,
   }
 }
 
+struct SensorInfo
+{
+  std::string sensor_no;
+  std::string sensor_parameter;
+};
+
+SensorInfo extract_sensor_info(const std::string& name,
+                               std::string& innermost_item,
+                               std::string& tmpname)
+{
+  if (boost::algorithm::istarts_with(name, "date(") ||
+      innermost_item.find('(') == std::string::npos)
+    return {};
+
+  Fmi::trim(innermost_item);
+  std::string innermost_name = innermost_item.substr(0, innermost_item.find('('));
+  if (innermost_item.find('[') != std::string::npos)
+  {
+    // Remove [..., for example percentage_t[0:60](TotalCloudCover)
+    innermost_name.resize(innermost_item.find('['));
+  }
+
+  // If the name before innermost parenthesis is not a function it must be a parameter
+  if (get_function_index(innermost_name) >= 0)
+    return {};
+
+  // Sensor info
+  SensorInfo result;
+  bool sensor_parameter_exists = false;
+  auto len = innermost_item.find(')') - innermost_item.find('(') + 1;
+  auto sensor_info = innermost_item.substr(innermost_item.find('('), len);
+  if (sensor_info.find(':') != sensor_info.rfind(':'))
+  {
+    auto len2 = sensor_info.rfind(')') - sensor_info.rfind(':') - 1;
+    result.sensor_parameter = sensor_info.substr(sensor_info.rfind(':') + 1, len2);
+    len2 = sensor_info.rfind(':') - sensor_info.find(':') - 1;
+    result.sensor_no = sensor_info.substr(sensor_info.find(':') + 1, len2);
+    sensor_parameter_exists = true;
+  }
+  else if (sensor_info.find(':') != std::string::npos)
+  {
+    size_t len2 = sensor_info.rfind(')') - sensor_info.find(':') - 1;
+    result.sensor_no = sensor_info.substr(sensor_info.find(':') + 1, len2);
+  }
+  Fmi::trim(result.sensor_parameter);
+  Fmi::trim(result.sensor_no);
+
+  if (result.sensor_no.empty())
+    throw Fmi::Exception(BCP, "Sensor number can not be empty!");
+  if (sensor_parameter_exists &&
+      (result.sensor_parameter.empty() ||
+       (result.sensor_parameter != "qc" && result.sensor_parameter != "longitude" &&
+        result.sensor_parameter != "latitude")))
+    throw Fmi::Exception(BCP, "Sensor parameter must be of the following: qc,longitide,latitude!");
+
+  boost::algorithm::replace_first(tmpname, sensor_info, "");
+  return result;
+}
+
 }  // namespace
 
 // ----------------------------------------------------------------------
@@ -803,9 +862,6 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
     if (parenhesis_start != parenhesis_end)
       throw Fmi::Exception(BCP, "Wrong number of parenthesis: " + tmpname);
 
-    std::string sensor_no;
-    std::string sensor_parameter;
-
     std::string innermost_item = tmpname;
     // If sensor info exists it is inside the innermost parenthesis
     while (innermost_item.find_first_of('(') != innermost_item.find_last_of('('))
@@ -814,52 +870,7 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
       innermost_item = innermost_item.substr(innermost_item.find_first_of('(') + 1, count);
     }
 
-    if (!boost::algorithm::istarts_with(name, "date(") &&
-        innermost_item.find('(') != std::string::npos)
-    {
-      Fmi::trim(innermost_item);
-      std::string innermost_name = innermost_item.substr(0, innermost_item.find('('));
-      if (innermost_item.find('[') != std::string::npos)
-      {
-        // Remove [..., for example percentage_t[0:60](TotalCloudCover)
-        innermost_name.resize(innermost_item.find('['));
-      }
-      // If the name before innermost parenthesis is not a function it must be a parameter
-
-      if (get_function_index(innermost_name) < 0)
-      {
-        // Sensor info
-        bool sensor_parameter_exists = false;
-        auto len = innermost_item.find(')') - innermost_item.find('(') + 1;
-        auto sensor_info = innermost_item.substr(innermost_item.find('('), len);
-        if (sensor_info.find(':') != sensor_info.rfind(':'))
-        {
-          auto len = sensor_info.rfind(')') - sensor_info.rfind(':') - 1;
-          sensor_parameter = sensor_info.substr(sensor_info.rfind(':') + 1, len);
-          len = sensor_info.rfind(':') - sensor_info.find(':') - 1;
-          sensor_no = sensor_info.substr(sensor_info.find(':') + 1, len);
-          sensor_parameter_exists = true;
-        }
-        else if (sensor_info.find(':') != std::string::npos)
-        {
-          size_t len = sensor_info.rfind(')') - sensor_info.find(':') - 1;
-          sensor_no = sensor_info.substr(sensor_info.find(':') + 1, len);
-        }
-        Fmi::trim(sensor_parameter);
-        Fmi::trim(sensor_no);
-
-        if (sensor_no.empty())
-          throw Fmi::Exception(BCP, "Sensor number can not be empty!");
-        if (sensor_parameter_exists &&
-            (sensor_parameter.empty() ||
-             (sensor_parameter != "qc" && sensor_parameter != "longitude" &&
-              sensor_parameter != "latitude")))
-          throw Fmi::Exception(BCP,
-                               "Sensor parameter must be of the following: qc,longitide,latitude!");
-
-        boost::algorithm::replace_first(tmpname, sensor_info, "");
-      }
-    }
+    auto sensor = extract_sensor_info(name, innermost_item, tmpname);
 
     std::string originalParamName = tmpname;
 
@@ -872,12 +883,12 @@ ParameterAndFunctions ParameterFactory::parseNameAndFunctions(
     parameter.setOriginalName(originalParamName);
 
     if (boost::algorithm::starts_with(paramname, "qc_"))
-      sensor_parameter = "qc";
+      sensor.sensor_parameter = "qc";
 
-    if (!sensor_no.empty())
-      parameter.setSensorNumber(Fmi::stoi(sensor_no));
-    if (!sensor_parameter.empty())
-      parameter.setSensorParameter(sensor_parameter);
+    if (!sensor.sensor_no.empty())
+      parameter.setSensorNumber(Fmi::stoi(sensor.sensor_no));
+    if (!sensor.sensor_parameter.empty())
+      parameter.setSensorParameter(sensor.sensor_parameter);
 
     return {parameter, DataFunctions(innerFunction, outerFunction)};
   }
