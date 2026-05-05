@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.4.13
+Version: 26.5.5
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -21,16 +21,16 @@ BuildRequires: %{smartmet_boost}-devel
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: rpm-build
-BuildRequires: smartmet-utils-devel >= 26.2.4
-BuildRequires: smartmet-library-macgyver-devel >= 26.2.4
+BuildRequires: smartmet-utils-devel >= 26.4.28
+BuildRequires: smartmet-library-macgyver-devel >= 26.4.13
 BuildRequires: smartmet-library-newbase-devel >= 26.2.4
-BuildRequires: smartmet-library-spine-devel >= 26.2.4
+BuildRequires: smartmet-library-spine-devel >= 26.4.27
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 26.2.4
+Requires: smartmet-library-spine >= 26.4.27
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -49,9 +49,9 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 26.2.4
+Requires: smartmet-library-macgyver-devel >= 26.4.13
 Requires: smartmet-library-newbase-devel >= 26.2.4
-Requires: smartmet-library-spine-devel >= 26.2.4
+Requires: smartmet-library-spine-devel >= 26.4.27
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Tue May  5 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.5.5-1.fmi
+- Fixed RPM dependencies
+
 * Mon Apr 13 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.4.13-1.fmi
 - Refactored code for simplicity
 
