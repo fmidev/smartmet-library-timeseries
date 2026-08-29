@@ -185,6 +185,33 @@ void fixedtimes_day()
  */
 // ----------------------------------------------------------------------
 
+void excessive_timesteps()
+{
+  using namespace SmartMet::TimeSeries;
+
+  // A one-minute step over a multi-decade span would build a set of tens of millions of
+  // times and OOM/hang the process. The generator must instead throw once it exceeds its
+  // hard safety limit rather than attempt the allocation.
+  TimeSeriesGeneratorOptions opt;
+  opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
+  opt.startTime = Fmi::DateTime(Fmi::Date(2000, 1, 1), Fmi::Hours(0));
+  opt.startTimeUTC = true;
+  opt.endTime = opt.startTime + Fmi::Hours(24 * 365 * 40);  // ~40 years
+  opt.timeStep = 1;                                         // one minute
+
+  auto tz = timezones.time_zone_from_string("UTC");
+  try
+  {
+    (void)TimeSeriesGenerator::generate(opt, tz);
+    TEST_FAILED("Unbounded time-step generation should have thrown");
+  }
+  catch (...)
+  {
+    // Expected: the hard safety limit was hit.
+  }
+  TEST_PASSED();
+}
+
 void timesteps_utc()
 {
   using namespace SmartMet::TimeSeries;
@@ -557,6 +584,7 @@ class tests : public tframe::tests
     TEST(fixedtimes_towintertime);
     TEST(fixedtimes_tosummertime);
     TEST(fixedtimes_day);
+    TEST(excessive_timesteps);
     TEST(timesteps_utc);
     TEST(timesteps_helsinki);
     TEST(timesteps_tosummertime);

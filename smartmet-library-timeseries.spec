@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.5.5
+Version: 26.8.30
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -79,6 +79,10 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Sat Aug 30 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.8.30-1.fmi
+- Security: cap the number of iterations a single time-series generation may perform,
+  so an unbounded endtime, timestep or timesteps value can no longer build a
+  multi-billion-element timestamp set and OOM/hang the process.
 * Tue May  5 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.5.5-1.fmi
 - Fixed RPM dependencies
 
