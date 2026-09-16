@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.5.5
+Version: 26.9.16
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -22,7 +22,7 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 26.4.28
-BuildRequires: smartmet-library-macgyver-devel >= 26.4.13
+BuildRequires: smartmet-library-macgyver-devel >= 26.9.16
 BuildRequires: smartmet-library-newbase-devel >= 26.2.4
 BuildRequires: smartmet-library-spine-devel >= 26.4.27
 %if %{with tests}
@@ -49,7 +49,7 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 26.4.13
+Requires: smartmet-library-macgyver-devel >= 26.9.16
 Requires: smartmet-library-newbase-devel >= 26.2.4
 Requires: smartmet-library-spine-devel >= 26.4.27
 Requires: %{SPECNAME} = %{version}-%{release}
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Wed Sep 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.9.16-1.fmi
+- Repackaged due to Fmi::Cache::Cache locking changes
+
 * Tue May  5 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.5.5-1.fmi
 - Fixed RPM dependencies
 
