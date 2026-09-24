@@ -18,6 +18,21 @@ namespace
 {
 const int default_timestep = 60;
 
+// Hard safety limit on how many iterations a single time-series generation may perform,
+// independent of the configurable RequestLimits::maxtimes (which is only a post-generation
+// policy check). Without it, an unbounded endtime, a huge timesteps count, or a days/time
+// filter that excludes everything drives the generation loops into a multi-billion
+// iteration build that OOM-kills or hangs the process. The limit is generous (10M steps is
+// ~19 years of one-minute data), so it never rejects a realistic query; it only stops abuse.
+const std::size_t max_generated_timesteps = 10ULL * 1000 * 1000;
+
+void check_generation_limit(std::size_t iterations)
+{
+  if (iterations > max_generated_timesteps)
+    throw Fmi::Exception(BCP, "Too many time steps requested")
+        .addParameter("maximum", std::to_string(max_generated_timesteps));
+}
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Generate fixed HHMM times
@@ -36,8 +51,10 @@ void generate_fixedtimes_until_endtime(std::set<Fmi::LocalDateTime>& theTimes,
 
     Fmi::Date day(theStartTime.local_time().date());
 
+    std::size_t iterations = 0;
     while (true)
     {
+      check_generation_limit(++iterations);
       for (unsigned int hhmm : theOptions.timeList)
       {
         unsigned int hh = hhmm / 100;
@@ -86,8 +103,10 @@ void generate_fixedtimes_for_number_of_steps(std::set<Fmi::LocalDateTime>& theTi
 
     Fmi::Date day(theStartTime.local_time().date());
 
+    std::size_t iterations = 0;
     while (true)
     {
+      check_generation_limit(++iterations);
       for (unsigned int hhmm : theOptions.timeList)
       {
         unsigned int hh = hhmm / 100;
@@ -205,8 +224,10 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
 
     int mins = 0;
 
+    std::size_t iterations = 0;
     while (true)
     {
+      check_generation_limit(++iterations);
       if (mins >= 24 * 60)
       {
         mins -= 24 * 60;
