@@ -16,6 +16,10 @@ The timeseries library provides data structures and algorithms for handling time
 
 Used by [smartmet-plugin-timeseries](https://github.com/fmidev/smartmet-plugin-timeseries) and [smartmet-engine-observation](https://github.com/fmidev/smartmet-engine-observation).
 
+## Documentation
+
+- [Developer guide](docs/developer-guide.md) — data types, parameter and function syntax, time generation, aggregation, filters, limits
+
 ## License
 
 MIT — see [LICENSE](LICENSE)

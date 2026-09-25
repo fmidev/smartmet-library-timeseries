@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `smartmet-library-timeseries` — a C++17 shared library providing time series data structures and statistical operations for meteorological data. Part of FMI's SmartMet Server ecosystem. Consumed primarily by `smartmet-plugin-timeseries` and `smartmet-engine-observation`.
 
+Full developer documentation: `docs/developer-guide.md`.
+
 ## Build commands
 
 ```bash
@@ -79,5 +81,5 @@ include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 ## Notes
 
 - `TimeSeriesAggregator.cpp` is compiled with `-Wno-deprecated-declarations` (same for its test).
-- Tests are individual executables (not Boost.Test), each `*Test.cpp` compiles to a separate binary.
+- Tests are individual Boost.Test executables (`boost/test/included/unit_test.hpp`); each `*Test.cpp` compiles to a separate binary.
 - The `test-installed` make target tests against system-installed headers/libraries rather than the local build.
