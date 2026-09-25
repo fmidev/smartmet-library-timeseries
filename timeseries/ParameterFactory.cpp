@@ -927,7 +927,12 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
     auto number = FmiParameterName(converter.ToEnum(pname));
 
     if (number == kFmiBadParameter && Fmi::looks_signed_int(pname))
-      number = FmiParameterName(Fmi::stol(pname));
+    {
+      // Only values within the enumeration range are valid parameter numbers
+      const long value = Fmi::stol(pname);
+      if (value > 0 && value <= kFmiLastParameter)
+        number = FmiParameterName(value);
+    }
 
     Parameter::Type type = Parameter::Type::Data;
 
