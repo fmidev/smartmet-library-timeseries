@@ -201,8 +201,6 @@ the version, and rebuild and release the engines and plugins together.
   replace it (as `Query::parse_aggregation_intervals()` there does) before aggregating or
   extending the data period.
 * **Missing values propagate** unless the `nan` variant of a function is used.
-* **Same-kind nesting is silently simplified.** `max_t(mean_t(T/3h))` keeps only one of
-  the two time functions.
 * **Local times.** Series are in the request's time zone; daylight-saving changes give
   23- and 25-hour days, which affects hourly aggregation around the change.
 * **`NFmiEnumConverter` is expensive to construct.** Never create one per call; use
