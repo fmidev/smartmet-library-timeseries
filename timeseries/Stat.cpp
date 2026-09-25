@@ -743,8 +743,8 @@ double Stat::percentage(double lowerLimit,
     if (!get_subvector(subvector, startTime, endTime))
       return itsMissingValue;
 
-    int occurrances = 0;
-    int total_count = 0;
+    double occurrances = 0;
+    double total_count = 0;
 
     for (const DataItem& item : subvector)
     {
