@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.9.26
+Version: 26.10.2
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -22,7 +22,7 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 26.4.28
-BuildRequires: smartmet-library-macgyver-devel >= 26.9.16
+BuildRequires: smartmet-library-macgyver-devel >= 26.10.2
 BuildRequires: smartmet-library-newbase-devel >= 26.2.4
 BuildRequires: smartmet-library-spine-devel >= 26.4.27
 %if %{with tests}
@@ -49,7 +49,7 @@ FMI BrainStorm Timeseries Library
 Summary: SmartMet Timeseries development files
 Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
-Requires: smartmet-library-macgyver-devel >= 26.9.16
+Requires: smartmet-library-macgyver-devel >= 26.10.2
 Requires: smartmet-library-newbase-devel >= 26.2.4
 Requires: smartmet-library-spine-devel >= 26.4.27
 Requires: %{SPECNAME} = %{version}-%{release}
@@ -79,6 +79,10 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Oct 02 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.2-1.fmi
+- Rebuilt against macgyver 26.10.2 where Fmi::Cache::Cache uses CLOCK eviction instead of LRU.
+  CLOCK is faster than LRU since a cache hit only takes a shared lock (ABI change)
+
 * Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.9.26-1.fmi
 - Security: cap the number of iterations a single time-series generation may perform,
   so an unbounded endtime, timestep or timesteps value can no longer build a
