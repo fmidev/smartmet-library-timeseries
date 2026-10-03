@@ -4,7 +4,7 @@
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
 Version: 26.10.3
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Sat Oct  3 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.3-2.fmi
+- Reject time option values with invalid minutes such as time=1275
+
 * Sat Oct 03 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.3-1.fmi
 - Accept numeric parameter ids only within the parameter enumeration
 - Fix weighted percentage counts being truncated to integers

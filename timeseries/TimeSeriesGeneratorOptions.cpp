@@ -88,7 +88,7 @@ void parse_time(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Request&
     for (const std::string& part : parts)
     {
       int th = Fmi::stoi(part);
-      if (th < 0 || th > 2359)
+      if (th < 0 || th > 2359 || th % 100 > 59)
         throw Fmi::Exception(BCP, "Invalid time selection '" + part + "'!");
 
       options.timeList.insert(th);
