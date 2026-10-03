@@ -807,11 +807,17 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       parse_function(functionname1, paramname, theInnerDataFunction);
     }
 
+    // Nested functions must be one time function and one area function. Two
+    // functions of the same kind cannot both be applied (there is no syntax for
+    // two aggregation intervals), and silently dropping one of them would give
+    // a different result than the one requested.
     if (theOuterDataFunction.type() == theInnerDataFunction.type() &&
         theOuterDataFunction.type() != FunctionType::NullFunctionType)
     {
-      // remove outer function
-      theOuterDataFunction = DataFunction();
+      throw Fmi::Exception(BCP,
+                           "Nested functions must be one time function and one area function")
+          .addParameter("Parameter", theParameterRequest)
+          .disableStackTrace();
     }
 
     // We assume ASCII chars only in parameter names
@@ -921,7 +927,12 @@ Spine::Parameter ParameterFactory::parse(const std::string& paramname,
     auto number = FmiParameterName(converter.ToEnum(pname));
 
     if (number == kFmiBadParameter && Fmi::looks_signed_int(pname))
-      number = FmiParameterName(Fmi::stol(pname));
+    {
+      // Only values within the enumeration range are valid parameter numbers
+      const long value = Fmi::stol(pname);
+      if (value > 0 && value <= kFmiLastParameter)
+        number = FmiParameterName(value);
+    }
 
     Parameter::Type type = Parameter::Type::Data;
 
