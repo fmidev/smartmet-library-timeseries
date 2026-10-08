@@ -6,6 +6,7 @@
 #include <spine/Convenience.h>
 #include <spine/Parameter.h>
 #include <spine/Parameters.h>
+#include <cctype>
 #include <stdexcept>
 
 namespace SmartMet
@@ -195,19 +196,58 @@ FunctionId parse_function(const std::string& theFunction)
   }
 }
 
+// A duration accepted by Spine::duration_string_to_minutes, for example 30, 30m, 1h or 1d.
+// A sign is accepted too so that negative intervals are still reported as such.
+bool is_duration(const std::string& theString)
+{
+  std::size_t pos = (!theString.empty() && theString[0] == '-' ? 1 : 0);
+  const std::size_t start = pos;
+  while (pos < theString.size() && std::isdigit(static_cast<unsigned char>(theString[pos])))
+    ++pos;
+  if (pos == start)
+    return false;
+  if (pos < theString.size() &&
+      (theString[pos] == 'm' || theString[pos] == 'h' || theString[pos] == 'd'))
+    ++pos;
+  return pos == theString.size();
+}
+
+// The legacy interval syntax name:behind[:ahead] uses colons, but so do grid parameter names
+// such as T-K:MEPS:1093:6:2:4:0. Colons separate intervals only if everything after the first
+// colon consists of one or two durations.
+bool has_colon_intervals(const std::string& paramname)
+{
+  auto pos = paramname.find(':');
+  if (pos == std::string::npos)
+    return false;
+
+  std::size_t count = 0;
+  while (pos != std::string::npos)
+  {
+    const auto next = paramname.find(':', pos + 1);
+    const auto len = (next == std::string::npos ? std::string::npos : next - pos - 1);
+    if (++count > 2 || !is_duration(paramname.substr(pos + 1, len)))
+      return false;
+    pos = next;
+  }
+  return true;
+}
+
 void parse_intervals(std::string& paramname,
                      unsigned int& aggregation_interval_behind,
                      unsigned int& aggregation_interval_ahead)
 {
   try
   {
-    std::string intervalSeparator(":");
+    std::string intervalSeparator;
     if (paramname.find('/') != std::string::npos)
       intervalSeparator = "/";
     else if (paramname.find(';') != std::string::npos)
       intervalSeparator = ";";
-    else if (paramname.find(':') != std::string::npos)
+    else if (has_colon_intervals(paramname))
       intervalSeparator = ":";
+    else
+      return;
 
     if (paramname.find(intervalSeparator) != std::string::npos)
     {
