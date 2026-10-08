@@ -4,7 +4,7 @@
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
 Version: 26.10.8
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Thu Oct  8 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.8-2.fmi
+- Accept the aggregation interval of an outer time function after the inner area function, as in nanmean_t(nanmean(T)/0m/60m)
+
 * Thu Oct  8 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.8-1.fmi
 - Do not split grid parameter names such as T-K:MEPS:1093:6:2:4:0 at colons when parsing aggregation intervals, colons separate intervals only if they are followed by durations
 
