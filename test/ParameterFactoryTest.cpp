@@ -70,10 +70,31 @@ BOOST_AUTO_TEST_CASE(colons_in_parameter_names)
   BOOST_CHECK_EQUAL(pf.functions.outerFunction.getAggregationIntervalBehind(), 0U);
   BOOST_CHECK_EQUAL(pf.functions.outerFunction.getAggregationIntervalAhead(), 60U);
 
-  // The interval belongs next to the parameter name, not after the inner function
+  // The interval of an outer time function can be given in its own parentheses
+  pf = factory.parseNameAndFunctions("nanmean_t(nanmean(T-K:MEPS:1093:6:2:4:0)/0m/60m)", true);
+  BOOST_CHECK_EQUAL(pf.parameter.name(), "t-k:meps:1093:6:2:4:0");
+  BOOST_CHECK(pf.functions.innerFunction.type() == TS::FunctionType::AreaFunction);
+  BOOST_CHECK(pf.functions.outerFunction.type() == TS::FunctionType::TimeFunction);
+  BOOST_CHECK_EQUAL(pf.functions.outerFunction.getAggregationIntervalBehind(), 0U);
+  BOOST_CHECK_EQUAL(pf.functions.outerFunction.getAggregationIntervalAhead(), 60U);
+
+  pf = factory.parseNameAndFunctions("max_t(mean(temperature)/3h)");
+  BOOST_CHECK_EQUAL(pf.parameter.name(), "Temperature");
+  BOOST_CHECK(pf.functions.outerFunction.type() == TS::FunctionType::TimeFunction);
+  BOOST_CHECK_EQUAL(pf.functions.outerFunction.getAggregationIntervalBehind(), 180U);
+
+  pf = factory.parseNameAndFunctions("max_t(mean(temperature);1h;2h)");
+  BOOST_CHECK_EQUAL(pf.functions.outerFunction.getAggregationIntervalBehind(), 60U);
+  BOOST_CHECK_EQUAL(pf.functions.outerFunction.getAggregationIntervalAhead(), 120U);
+
+  // The interval cannot be given twice, and an area function takes no interval
   BOOST_CHECK_THROW(
-      factory.parseNameAndFunctions("nanmean_t(nanmean(T-K:MEPS:1093:6:2:4:0)/0m/60m)", true),
+      factory.parseNameAndFunctions("nanmean_t(nanmean(T-K:MEPS:1093:6:2:4:0/1h)/0m/60m)", true),
       Fmi::Exception);
+  BOOST_CHECK_THROW(factory.parseNameAndFunctions("max_t(mean(temperature:1h)/3h)"),
+                    Fmi::Exception);
+  BOOST_CHECK_THROW(factory.parseNameAndFunctions("mean(mean_t(temperature)/1h)"),
+                    Fmi::Exception);
 
   // The legacy colon syntax for intervals still works
   pf = factory.parseNameAndFunctions("mean_t(Temperature:1h)");

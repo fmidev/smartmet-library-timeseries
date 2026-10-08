@@ -824,6 +824,16 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
 
     auto parts = parse_parameter_parts(paramreq);
 
+    // The aggregation interval of an outer time function may be given inside its own
+    // parentheses after the inner area function, as in nanmean_t(nanmean(T)/0m/60m).
+    std::string outer_interval;
+    if (parts.size() == 4 && (parts.back()[0] == '/' || parts.back()[0] == ';') &&
+        boost::algorithm::ends_with(paramreq, ")" + parts.back() + ")"))
+    {
+      outer_interval = parts.back();
+      parts.pop_back();
+    }
+
     if (parts.empty() || parts.size() > 3)
       throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
 
@@ -836,6 +846,28 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
     const std::string functionname2 = (parts.empty() ? "" : parts.front());
     if (!parts.empty())
       parts.pop_front();
+
+    if (!outer_interval.empty())
+    {
+      double lower_limit = 0;
+      double upper_limit = 0;
+      if (!boost::algorithm::ends_with(extract_function(functionname1, lower_limit, upper_limit),
+                                       "_t"))
+        throw Fmi::Exception(BCP,
+                             "An aggregation interval after the inner function requires the "
+                             "outer function to be a time function")
+            .addParameter("Parameter", theParameterRequest)
+            .disableStackTrace();
+
+      if (paramname.find('/') != std::string::npos || paramname.find(';') != std::string::npos ||
+          has_colon_intervals(paramname))
+        throw Fmi::Exception(BCP, "The aggregation interval is given twice")
+            .addParameter("Parameter", theParameterRequest)
+            .disableStackTrace();
+
+      // From here on the interval is handled as if given after the parameter name
+      paramname += outer_interval;
+    }
 
     if (!functionname1.empty() && !functionname2.empty())
     {
