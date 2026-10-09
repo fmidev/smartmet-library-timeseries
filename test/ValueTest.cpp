@@ -40,6 +40,26 @@ BOOST_AUTO_TEST_CASE(compare_with_none)
     BOOST_CHECK(v1 != v2);
 }
 
+// In C++20 "value == None()" may be rewritten as "None() == value", which used the template
+// Spine::None::operator== returning false for every type but None
+BOOST_AUTO_TEST_CASE(compare_directly_with_none)
+{
+    Value missing = None();
+    Value number = 1.3;
+    Value text = std::string("x");
+
+    BOOST_CHECK(missing == None());
+    BOOST_CHECK(!(missing != None()));
+    BOOST_CHECK(None() == missing);
+    BOOST_CHECK(!(None() != missing));
+
+    BOOST_CHECK(number != None());
+    BOOST_CHECK(!(number == None()));
+    BOOST_CHECK(None() != number);
+    BOOST_CHECK(text != None());
+    BOOST_CHECK(!(None() == text));
+}
+
 BOOST_AUTO_TEST_CASE(get_double)
 {
   None none;

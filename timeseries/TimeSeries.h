@@ -59,6 +59,16 @@ struct Value : public Value_
 
   bool operator!=(const Value& other) const { return !operator==(other); }
 
+  // Without these, C++20 rewrites "value == None()" as "None() == value", and the template
+  // Spine::None::operator== returns false for everything but None, so the result was always
+  // false (and "value != None()" always true) even for missing values
+  bool operator==(const Spine::None& /* none */) const
+  {
+    return std::holds_alternative<Spine::None>(static_cast<const Value_&>(*this));
+  }
+
+  bool operator!=(const Spine::None& none) const { return !operator==(none); }
+
   /**
    *   @brief Get double value using supported conversions
    */
@@ -66,6 +76,17 @@ struct Value : public Value_
 
   int as_int() const;
 };
+
+// For "None() == value": a non-template beats the template Spine::None::operator==
+inline bool operator==(const Spine::None& none, const Value& value)
+{
+  return value == none;
+}
+
+inline bool operator!=(const Spine::None& none, const Value& value)
+{
+  return value != none;
+}
 
 struct TimedValue
 {
