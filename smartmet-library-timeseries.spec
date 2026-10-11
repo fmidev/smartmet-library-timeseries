@@ -24,13 +24,13 @@ BuildRequires: rpm-build
 BuildRequires: smartmet-utils-devel >= 26.4.28
 BuildRequires: smartmet-library-macgyver-devel >= 26.10.3
 BuildRequires: smartmet-library-newbase-devel >= 26.10.3
-BuildRequires: smartmet-library-spine-devel >= 26.10.10
+BuildRequires: smartmet-library-spine-devel >= 26.10.11-2
 %if %{with tests}
 BuildRequires: smartmet-library-regression
 %endif
 Requires: %{smartmet_boost}-system
 Requires: %{smartmet_boost}-thread
-Requires: smartmet-library-spine >= 26.10.10
+Requires: smartmet-library-spine >= 26.10.11-2
 Requires: ctpp2
 
 #TestRequires: %{smartmet_boost}-devel
@@ -51,7 +51,7 @@ Group: SmartMet/Development
 Requires: %{smartmet_boost}-devel
 Requires: smartmet-library-macgyver-devel >= 26.10.3
 Requires: smartmet-library-newbase-devel >= 26.10.3
-Requires: smartmet-library-spine-devel >= 26.10.10
+Requires: smartmet-library-spine-devel >= 26.10.11-2
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet Timeseries development files
@@ -81,6 +81,7 @@ make %{_smp_mflags}
 %changelog
 * Sat Oct 10 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.10-1.fmi
 - Added special parameter roadww (BRAINSTORM-2786)
+- Requires smartmet-library-spine >= 26.10.11-2 for RoadWW
 
 * Fri Oct 09 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.9-1.fmi
 - Comparisons of Value with None work in C++20, where value == None() was always false
