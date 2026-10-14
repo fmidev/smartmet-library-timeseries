@@ -14,8 +14,7 @@ namespace SpecialParameters
 const StationParameters StationParameters::instance;
 
 StationParameters::StationParameters()
-try : Fmi
-  ::FunctionMap<Value, StationParameterArgs>()
+try
   {
     add(DIRECTION_PARAM,
         [](const StationParameterArgs& args) -> Value
