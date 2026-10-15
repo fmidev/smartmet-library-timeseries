@@ -58,6 +58,8 @@ struct TimeParameterArgs final
   }
 
   ~TimeParameterArgs();
+  TimeParameterArgs(const TimeParameterArgs&) = delete;
+  TimeParameterArgs& operator=(const TimeParameterArgs&) = delete;
 
  private:
   // Currently unused, but can be used for internal caching of temporary values to

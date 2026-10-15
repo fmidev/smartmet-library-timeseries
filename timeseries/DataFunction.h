@@ -63,6 +63,7 @@ struct DataFunction
   }
   DataFunction(const DataFunction& pf) = default;
   DataFunction& operator=(const DataFunction& pf) = default;
+  ~DataFunction() = default;
 
   bool exists() const { return itsFunctionType != FunctionType::NullFunctionType; }
   std::string info() const;
@@ -120,6 +121,7 @@ struct DataFunctions
   }
   DataFunctions(const DataFunctions& functions) = default;
   DataFunctions& operator=(const DataFunctions& other) = default;
+  ~DataFunctions() = default;
 
   DataFunction innerFunction;
   DataFunction outerFunction;

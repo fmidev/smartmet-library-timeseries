@@ -47,6 +47,8 @@ struct LocationParameterArgs final
   }
 
   ~LocationParameterArgs();
+  LocationParameterArgs(const LocationParameterArgs&) = delete;
+  LocationParameterArgs& operator=(const LocationParameterArgs&) = delete;
 
  private:
   // Currently unused, but can be used for internal caching.

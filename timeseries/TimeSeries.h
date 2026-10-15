@@ -54,6 +54,7 @@ struct Value : public Value_
   Value(const Value&) = default;
 
   Value& operator=(const Value&) = default;
+  ~Value() = default;
 
   bool operator==(const Value& other) const;
 
@@ -106,6 +107,7 @@ struct TimedValue
     }
     return *this;
   }
+  ~TimedValue() = default;
 
   Fmi::LocalDateTime time;
   Value value;
@@ -128,6 +130,7 @@ class TimeSeries : public TimedValueVector
               TimedValueVector::const_iterator first,
               TimedValueVector::const_iterator last);
   TimeSeries& operator=(const TimeSeries& ts);
+  ~TimeSeries() = default;
 
   LocalTimeList getTimes() const;
 };
