@@ -64,6 +64,7 @@ const std::map<std::string, Parameter::Type> special_parameter_map = {
     //{ SENSOR_NO_PARAM, Parameter::Type::DataIndependent },
     {"roadww", Parameter::Type::DataDerived},
     {"smartsymbol", Parameter::Type::DataDerived},
+    {"smartsymboltext", Parameter::Type::DataDerived},
     //{ "stationary", Parameter::Type::DataIndependent },
     {STATION_ELEVATION_PARAM, Parameter::Type::DataIndependent},
     {STATION_NAME_PARAM, Parameter::Type::DataIndependent},
