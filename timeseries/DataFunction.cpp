@@ -73,6 +73,9 @@ std::string DataFunction::hash() const
       case FunctionId::Count:
         ss << "Cnt[" << itsLowerLimit << "," << itsUpperLimit << "]";
         break;
+      case FunctionId::Percentile:
+        ss << "Pctl[" << itsLowerLimit << "]";
+        break;
       case FunctionId::NullFunction:
         return "";
     }
@@ -150,6 +153,9 @@ std::string DataFunction::info() const
         break;
       case FunctionId::Interpolate:
         ss << "Interpolate";
+        break;
+      case FunctionId::Percentile:
+        ss << "Percentile[" << itsLowerLimit << "]";
         break;
       case FunctionId::NullFunction:
         ss << "NullFunction";

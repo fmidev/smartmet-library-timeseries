@@ -40,6 +40,36 @@ BOOST_AUTO_TEST_CASE(nested_functions)
   BOOST_CHECK_THROW(factory.parseNameAndFunctions("max(mean(temperature))"), Fmi::Exception);
 }
 
+BOOST_AUTO_TEST_CASE(percentiles)
+{
+  const auto& factory = TS::ParameterFactory::instance();
+
+  auto pf = factory.parseNameAndFunctions("percentile_a[90](temperature)");
+  BOOST_CHECK(pf.functions.innerFunction.id() == TS::FunctionId::Percentile);
+  BOOST_CHECK(pf.functions.innerFunction.type() == TS::FunctionType::AreaFunction);
+  BOOST_CHECK_EQUAL(pf.functions.innerFunction.lowerLimit(), 90);
+
+  pf = factory.parseNameAndFunctions("nanpercentile_t[2.5](temperature/24h)");
+  BOOST_CHECK(pf.functions.innerFunction.id() == TS::FunctionId::Percentile);
+  BOOST_CHECK(pf.functions.innerFunction.type() == TS::FunctionType::TimeFunction);
+  BOOST_CHECK(pf.functions.innerFunction.isNanFunction());
+  BOOST_CHECK_EQUAL(pf.functions.innerFunction.lowerLimit(), 2.5);
+
+  // Both kinds nested
+  pf = factory.parseNameAndFunctions("percentile_a[10](mean_t(temperature/3h))");
+  BOOST_CHECK(pf.functions.outerFunction.id() == TS::FunctionId::Percentile);
+  BOOST_CHECK_EQUAL(pf.functions.outerFunction.lowerLimit(), 10);
+
+  // The percentile is required, from 0 to 100, and other functions still take ranges only
+  BOOST_CHECK_THROW(factory.parseNameAndFunctions("percentile_a(temperature)"), Fmi::Exception);
+  BOOST_CHECK_THROW(factory.parseNameAndFunctions("percentile_a[0:10](temperature)"),
+                    Fmi::Exception);
+  BOOST_CHECK_THROW(factory.parseNameAndFunctions("percentile_a[101](temperature)"),
+                    Fmi::Exception);
+  BOOST_CHECK_THROW(factory.parseNameAndFunctions("percentile_a[x](temperature)"), Fmi::Exception);
+  BOOST_CHECK_THROW(factory.parseNameAndFunctions("percentage_a[5](temperature)"), Fmi::Exception);
+}
+
 BOOST_AUTO_TEST_CASE(colons_in_parameter_names)
 {
   const auto& factory = TS::ParameterFactory::instance();

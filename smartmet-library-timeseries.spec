@@ -4,7 +4,7 @@
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
 Version: 26.10.16
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -79,6 +79,12 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Oct 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.16-2.fmi
+- New functions percentile_a[p], percentile_t[p], nanpercentile_a[p] and nanpercentile_t[p]:
+  the p:th percentile (0...100), interpolated linearly between the ranks
+- FunctionId::Percentile is added after NullFunction, so the values of the other ids do not
+  change and dependent packages need no rebuild unless they use the new function
+
 * Fri Oct 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.16-1.fmi
 - Fixed compiler warnings and clang-tidy findings (unused code, unreachable code, empty statements, member initialization, parameter passing, noexcept), no functional changes
 

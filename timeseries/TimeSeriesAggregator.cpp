@@ -62,7 +62,7 @@ bool include_value(const TimedValue &tv, const DataFunction &func)
   FunctionId funcId = func.id();
 
   if (func.lowerOrUpperLimitGiven() && funcId != FunctionId::Percentage &&
-      funcId != FunctionId::Count)
+      funcId != FunctionId::Count && funcId != FunctionId::Percentile)
   {
     std::optional<double> double_value;
     if (const double *tmp = std::get_if<double>(&tv.value))
@@ -187,6 +187,8 @@ double StatCalculator::getDoubleStatValue(const DataFunction &func, bool useWeig
         return stat.min();
       case FunctionId::Median:
         return stat.median();
+      case FunctionId::Percentile:
+        return stat.percentile(func.lowerLimit());
       case FunctionId::Sum:
         stat.useWeights(false);
         return stat.sum();

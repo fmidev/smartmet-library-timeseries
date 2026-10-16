@@ -30,7 +30,7 @@ namespace
 {
 int get_function_index(const std::string& theFunction)
 {
-  constexpr std::array<const char*, 63> names = {{"mean_a",
+  constexpr std::array<const char*, 67> names = {{"mean_a",
                                                   "mean_t",
                                                   "amean_t",
                                                   "nanmean_a",
@@ -90,6 +90,10 @@ int get_function_index(const std::string& theFunction)
                                                   "nancirclemean_a",
                                                   "circlemean_t",
                                                   "nancirclemean_t",
+                                                  "percentile_a",
+                                                  "percentile_t",
+                                                  "nanpercentile_a",
+                                                  "nanpercentile_t",
                                                   ""}};
 
   std::string func_name(theFunction);
@@ -122,7 +126,7 @@ FunctionId parse_function(const std::string& theFunction)
 {
   try
   {
-    constexpr std::array<FunctionId, 62> functions = {{FunctionId::Mean,
+    constexpr std::array<FunctionId, 66> functions = {{FunctionId::Mean,
                                                        FunctionId::Mean,
                                                        FunctionId::Amean,
                                                        FunctionId::Mean,
@@ -182,7 +186,11 @@ FunctionId parse_function(const std::string& theFunction)
                                                        FunctionId::CircleMean,
                                                        FunctionId::CircleMean,
                                                        FunctionId::CircleMean,
-                                                       FunctionId::CircleMean}};
+                                                       FunctionId::CircleMean,
+                                                       FunctionId::Percentile,
+                                                       FunctionId::Percentile,
+                                                       FunctionId::Percentile,
+                                                       FunctionId::Percentile}};
 
     int function_index = get_function_index(theFunction);
     if (function_index >= 0)
@@ -326,6 +334,8 @@ std::string extract_limits(const std::string& theString)
  *
  *  - name
  *  - name[lo:hi]
+ *  - name[value], for example percentile_a[90], when 'theSingleValue' is given; the value is
+ *    returned as both limits
  *
  * \param theString The function call to parse
  * \return The function name alone
@@ -334,7 +344,8 @@ std::string extract_limits(const std::string& theString)
 
 std::string extract_function(const std::string& theString,
                              double& theLowerLimit,
-                             double& theUpperLimit)
+                             double& theUpperLimit,
+                             bool* theSingleValue = nullptr)
 {
   try
   {
@@ -353,6 +364,15 @@ std::string extract_function(const std::string& theString,
     if (!limits.empty())
     {
       const auto pos = limits.find(':');
+
+      if (pos == std::string::npos && theSingleValue != nullptr)
+      {
+        auto value = limits;
+        Fmi::trim(value);
+        theLowerLimit = theUpperLimit = Fmi::stod(value);
+        *theSingleValue = true;
+        return function_name;
+      }
 
       if (pos == std::string::npos)
         throw Fmi::Exception(BCP, "Unrecognized modifier format '" + limits + "'!");
@@ -540,6 +560,30 @@ std::list<std::string> parse_parameter_parts(const std::string& paramreq)
   }
 }
 
+// Parse the name and the modifier of a function: a percentile takes one value from 0 to 100, the
+// other functions a range
+std::string extract_function_modifier(const std::string& theString,
+                                      double& theLowerLimit,
+                                      double& theUpperLimit)
+{
+  bool single = false;
+  auto name = extract_function(theString, theLowerLimit, theUpperLimit, &single);
+  const bool percentile =
+      (get_function_index(name) >= 0 && parse_function(name) == FunctionId::Percentile);
+  if (percentile)
+  {
+    if (!single)
+      throw Fmi::Exception(BCP, "The percentile must be given as " + name + "[0...100]")
+          .addParameter("Function", theString);
+    if (!(theLowerLimit >= 0 && theLowerLimit <= 100))
+      throw Fmi::Exception(BCP, "The percentile must be in the range 0...100")
+          .addParameter("Function", theString);
+  }
+  else if (single)
+    throw Fmi::Exception(BCP, "Unrecognized modifier format in '" + theString + "'!");
+  return name;
+}
+
 void parse_functions(const std::string& functionname1,
                      const std::string& functionname2,
                      std::string& paramname,
@@ -554,7 +598,7 @@ void parse_functions(const std::string& functionname1,
     unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
 
     // inner and outer functions exist
-    auto f_name = extract_function(functionname2, lower_limit, upper_limit);
+    auto f_name = extract_function_modifier(functionname2, lower_limit, upper_limit);
 
     theInnerDataFunction.setLimits(lower_limit, upper_limit);
 
@@ -577,7 +621,7 @@ void parse_functions(const std::string& functionname1,
       theInnerDataFunction.setAggregationIntervalAhead(aggregation_interval_ahead);
     }
 
-    f_name = extract_function(functionname1, lower_limit, upper_limit);
+    f_name = extract_function_modifier(functionname1, lower_limit, upper_limit);
     theOuterDataFunction.setLimits(lower_limit, upper_limit);
 
     theOuterDataFunction.setId(parse_function(f_name));
@@ -613,7 +657,7 @@ void parse_function(const std::string& functionname1,
     unsigned int aggregation_interval_ahead = std::numeric_limits<unsigned int>::max();
 
     // only inner function exists,
-    auto f_name = extract_function(functionname1, lower_limit, upper_limit);
+    auto f_name = extract_function_modifier(functionname1, lower_limit, upper_limit);
     theInnerDataFunction.setLimits(lower_limit, upper_limit);
 
     theInnerDataFunction.setId(parse_function(f_name));

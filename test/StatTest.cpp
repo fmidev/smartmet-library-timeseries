@@ -501,6 +501,39 @@ void percentage()
   TEST_PASSED();
 }
 
+void percentile()
+{
+  Stat stat(get_data_vector_t());
+  stat.useWeights(false);
+
+  // {2, 1, 5, 3, 4} sorted is {1, 2, 3, 4, 5}
+  const std::vector<std::pair<double, double>> expected{
+      {0, 1}, {10, 1.4}, {25, 2}, {50, 3}, {90, 4.6}, {100, 5}, {150, 5}};
+  for (const auto& item : expected)
+  {
+    const double value = stat.percentile(item.first);
+    if (std::abs(value - item.second) > 1e-9)
+    {
+      std::stringstream ss;
+      ss << "Percentile " << item.first << " of {2.0, 1.0, 5.0, 3.0, 4.0} is " << item.second
+         << ", not " << value;
+      TEST_FAILED(ss.str());
+    }
+  }
+
+  // Between 14:00-17:00 the values are {2, 1, 5}
+  const double p75 = stat.percentile(
+      75, time_from_string("2013-12-02 14:00:00"), time_from_string("2013-12-02 17:00:00"));
+  if (std::abs(p75 - 3.5) > 1e-9)
+  {
+    std::stringstream ss;
+    ss << "Percentile 75 of {2.0, 1.0, 5.0} is 3.5, not " << p75;
+    TEST_FAILED(ss.str());
+  }
+
+  TEST_PASSED();
+}
+
 void median()
 {
   Stat stat(get_data_vector_t());
@@ -872,6 +905,7 @@ class tests : public tframe::tests
     TEST(count);
     TEST(percentage);
     TEST(median);
+    TEST(percentile);
     TEST(stddev);
     TEST(variance);
     TEST(missing_value);

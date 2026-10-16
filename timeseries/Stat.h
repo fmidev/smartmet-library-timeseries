@@ -96,6 +96,10 @@ class Stat
                     const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   double median(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
                 const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
+  // The p:th percentile (0...100), interpolated linearly between the ranks
+  double percentile(double p,
+                    const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
+                    const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   double variance(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
                   const Fmi::DateTime& endTime = Fmi::DateTime::NOT_A_DATE_TIME) const;
   double stddev(const Fmi::DateTime& startTime = Fmi::DateTime::NOT_A_DATE_TIME,
