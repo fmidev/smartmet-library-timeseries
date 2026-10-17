@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.10.16
-Release: 2%{?dist}.fmi
+Version: 26.10.17
+Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -79,7 +79,7 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
-* Fri Oct 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.16-2.fmi
+* Sat Oct 17 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.17-1.fmi
 - New functions percentile_a[p], percentile_t[p], nanpercentile_a[p] and nanpercentile_t[p]:
   the p:th percentile (0...100), interpolated linearly between the ranks
 - FunctionId::Percentile is added after NullFunction, so the values of the other ids do not
