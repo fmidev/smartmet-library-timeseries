@@ -92,6 +92,11 @@ date(%Y-%m-%d)                       formatted time
 * Functions: `mean`, `amean`, `max`, `min`, `median`, `sum`, `integ`, `sdev`, `percentage`,
   `count`, `change`, `trend`, `circlemean` (all with a `nan` variant), and the time-only
   `nearest`, `interpolate`, `interpolatedir`, `meandir`, `sdevdir`.
+* `percentile_t[p]` and `percentile_a[p]` (and `nanpercentile_t[p]`, `nanpercentile_a[p]`)
+  give the p:th percentile, `p` from 0 to 100, interpolated linearly between the ranks:
+  `percentile_a[90](Temperature)`, `nanpercentile_t[10](Temperature/24h)`. The value in the
+  brackets is required. `FunctionId::Percentile` comes after `NullFunction`, so the ids of the
+  older functions did not change.
 * The **intervals** follow the parameter name, separated by `/`, `;` or `:`: the first is
   the interval behind the time step, the second (default 0) the interval ahead. They are
   durations (`3h`, `90m`, `1d`). Without intervals in the name, the interval is left

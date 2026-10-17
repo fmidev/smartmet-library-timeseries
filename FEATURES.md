@@ -58,6 +58,9 @@ A small hierarchy built on `std::variant`:
   - **`Mean`**, **`Amean`** (arithmetic mean).
   - **`CircleMean`** — for directional data (e.g. wind direction).
   - **`Maximum`**, **`Minimum`**, **`Median`**.
+  - **`Percentile`** — the p:th percentile (0...100), interpolated linearly
+    between the ranks: `percentile_t[p]`, `percentile_a[p]` and their `nan`
+    variants.
   - **`Sum`**, **`Integ`** (integral).
   - **`StandardDeviation`**.
   - **`Percentage`**, **`Count`**.
@@ -70,6 +73,7 @@ A small hierarchy built on `std::variant`:
 - **`Stat`** — low-level statistical engine. Supports:
   - **Weighted** and **unweighted** stats.
   - **Circular mean** for wind directions.
+  - **Percentiles** (`Stat::percentile`).
   - **Missing-value handling**.
 
 ## 4. Parameter system
@@ -172,4 +176,4 @@ that aren't fetched from data but computed on the fly:
 
 ---
 
-*Last updated: 2026-06-01.*
+*Last updated: 2026-10-17.*

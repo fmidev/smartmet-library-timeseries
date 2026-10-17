@@ -59,7 +59,7 @@ include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
 1. **TimeSeriesGenerator** produces timestamp lists (`LocalTimeList`) from `TimeSeriesGeneratorOptions` (start/end times, step, mode: DataTimes/GraphTimes/FixedTimes/TimeSteps). Results are cached in `TimeSeriesGeneratorCache`.
 
-2. **TimeSeriesAggregator** applies `DataFunctions` (inner + outer function pair) over time series data. Functions are defined by `FunctionId` (Mean, Max, Min, Median, Sum, Integ, StdDev, Percentage, Count, Change, Trend, Nearest, Interpolate, CircleMean). Functions have a type (`TimeFunction` or `AreaFunction`) and optional aggregation intervals (max 7 days).
+2. **TimeSeriesAggregator** applies `DataFunctions` (inner + outer function pair) over time series data. Functions are defined by `FunctionId` (Mean, Max, Min, Median, Sum, Integ, StdDev, Percentage, Count, Change, Trend, Nearest, Interpolate, CircleMean, Percentile). Functions have a type (`TimeFunction` or `AreaFunction`) and optional aggregation intervals (max 7 days).
 
 3. **Stat** implements the actual statistical computations — supports weighted/unweighted stats and circular mean for wind directions.
 
