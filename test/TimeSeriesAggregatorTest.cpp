@@ -1385,6 +1385,26 @@ void median_a()
   TEST_PASSED();
 }
 
+void percentile_a()
+{
+  // The 90th percentile of the five values of each time, the first being {1, 2, 3, 4, 5}
+  std::string test_result =
+      to_string(*execute_area_aggregation_function_with_range(TS::FunctionId::Percentile, 90, 90));
+
+  std::string expected_result =
+      "2015-Mar-03 00:00:00 EET -> 4.6\n"
+      "2015-Mar-03 01:00:00 EET -> 9.6\n"
+      "2015-Mar-03 02:00:00 EET -> 14.6\n"
+      "2015-Mar-03 03:00:00 EET -> 19.6\n"
+      "2015-Mar-03 04:00:00 EET -> 24.6\n";
+
+  if (test_result != expected_result)
+    TEST_FAILED("Percentile-function test for area failed. Result should be:\n" + expected_result +
+                "\n not \n" + test_result);
+
+  TEST_PASSED();
+}
+
 void sum_a()
 {
   std::string test_result = to_string(*execute_area_aggregation_function(TS::FunctionId::Sum));
@@ -1641,6 +1661,7 @@ class tests : public tframe::tests
     TEST(max_a_nan);
     TEST(mean_a);
     TEST(median_a);
+    TEST(percentile_a);
     TEST(sum_a);
     TEST(stddev_a);
     TEST(percentage_a);

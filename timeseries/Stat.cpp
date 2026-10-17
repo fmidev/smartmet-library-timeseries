@@ -5,6 +5,7 @@
 #include <boost/accumulators/statistics/weighted_median.hpp>
 #include <boost/accumulators/statistics/weighted_variance.hpp>
 #include <macgyver/Exception.h>
+#include <algorithm>
 #include <cmath>
 #include <iterator>
 #include <numeric>
@@ -808,6 +809,38 @@ double Stat::median(const Fmi::DateTime& startTime /*= not_a_date_time */,
     }
 
     return double_vector[static_cast<std::size_t>(((vector_size + 1) / 2) - 1)];
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+double Stat::percentile(double p,
+                        const Fmi::DateTime& startTime /*= not_a_date_time */,
+                        const Fmi::DateTime& endTime /*= not_a_date_time */) const
+{
+  try
+  {
+    DataVector subvector;
+
+    if (!get_subvector(subvector, startTime, endTime) || subvector.empty())
+      return itsMissingValue;
+
+    // Weights repeat the values, as in median()
+    vector<double> values;
+    for (const DataItem& item : subvector)
+      values.insert(
+          values.end(), static_cast<std::size_t>(itsWeights ? item.weight : 1.0), item.value);
+
+    if (values.empty())
+      return itsMissingValue;
+
+    std::sort(values.begin(), values.end());
+    const double pos = std::clamp(p, 0.0, 100.0) / 100.0 * static_cast<double>(values.size() - 1);
+    const auto lo = static_cast<std::size_t>(std::floor(pos));
+    const auto hi = static_cast<std::size_t>(std::ceil(pos));
+    return values[lo] + (values[hi] - values[lo]) * (pos - static_cast<double>(lo));
   }
   catch (...)
   {

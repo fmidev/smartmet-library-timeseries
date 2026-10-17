@@ -35,7 +35,10 @@ enum class FunctionId
   Interpolate,
   Amean,
   CircleMean,
-  NullFunction
+  NullFunction,
+  // New functions are added last to keep the values of the others, which plugins have
+  // compiled in
+  Percentile  // the percentile is the lower limit
 };
 
 enum class FunctionType

@@ -80,6 +80,10 @@ make %{_smp_mflags}
 
 %changelog
 * Sat Oct 17 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.17-1.fmi
+- New functions percentile_a[p], percentile_t[p], nanpercentile_a[p] and nanpercentile_t[p]:
+  the p:th percentile (0...100), interpolated linearly between the ranks
+- FunctionId::Percentile is added after NullFunction, so the values of the other ids do not
+  change and dependent packages need no rebuild unless they use the new function
 - Rebuilt against the new library versions
 
 * Fri Oct 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.16-1.fmi
