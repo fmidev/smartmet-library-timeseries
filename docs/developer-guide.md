@@ -31,7 +31,7 @@ plugin's [Using-the-Timeseries-API.md](https://github.com/fmidev/smartmet-plugin
 
 ```bash
 make                       # libsmartmet-timeseries.so
-make test                  # the Boost.Test programs in test/
+make test                  # the test programs in test/
 cd test && make StatTest && ./StatTest
 cd test && TSAN=yes make test
 cd test && ASAN=yes make test
@@ -124,7 +124,7 @@ name table.
 |------|--------|-------|
 | `TimeSteps` (default) | `timestep=60` (or `1h`) | Every `timestep` minutes from `starttime`, `timesteps` of them or up to `endtime`. |
 | `DataTimes` | `timestep=data` or `all` | The times present in the data. |
-| `GraphTimes` | `timestep=graph` | The data times plus "now". |
+| `GraphTimes` | `timestep=graph` | The data times plus the start time rounded up to the next full hour. |
 | `FixedTimes` | `hour=`, `day=`, `time=` | The listed times of day, days and times in the range. |
 
 `starttime=data` / `endtime=data` take the start or end from the data. Mixing `timestep`

@@ -81,5 +81,5 @@ include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 ## Notes
 
 - `TimeSeriesAggregator.cpp` is compiled with `-Wno-deprecated-declarations` (same for its test).
-- Tests are individual Boost.Test executables (`boost/test/included/unit_test.hpp`); each `*Test.cpp` compiles to a separate binary.
+- Each `*Test.cpp` compiles to a separate binary. Most use Boost.Test (`boost/test/included/unit_test.hpp`); `StatTest`, `TimeSeriesAggregatorTest`, `TimeSeriesGeneratorTest` and `TimeSeriesGeneratorOptionsTest` use `regression/tframe.h`.
 - The `test-installed` make target tests against system-installed headers/libraries rather than the local build.

@@ -43,7 +43,8 @@ A small hierarchy built on `std::variant`:
 - **`TimeSeriesGeneratorOptions`** — start / end time, step, and
   generation **mode**:
   - **`DataTimes`** — match the source data's native timesteps.
-  - **`GraphTimes`** — graph-aligned ticks (hourly / daily / etc.).
+  - **`GraphTimes`** — the data times plus the start time rounded up
+    to the next full hour, so that a graph has no gap at the start.
   - **`FixedTimes`** — exact named instants.
   - **`TimeSteps`** — fixed step from start.
 - **`TimeSeriesGeneratorCache`** — caches recently generated time
@@ -80,7 +81,8 @@ A small hierarchy built on `std::variant`:
 
 - **`ParameterFactory`** (singleton) — parses parameter name strings
   into `ParameterAndFunctions` structs:
-  - Extracts embedded aggregation functions (e.g. `t2m:mean:1h`).
+  - Extracts embedded aggregation functions (e.g.
+    `mean_t(Temperature/1h)`, `max_a(mean_t(Temperature/24h))`).
   - Resolves meteorological parameter names via
     `NFmiEnumConverter` from newbase.
 - **`ParameterAndFunctions`** — parameter + inner/outer function
@@ -125,7 +127,8 @@ that aren't fetched from data but computed on the fly:
 - **`OptionParsers`** — extract parameter lists from HTTP requests
   (used by the timeseries / EDR plugins).
 - **`RequestLimits`** — bounds on query dimensions (max locations,
-  max parameters, max times, max levels).
+  max parameters, max times, max levels, max elements, max radius;
+  0 means unlimited).
 - **`DataFilter`** — generate SQL `WHERE` clauses from filter
   expressions (used by observation queries).
 
@@ -139,17 +142,21 @@ that aren't fetched from data but computed on the fly:
 
 ## 9. Testing
 
-- **~8 standalone test executables** under `test/`:
+- **10 standalone test executables** under `test/`:
   - `DataFilterTest.cpp`
   - `LocationParametersTest.cpp`
+  - `ParameterFactoryTest.cpp`
   - `ParameterToolsTest.cpp`
   - `StatTest.cpp`
   - `TimeParametersTest.cpp`
   - `TimeSeriesAggregatorTest.cpp`
+  - `TimeSeriesGeneratorOptionsTest.cpp`
   - `TimeSeriesGeneratorTest.cpp`
   - `ValueTest.cpp`
 - **Per-test build**: `cd test && make StatTest && ./StatTest`.
-- **Framework**: standalone executables (not Boost.Test).
+- **Framework**: each test is its own executable; most use Boost.Test,
+  `StatTest`, `TimeSeriesAggregatorTest`, `TimeSeriesGeneratorTest` and
+  `TimeSeriesGeneratorOptionsTest` use `regression/tframe.h`.
 - **Sanitiser builds**:
   - `cd test && TSAN=yes make test` — thread sanitiser.
   - `cd test && ASAN=yes make test` — address sanitiser.
