@@ -152,7 +152,9 @@ void parse_starttime(TimeSeriesGeneratorOptions& options, const Spine::HTTP::Req
   {
     std::string stamp = required_string(theReq.getParameter("starttime"), "");
 
-    if (stamp == "data")
+    if (stamp == "now")
+      options.startTimeUTC = true;  // the default, as for endtime=now
+    else if (stamp == "data")
       options.startTimeData = true;
 
     else

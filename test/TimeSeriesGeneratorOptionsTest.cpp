@@ -154,6 +154,13 @@ void start_and_end_times()
   if (!opt.startTimeData || !opt.endTimeData)
     TEST_FAILED("starttime=data and endtime=data should take the times from the data");
 
+  // starttime=now is the default start
+  opt = parse({{"starttime", "now"}});
+  auto def = parse({});
+  if (opt.startTime != def.startTime || opt.endTime != def.endTime || !opt.startTimeUTC)
+    TEST_FAILED("starttime=now should give the default times, got " + str(opt.startTime) +
+                " - " + str(opt.endTime));
+
   opt = parse({{"starttime", "2008-08-05T12:00:00Z"}});
   if (!opt.startTimeUTC || opt.startTime != t(5, 12))
     TEST_FAILED("A Z suffix should give a UTC start time");

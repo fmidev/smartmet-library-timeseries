@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.10.17
-Release: 2%{?dist}.fmi
+Version: 26.10.23
+Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Oct 23 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.23-1.fmi
+- starttime=now is the default start, as endtime=now is the default end
+
 * Mon Oct 19 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.17-2.fmi
 - Repackaged: simultaneous CI runs corrupted the 26.10.17-1 RPMs
 * Sat Oct 17 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.17-1.fmi
