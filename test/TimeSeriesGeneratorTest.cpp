@@ -495,8 +495,11 @@ void offset()
 
   auto tz = timezones.time_zone_from_string("Europe/Helsinki");
 
-  const Fmi::DateTime now = Fmi::SecondClock::universal_time();
-  const Fmi::DateTime start = Fmi::DateTime(now.date(), Fmi::Seconds(0));
+  // A fixed day without a daylight saving time change. With the current day the test failed
+  // on the day before the change to winter time: the hourly steps are in local time, so the
+  // repeated hour is skipped (see timesteps_towintertime) and the second time is two hours
+  // after the first in UTC.
+  const Fmi::DateTime start = Fmi::DateTime(Fmi::Date(2012, 11, 13), Fmi::Seconds(0));
 
   for (unsigned seconds = 0; seconds < 86400 && numErrors < MAX_ERRORS; seconds += 1)
   {
