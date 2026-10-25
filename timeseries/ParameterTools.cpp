@@ -62,6 +62,7 @@ const std::map<std::string, Parameter::Type> special_parameter_map = {
     {REGION_PARAM, Parameter::Type::DataIndependent},
     //{ RWSID_PARAM, Parameter::Type::DataIndependent },
     //{ SENSOR_NO_PARAM, Parameter::Type::DataIndependent },
+    {"roadwawa", Parameter::Type::DataDerived},
     {"roadww", Parameter::Type::DataDerived},
     {"smartsymbol", Parameter::Type::DataDerived},
     {"smartsymboltext", Parameter::Type::DataDerived},
