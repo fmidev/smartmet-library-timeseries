@@ -430,7 +430,7 @@ Value StatCalculator::getStatValue(const DataFunction &func, bool useWeights) co
       if (result == kFloatMissing &&
           (func.id() == FunctionId::Nearest || func.id() == FunctionId::Interpolate))
         return None();
-      ret = getDoubleStatValue(func, useWeights);
+      ret = result;
     }
     else if (!itsTimeSeries.empty())
     {
@@ -525,8 +525,7 @@ TimeSeriesGroupPtr time_aggregate(const TimeSeriesGroup &ts_group,
     // iterate through locations
     for (const auto &t : ts_group)
     {
-      TimeSeries ts(t.timeseries);
-      TimeSeriesPtr aggregated_timeseries(time_aggregate(ts, func, timesteps));
+      TimeSeriesPtr aggregated_timeseries(time_aggregate(t.timeseries, func, timesteps));
       ret->emplace_back(t.lonlat, *aggregated_timeseries);
     }
 
