@@ -1243,9 +1243,9 @@ void trend_t()
   std::string expected_result =
       "2015-Mar-03 00:00:00 EET -> 32700\n"
       "2015-Mar-03 01:00:00 EET -> 100\n"
-      "2015-Mar-03 02:00:00 EET -> 66.6667\n"
-      "2015-Mar-03 03:00:00 EET -> 66.6667\n"
-      "2015-Mar-03 04:00:00 EET -> 66.6667\n";
+      "2015-Mar-03 02:00:00 EET -> 100\n"
+      "2015-Mar-03 03:00:00 EET -> 100\n"
+      "2015-Mar-03 04:00:00 EET -> 100\n";
 
   if (expected_result != test_result)
     TEST_FAILED("Trend-function test failed. Expected result should be:\n" + expected_result +

@@ -610,7 +610,8 @@ double Stat::change(const Fmi::DateTime& startTime /*= not_a_date_time */,
 #endif
     DataVector subvector;
 
-    if (!get_subvector(subvector, startTime, endTime) || subvector.empty())
+    // Weighted extraction would duplicate every interior sample, change needs the samples as is
+    if (!get_subvector(subvector, startTime, endTime, false) || subvector.empty())
       return itsMissingValue;
 
     if (itsDegrees)
@@ -655,7 +656,9 @@ double Stat::trend(const Fmi::DateTime& startTime /*= not_a_date_time */,
 #endif
     DataVector subvector;
 
-    if (!get_subvector(subvector, startTime, endTime) || subvector.size() <= 1)
+    // Weighted extraction would duplicate every interior sample and add zero changes between the
+    // copies, limiting the trend of hourly data within +-1h to {-66.7, 0, 66.7}
+    if (!get_subvector(subvector, startTime, endTime, false) || subvector.size() <= 1)
       return itsMissingValue;
 
     long positiveChanges(0);

@@ -328,6 +328,23 @@ void change()
     TEST_FAILED(ss.str());
   }
 
+  // weights must not pull in samples outside the interval
+  SmartMet::TimeSeries::Stat::DataVector rising;
+  rising.push_back(DataItem(time_from_string("2013-12-02 14:00:00"), 1.0));
+  rising.push_back(DataItem(time_from_string("2013-12-02 15:00:00"), 2.0));
+  rising.push_back(DataItem(time_from_string("2013-12-02 16:00:00"), 3.0));
+  rising.push_back(DataItem(time_from_string("2013-12-02 17:00:00"), 4.0));
+  Stat weighted(rising);
+  weighted.useWeights(true);
+  change = weighted.change(time_from_string("2013-12-02 14:30:00"),
+                           time_from_string("2013-12-02 16:30:00"));
+  if (change != 1)
+  {
+    std::stringstream ss;
+    ss << "Weighted change of {2.0, 3.0} is 1, not " << change;
+    TEST_FAILED(ss.str());
+  }
+
   TEST_PASSED();
 }
 
@@ -362,6 +379,21 @@ void trend()
   {
     std::stringstream ss;
     ss << "Trend of {3.0, 4.0} is 100.0, not " << trend;
+    TEST_FAILED(ss.str());
+  }
+
+  // weights must not duplicate interior samples and add zero changes between the copies
+  SmartMet::TimeSeries::Stat::DataVector rising;
+  rising.push_back(DataItem(time_from_string("2013-12-02 14:00:00"), 1.0));
+  rising.push_back(DataItem(time_from_string("2013-12-02 15:00:00"), 2.0));
+  rising.push_back(DataItem(time_from_string("2013-12-02 16:00:00"), 3.0));
+  Stat weighted(rising);
+  weighted.useWeights(true);
+  trend = weighted.trend();
+  if (trend != 100.0)
+  {
+    std::stringstream ss;
+    ss << "Weighted trend of {1.0, 2.0, 3.0} is 100.0, not " << trend;
     TEST_FAILED(ss.str());
   }
 
