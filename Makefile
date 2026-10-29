@@ -5,7 +5,7 @@ INCDIR = smartmet/$(SUBNAME)
 
 REQUIRES =
 
-include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
+include $(or $(PREFIX),$(shell smartbuildcfg --prefix))/share/smartmet/devel/makefile.inc
 
 ifeq ($(origin SYSCONFDIR), undefined)
   sysconfdir = /etc
