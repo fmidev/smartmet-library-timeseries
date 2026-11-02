@@ -12,14 +12,29 @@ void TimeSeries::emplace_back(const TimedValue& tv)
   TimedValueVector::emplace_back(tv);
 }
 
+void TimeSeries::emplace_back(TimedValue&& tv)
+{
+  TimedValueVector::emplace_back(std::move(tv));
+}
+
 void TimeSeries::push_back(const TimedValue& tv)
 {
   TimedValueVector::push_back(tv);
 }
 
+void TimeSeries::push_back(TimedValue&& tv)
+{
+  TimedValueVector::push_back(std::move(tv));
+}
+
 TimedValueVector::iterator TimeSeries::insert(TimedValueVector::iterator pos, const TimedValue& tv)
 {
   return TimedValueVector::insert(pos, tv);
+}
+
+TimedValueVector::iterator TimeSeries::insert(TimedValueVector::iterator pos, TimedValue&& tv)
+{
+  return TimedValueVector::insert(pos, std::move(tv));
 }
 
 void TimeSeries::insert(TimedValueVector::iterator pos,

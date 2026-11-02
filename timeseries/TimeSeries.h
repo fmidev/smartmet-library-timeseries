@@ -11,6 +11,7 @@
 #include <memory>
 #include <string>
 #include <type_traits>
+#include <utility>
 #include <variant>
 #include <vector>
 
@@ -52,8 +53,10 @@ struct Value : public Value_
   Value(const Fmi::LocalDateTime& x) : Value_(x) {}
 
   Value(const Value&) = default;
+  Value(Value&&) = default;
 
   Value& operator=(const Value&) = default;
+  Value& operator=(Value&&) = default;
   ~Value() = default;
 
   bool operator==(const Value& other) const;
@@ -95,18 +98,10 @@ struct TimedValue
       : time(const_cast<Fmi::LocalDateTime&>(timestamp)), value(val)
   {
   }
-  TimedValue(const TimedValue& tv) : time(const_cast<Fmi::LocalDateTime&>(tv.time)), value(tv.value)
-  {
-  }
-  TimedValue& operator=(const TimedValue& tv)
-  {
-    if (this != &tv)
-    {
-      time = const_cast<Fmi::LocalDateTime&>(tv.time);
-      value = tv.value;
-    }
-    return *this;
-  }
+  TimedValue(const TimedValue& tv) = default;
+  TimedValue(TimedValue&& tv) = default;
+  TimedValue& operator=(const TimedValue& tv) = default;
+  TimedValue& operator=(TimedValue&& tv) = default;
   ~TimedValue() = default;
 
   Fmi::LocalDateTime time;
@@ -120,9 +115,13 @@ class TimeSeries : public TimedValueVector
  public:
   TimeSeries() = default;
   TimeSeries(const TimeSeries&) = default;
+  TimeSeries(TimeSeries&&) = default;
   void emplace_back(const TimedValue& tv);
+  void emplace_back(TimedValue&& tv);
   void push_back(const TimedValue& tv);
+  void push_back(TimedValue&& tv);
   TimedValueVector::iterator insert(TimedValueVector::iterator pos, const TimedValue& tv);
+  TimedValueVector::iterator insert(TimedValueVector::iterator pos, TimedValue&& tv);
   void insert(TimedValueVector::iterator pos,
               TimedValueVector::iterator first,
               TimedValueVector::iterator last);
@@ -130,6 +129,7 @@ class TimeSeries : public TimedValueVector
               TimedValueVector::const_iterator first,
               TimedValueVector::const_iterator last);
   TimeSeries& operator=(const TimeSeries& ts);
+  TimeSeries& operator=(TimeSeries&&) = default;
   ~TimeSeries() = default;
 
   LocalTimeList getTimes() const;
@@ -141,7 +141,8 @@ using TimeSeriesPtr = std::shared_ptr<TimeSeries>;
 // time series result variable for an area
 struct LonLatTimeSeries
 {
-  LonLatTimeSeries(const Spine::LonLat& coord, const TimeSeries& ts) : lonlat(coord), timeseries(ts)
+  LonLatTimeSeries(const Spine::LonLat& coord, TimeSeries ts)
+      : lonlat(coord), timeseries(std::move(ts))
   {
   }
 
