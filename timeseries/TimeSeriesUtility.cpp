@@ -1,6 +1,8 @@
 #include "TimeSeriesUtility.h"
 #include "TimeSeriesOutput.h"
 #include <macgyver/StringConversion.h>
+#include <algorithm>
+#include <utility>
 
 namespace SmartMet
 {
@@ -270,10 +272,11 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
     return;
 
   TimeSeries ts2;
+  ts2.reserve(std::max(ts.size(), tlist->size()));
 
   auto it = tlist->begin();
 
-  for (const auto& value : ts)
+  for (auto& value : ts)
   {
     // Add missing timesteps
     while (it != tlist->end() && *it < value.time)
@@ -281,7 +284,7 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
       ts2.emplace_back(TimedValue(*it, None()));
       ++it;
     }
-    ts2.emplace_back(value);
+    ts2.emplace_back(std::move(value));
     // If list has been iterated to the end and
     // iteration time is same as observed timestep, go to next step
     if (it != tlist->end() && *it == value.time)
@@ -293,7 +296,7 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
     ts2.emplace_back(TimedValue(*it, None()));
     ++it;
   }
-  ts = ts2;
+  ts = std::move(ts2);
 }
 
 }  // namespace
@@ -365,6 +368,7 @@ if (UtilityFunctions::is_flash_or_mobile_producer(producer))
     for (const auto& location_index : location_indexes)
     {
       TimeSeriesVectorPtr tsv(new TimeSeriesVector());
+      tsv->reserve(observation_result->size());
       start_index = location_index.first;
       end_index = location_index.second;
       for (const TimeSeries& ts_k : *observation_result)
@@ -377,7 +381,7 @@ if (UtilityFunctions::is_flash_or_mobile_producer(producer))
           ts_ik.insert(ts_ik.begin(), ts_k.begin() + start_index, ts_k.begin() + end_index);
           // Add missing timesteps
           add_missing_timesteps(ts_ik, tlist);
-          tsv->emplace_back(ts_ik);
+          tsv->emplace_back(std::move(ts_ik));
         }
       }
 
