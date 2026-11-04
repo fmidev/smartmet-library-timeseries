@@ -104,4 +104,39 @@ BOOST_AUTO_TEST_CASE(get_int)
   BOOST_CHECK_EQUAL(v6.as_int(), 42);
 }
 
+// Without noexcept moves a std::vector copies its elements when it grows, and copying the
+// time series of an area query took gigabytes
+static_assert(std::is_nothrow_move_constructible_v<Value>);
+static_assert(std::is_nothrow_move_constructible_v<SmartMet::TimeSeries::TimedValue>);
+static_assert(std::is_nothrow_move_constructible_v<SmartMet::TimeSeries::TimeSeries>);
+static_assert(std::is_nothrow_move_constructible_v<SmartMet::TimeSeries::LonLatTimeSeries>);
+
+BOOST_AUTO_TEST_CASE(move_time_series)
+{
+  using SmartMet::TimeSeries::LonLatTimeSeries;
+  using SmartMet::TimeSeries::TimedValue;
+  using SmartMet::TimeSeries::TimeSeries;
+
+  const Fmi::LocalDateTime ldt(Fmi::DateTime(Fmi::Date(2026, 11, 2), Fmi::Hours(12)),
+                               Fmi::TimeZonePtr::utc);
+  TimeSeries ts;
+  ts.push_back(TimedValue(ldt, std::string("a long string which does not fit in SSO")));
+  ts.emplace_back(TimedValue(ldt, 1.5));
+  const auto* data = ts.data();
+
+  LonLatTimeSeries llts(SmartMet::Spine::LonLat(25, 60), std::move(ts));
+  BOOST_CHECK(llts.timeseries.data() == data);  // moved, not copied
+  BOOST_CHECK_EQUAL(llts.timeseries.size(), 2U);
+  BOOST_CHECK_EQUAL(llts.timeseries[1].value.as_double(), 1.5);
+
+  TimeSeries copy;
+  copy = llts.timeseries;
+  BOOST_CHECK_EQUAL(copy.size(), 2U);
+  BOOST_CHECK(copy.data() != data);
+
+  TimeSeries moved;
+  moved = std::move(copy);
+  BOOST_CHECK_EQUAL(moved.size(), 2U);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
