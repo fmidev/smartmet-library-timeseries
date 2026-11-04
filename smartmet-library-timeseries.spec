@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.10.28
+Version: 26.11.4
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Wed Nov  4 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.11.4-1.fmi
+- Add move constructor and assignmnet for TimeSeries related objects (memory use optimization)
+
 * Wed Oct 28 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.28-1.fmi
 - trend and change ignore time weights: weighting duplicated interior samples, limiting
   trend_t of hourly data within +-1h to {-66.7, 0, 66.7}, and let change_t use samples
