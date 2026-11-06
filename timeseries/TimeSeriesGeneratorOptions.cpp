@@ -5,6 +5,7 @@
 // ======================================================================
 
 #include "TimeSeriesGeneratorOptions.h"
+#include <boost/algorithm/string.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/Hash.h>
 #include <macgyver/NumericCast.h>

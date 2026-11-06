@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-library-%{DIRNAME}
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
-Version: 26.11.4
+Version: 26.11.6
 Release: 1%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
@@ -79,6 +79,9 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Fri Nov 6 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.11.6-1.fmi
+- Include the headers used directly instead of relying on transitive includes
+
 * Wed Nov  4 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.11.4-1.fmi
 - Add move constructor and assignmnet for TimeSeries related objects (memory use optimization)
 

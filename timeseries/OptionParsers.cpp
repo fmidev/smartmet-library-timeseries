@@ -1,4 +1,5 @@
 #include "OptionParsers.h"
+#include <boost/algorithm/string.hpp>
 #include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
