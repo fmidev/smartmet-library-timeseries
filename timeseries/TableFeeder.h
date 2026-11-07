@@ -22,7 +22,7 @@ class TableFeeder
   const Fmi::ValueFormatter& itsValueFormatter;
   const std::vector<int>& itsPrecisions;
   Spine::TableVisitor itsTableVisitor;
-  Spine::LonLatFormat itsLonLatFormat;
+  Spine::LonLatFormat itsLonLatFormat = Spine::LonLatFormat::LONLAT;
 
  public:
   TableFeeder(Spine::Table& table,
