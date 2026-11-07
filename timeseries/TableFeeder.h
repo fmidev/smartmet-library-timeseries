@@ -31,9 +31,7 @@ class TableFeeder
               unsigned int currentcolumn = 0)
       : itsValueFormatter(valueformatter),
         itsPrecisions(precisions),
-        itsTableVisitor(table, valueformatter, precisions, currentcolumn, currentcolumn),
-        itsLonLatFormat(Spine::LonLatFormat::LONLAT)
-
+        itsTableVisitor(table, valueformatter, precisions, currentcolumn, currentcolumn)
   {
   }
 

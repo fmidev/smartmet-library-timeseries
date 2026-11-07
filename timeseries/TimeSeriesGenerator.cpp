@@ -33,6 +33,28 @@ void check_generation_limit(std::size_t iterations)
         .addParameter("maximum", std::to_string(max_generated_timesteps));
 }
 
+// The effective limit on the number of generated times: the caller's limit (0 = none) capped
+// by the hard safety limit.
+std::size_t effective_limit(std::size_t theMaxTimes)
+{
+  if (theMaxTimes == 0 || theMaxTimes > max_generated_timesteps)
+    return max_generated_timesteps;
+  return theMaxTimes;
+}
+
+// Insert a generated time and stop if the output grows beyond the limit. The iteration
+// counters above do not bound the output size: in fixed-times mode one iteration is a day,
+// which may insert up to 1440 times.
+void insert_time(std::set<Fmi::LocalDateTime>& theTimes,
+                 const Fmi::LocalDateTime& t,
+                 std::size_t theLimit)
+{
+  theTimes.insert(t);
+  if (theTimes.size() > theLimit)
+    throw Fmi::Exception(BCP, "Too many time steps requested")
+        .addParameter("maximum", std::to_string(theLimit));
+}
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Generate fixed HHMM times
@@ -43,7 +65,8 @@ void generate_fixedtimes_until_endtime(std::set<Fmi::LocalDateTime>& theTimes,
                                        const TimeSeriesGeneratorOptions& theOptions,
                                        const Fmi::LocalDateTime& theStartTime,
                                        const Fmi::LocalDateTime& theEndTime,
-                                       const Fmi::TimeZonePtr& theZone)
+                                       const Fmi::TimeZonePtr& theZone,
+                                       std::size_t theLimit)
 {
   try
   {
@@ -71,7 +94,7 @@ void generate_fixedtimes_until_endtime(std::set<Fmi::LocalDateTime>& theTimes,
             continue;
 
         if (period.contains(d) || d == theEndTime)
-          theTimes.insert(d);
+          insert_time(theTimes, d, theLimit);
         if (day > theEndTime.local_time().date())
           return;
       }
@@ -95,7 +118,8 @@ void generate_fixedtimes_for_number_of_steps(std::set<Fmi::LocalDateTime>& theTi
                                              const TimeSeriesGeneratorOptions& theOptions,
                                              const Fmi::LocalDateTime& theStartTime,
                                              const Fmi::LocalDateTime& theEndTime,
-                                             const Fmi::TimeZonePtr& theZone)
+                                             const Fmi::TimeZonePtr& theZone,
+                                             std::size_t theLimit)
 {
   try
   {
@@ -123,7 +147,7 @@ void generate_fixedtimes_for_number_of_steps(std::set<Fmi::LocalDateTime>& theTi
             continue;
 
         if (d >= theStartTime)
-          theTimes.insert(d);
+          insert_time(theTimes, d, theLimit);
         if (theTimes.size() >= *theOptions.timeSteps)
           return;
       }
@@ -147,7 +171,8 @@ void generate_fixedtimes(std::set<Fmi::LocalDateTime>& theTimes,
                          const TimeSeriesGeneratorOptions& theOptions,
                          const Fmi::LocalDateTime& theStartTime,
                          const Fmi::LocalDateTime& theEndTime,
-                         const Fmi::TimeZonePtr& theZone)
+                         const Fmi::TimeZonePtr& theZone,
+                         std::size_t theLimit)
 {
   try
   {
@@ -155,10 +180,11 @@ void generate_fixedtimes(std::set<Fmi::LocalDateTime>& theTimes,
       return;
 
     if (!theOptions.timeSteps)
-      generate_fixedtimes_until_endtime(theTimes, theOptions, theStartTime, theEndTime, theZone);
+      generate_fixedtimes_until_endtime(
+          theTimes, theOptions, theStartTime, theEndTime, theZone, theLimit);
     else
       generate_fixedtimes_for_number_of_steps(
-          theTimes, theOptions, theStartTime, theEndTime, theZone);
+          theTimes, theOptions, theStartTime, theEndTime, theZone, theLimit);
   }
   catch (...)
   {
@@ -177,16 +203,17 @@ bool insert_timestep_if_valid(std::set<Fmi::LocalDateTime>& theTimes,
                               const Fmi::LocalDateTime& t,
                               const Fmi::LocalTimePeriod& period,
                               const Fmi::LocalDateTime& theStartTime,
-                              const Fmi::LocalDateTime& theEndTime)
+                              const Fmi::LocalDateTime& theEndTime,
+                              std::size_t theLimit)
 {
   if (!!theOptions.timeSteps)
   {
     if (!t.is_not_a_date_time() && t >= theStartTime)
-      theTimes.insert(t);
+      insert_time(theTimes, t, theLimit);
     return theTimes.size() >= *theOptions.timeSteps;
   }
   if (!t.is_not_a_date_time() && (period.contains(t) || t == theEndTime))
-    theTimes.insert(t);
+    insert_time(theTimes, t, theLimit);
   return false;
 }
 
@@ -202,7 +229,8 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
                         const TimeSeriesGeneratorOptions& theOptions,
                         const Fmi::LocalDateTime& theStartTime,
                         const Fmi::LocalDateTime& theEndTime,
-                        const Fmi::TimeZonePtr& theZone)
+                        const Fmi::TimeZonePtr& theZone,
+                        std::size_t theLimit)
 {
   try
   {
@@ -250,7 +278,8 @@ void generate_timesteps(std::set<Fmi::LocalDateTime>& theTimes,
       // the latter case we must validate the time first
       // to prevent its inclusion.
 
-      if (insert_timestep_if_valid(theTimes, theOptions, t, period, theStartTime, theEndTime))
+      if (insert_timestep_if_valid(
+              theTimes, theOptions, t, period, theStartTime, theEndTime, theLimit))
         break;
 
       mins += timestep;
@@ -475,8 +504,27 @@ void generate_graphtimes(std::set<Fmi::LocalDateTime>& theTimes,
 LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
                        const Fmi::TimeZonePtr& theZone)
 {
+  return generate(theOptions, theZone, 0);
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Generate time series for the given timezone with a limit on the number of times
+ *
+ * Generation fails if the fixed-times or timestep modes would produce more than
+ * min(theMaxTimes, hard limit) times, where theMaxTimes=0 means only the hard limit.
+ * Data times are bounded by the data itself and are not limited.
+ */
+// ----------------------------------------------------------------------
+
+LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
+                       const Fmi::TimeZonePtr& theZone,
+                       std::size_t theMaxTimes)
+{
   try
   {
+    const std::size_t limit = effective_limit(theMaxTimes);
+
     // Determine start and end times
 
     Fmi::LocalDateTime starttime(Fmi::LocalDateTime::NOT_A_DATE_TIME);
@@ -516,10 +564,10 @@ LocalTimeList generate(const TimeSeriesGeneratorOptions& theOptions,
     switch (theOptions.mode)
     {
       case TimeSeriesGeneratorOptions::FixedTimes:
-        generate_fixedtimes(times, theOptions, starttime, endtime, theZone);
+        generate_fixedtimes(times, theOptions, starttime, endtime, theZone, limit);
         break;
       case TimeSeriesGeneratorOptions::TimeSteps:
-        generate_timesteps(times, theOptions, starttime, endtime, theZone);
+        generate_timesteps(times, theOptions, starttime, endtime, theZone, limit);
         break;
       case TimeSeriesGeneratorOptions::DataTimes:
         generate_datatimes(times, theOptions, starttime, endtime, theZone);

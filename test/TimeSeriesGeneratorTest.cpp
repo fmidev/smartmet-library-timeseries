@@ -571,7 +571,97 @@ void offset()
   TEST_PASSED();
 }
 
+// Return true if the function throws. TEST_FAILED throws too, so it must not be called
+// inside a try block with a catch-all handler.
+template <typename F>
+bool throws(F&& f)
+{
+  try
+  {
+    f();
+  }
+  catch (...)
+  {
+    return true;
+  }
+  return false;
+}
+
 // ----------------------------------------------------------------------
+/*!
+ * \brief Test that fixed times are limited by the number of generated times, not days
+ */
+// ----------------------------------------------------------------------
+
+void excessive_fixedtimes()
+{
+  using namespace SmartMet::TimeSeries;
+
+  // 24 times per day over ~1000 years is ~8.8M days * 24 = 210M times, which used to pass
+  // the hard limit since it counted days only.
+  TimeSeriesGeneratorOptions opt;
+  opt.mode = TimeSeriesGeneratorOptions::Mode::FixedTimes;
+  opt.startTime = Fmi::DateTime(Fmi::Date(2000, 1, 1), Fmi::Hours(0));
+  opt.startTimeUTC = true;
+  opt.endTime = Fmi::DateTime(Fmi::Date(3000, 1, 1), Fmi::Hours(0));
+  for (unsigned int h = 0; h < 24; h++)
+    opt.timeList.insert(h * 100);
+
+  auto tz = timezones.time_zone_from_string("UTC");
+
+  // A caller limit applies to the generated times
+  if (!throws([&] { (void)TimeSeriesGenerator::generate(opt, tz, 1000); }))
+    TEST_FAILED("Fixed-times generation should have thrown with maxtimes=1000");
+
+  // A shorter request within the limit works as before
+  opt.endTime = Fmi::DateTime(Fmi::Date(2000, 1, 2), Fmi::Hours(0));
+  auto tlist = TimeSeriesGenerator::generate(opt, tz, 25);
+  if (tlist.size() != 25)
+    TEST_FAILED("Expected 25 times, got " + std::to_string(tlist.size()));
+  if (!throws([&] { (void)TimeSeriesGenerator::generate(opt, tz, 24); }))
+    TEST_FAILED("Fixed-times generation should have thrown with maxtimes=24");
+
+  TEST_PASSED();
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Test the caller limit in timesteps mode
+ */
+// ----------------------------------------------------------------------
+
+void maxtimes_timesteps()
+{
+  using namespace SmartMet::TimeSeries;
+
+  TimeSeriesGeneratorOptions opt;
+  opt.mode = TimeSeriesGeneratorOptions::Mode::TimeSteps;
+  opt.startTime = Fmi::DateTime(Fmi::Date(2000, 1, 1), Fmi::Hours(0));
+  opt.startTimeUTC = true;
+  opt.endTime = opt.startTime + Fmi::Hours(99);  // 100 hourly steps
+  opt.timeStep = 60;
+
+  auto tz = timezones.time_zone_from_string("UTC");
+
+  if (TimeSeriesGenerator::generate(opt, tz, 100).size() != 100)
+    TEST_FAILED("Expected 100 timesteps with maxtimes=100");
+  if (TimeSeriesGenerator::generate(opt, tz, 0).size() != 100)
+    TEST_FAILED("Expected 100 timesteps with maxtimes=0");
+
+  if (!throws([&] { (void)TimeSeriesGenerator::generate(opt, tz, 99); }))
+    TEST_FAILED("Timestep generation should have thrown with maxtimes=99");
+
+  // The cache must apply the limit to cached lists too
+  TimeSeriesGeneratorCache cache;
+  cache.resize(10);
+  if (cache.generate(opt, tz, 100)->size() != 100)
+    TEST_FAILED("Expected 100 timesteps from the cache");
+  if (!throws([&] { (void)cache.generate(opt, tz, 99); }))
+    TEST_FAILED("Cached timestep list should have thrown with maxtimes=99");
+
+  TEST_PASSED();
+}
+
 /*!
  * The actual test suite
  */
@@ -588,6 +678,8 @@ class tests : public tframe::tests
     TEST(fixedtimes_tosummertime);
     TEST(fixedtimes_day);
     TEST(excessive_timesteps);
+    TEST(excessive_fixedtimes);
+    TEST(maxtimes_timesteps);
     TEST(timesteps_utc);
     TEST(timesteps_helsinki);
     TEST(timesteps_tosummertime);

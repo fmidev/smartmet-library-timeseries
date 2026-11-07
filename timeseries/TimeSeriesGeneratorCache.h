@@ -24,6 +24,12 @@ class TimeSeriesGeneratorCache
   TimeList generate(const TimeSeriesGeneratorOptions& theOptions,
                     const Fmi::TimeZonePtr& theZone) const;
 
+  // As above, but limit the number of generated times (0 = no limit), see
+  // TimeSeriesGenerator::generate
+  TimeList generate(const TimeSeriesGeneratorOptions& theOptions,
+                    const Fmi::TimeZonePtr& theZone,
+                    std::size_t theMaxTimes) const;
+
   Fmi::Cache::CacheStats getCacheStats() const { return itsCache.statistics(); }
 
  private:

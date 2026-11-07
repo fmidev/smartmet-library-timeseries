@@ -4,7 +4,7 @@
 Summary: SmartMet Timeseries classes
 Name: %{SPECNAME}
 Version: 26.11.7
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: BrainStorm/Development
 URL: https://github.com/fmidev/smartmet-library-timeseries
@@ -79,6 +79,11 @@ make %{_smp_mflags}
 %{_includedir}/smartmet/%{DIRNAME}
 
 %changelog
+* Sat Nov 7 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.11.7-2.fmi
+- Limit the number of generated time steps in all generation modes; new generate() overloads take a caller-supplied maximum
+- Do not cache very long time lists
+- Removed a redundant member initializer
+
 * Sat Nov 7 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.11.7-1.fmi
 - Initialize member variables that some constructors left uninitialized
 - add_missing_timesteps: read the value time before moving the value
