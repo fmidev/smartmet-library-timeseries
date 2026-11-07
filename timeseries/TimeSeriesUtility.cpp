@@ -284,11 +284,11 @@ void add_missing_timesteps(TimeSeries& ts, const TimeSeriesGeneratorCache::TimeL
       ts2.emplace_back(TimedValue(*it, None()));
       ++it;
     }
-    ts2.emplace_back(std::move(value));
     // If list has been iterated to the end and
     // iteration time is same as observed timestep, go to next step
     if (it != tlist->end() && *it == value.time)
       ++it;
+    ts2.emplace_back(std::move(value));
   }
   // If there are requested timesteps after last value, add them
   while (it != tlist->end())
