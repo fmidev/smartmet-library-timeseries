@@ -5,7 +5,7 @@
  * Stat class implements statistical functions.
  * Data can be passed in a constructor call or in addData, SetData functions.
  * Both plain double values and double-timestamp pairs are accepted as input.
- * Timestap can be either Fmi::LocalDateTime or Fmi::DateTime.
+ * Timestamp can be either Fmi::LocalDateTime or Fmi::DateTime.
  * If valid value-timestamp pairs are passed weighted version of statistical function is called
  * unless explicitly denied by calling useWeights(false) function before.
  * Exception is sum and integ-functions. In integ-function weights are always used.

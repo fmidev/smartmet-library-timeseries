@@ -418,7 +418,7 @@ double Stat::integ(const Fmi::DateTime& startTime /*= not_a_date_time */,
   }
 }
 
-// weight is alwaus 1.0
+// weight is always 1.0
 double Stat::sum(const Fmi::DateTime& startTime /*= not_a_date_time */,
                  const Fmi::DateTime& endTime /*= not_a_date_time */) const
 {

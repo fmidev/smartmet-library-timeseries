@@ -55,11 +55,11 @@ struct LocationParameterArgs final
   // This way changes to this class do not break the API.
   struct State;
 
-  // std::unique_ptr does not work with incomplete types. I preffered not to
+  // std::unique_ptr does not work with incomplete types. I preferred not to
   // use std::shared_ptr<> here, because it would be an overkill (AP)
   mutable State* state = nullptr;
 
-  // Not imlemented now
+  // Not implemented now
   State* get_mutable_state() const;
 };
 

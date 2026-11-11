@@ -849,7 +849,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
       std::string restOfTheParamReq = paramreq.substr(startIndex);
 
       if (restOfTheParamReq.find(')') == std::string::npos)
-        throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
+        throw Fmi::Exception(BCP, "Erroneous parameter request '" + theParameterRequest + "'!");
 
       size_t sizeOfTimeFormatString = restOfTheParamReq.find(')') + 1;
       restOfTheParamReq = restOfTheParamReq.substr(sizeOfTimeFormatString);
@@ -879,7 +879,7 @@ std::string ParameterFactory::parse_parameter_functions(const std::string& thePa
     }
 
     if (parts.empty() || parts.size() > 3)
-      throw Fmi::Exception(BCP, "Errorneous parameter request '" + theParameterRequest + "'!");
+      throw Fmi::Exception(BCP, "Erroneous parameter request '" + theParameterRequest + "'!");
 
     std::string paramname = parts.back();
 

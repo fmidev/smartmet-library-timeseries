@@ -439,7 +439,7 @@ void count()
     TEST_FAILED(ss.str());
   }
 
-  // count of occurances in whole time series where value is between [2.9, 4.1]
+  // count of occurrences in whole time series where value is between [2.9, 4.1]
   count = stat.count(2.9, 4.1);
 
   if (count != 2)
@@ -451,7 +451,7 @@ void count()
     TEST_FAILED(ss.str());
   }
 
-  // count of occurances between 15:00 and 20:00 where value is between
+  // count of occurrences between 15:00 and 20:00 where value is between
   // [2.9, 4.1]
   count = stat.count(
       2.9, 4.1, time_from_string("2013-12-02 15:00:00"), time_from_string("2013-12-02 20:00:00"));
@@ -473,7 +473,7 @@ void percentage()
   Stat stat(get_data_vector_t());
 
   // #1 weighted percentage (calculation is weighted by default)
-  // weighted percentage of occurances in the whole time series where value is
+  // weighted percentage of occurrences in the whole time series where value is
   // between 4.5 and 5.5
   double percentage = stat.percentage(4.5, 5.5);
 
@@ -486,7 +486,7 @@ void percentage()
     TEST_FAILED(ss.str());
   }
 
-  // #2 weighted percentage of occurances between 17:00 and 22:00  where value
+  // #2 weighted percentage of occurrences between 17:00 and 22:00  where value
   // is between 3.5 and 5.5
   percentage = stat.percentage(
       3.5, 5.5, time_from_string("2013-12-02 17:00:00"), time_from_string("2013-12-02 22:00:00"));
@@ -503,7 +503,7 @@ void percentage()
   // raw percentage
   stat.useWeights(false);
 
-  // #3 raw percentage of occurances in the whole time series where value is
+  // #3 raw percentage of occurrences in the whole time series where value is
   // between 4.5 and 5.5
   percentage = stat.percentage(4.5, 5.5);
 
@@ -516,7 +516,7 @@ void percentage()
     TEST_FAILED(ss.str());
   }
 
-  // #3 raw percentage of occurances between 17:00 and 22:00  where value is
+  // #3 raw percentage of occurrences between 17:00 and 22:00  where value is
   // between 3.5 and 5.5
   percentage = stat.percentage(
       3.5, 5.5, time_from_string("2013-12-02 17:00:00"), time_from_string("2013-12-02 22:00:00"));
@@ -752,7 +752,7 @@ void degrees()
   if (value != 1.0)
   {
     std::stringstream ss;
-    ss << "Count of occurances between [89,90] is 1 , not " << value;
+    ss << "Count of occurrences between [89,90] is 1 , not " << value;
     TEST_FAILED(ss.str());
   }
 

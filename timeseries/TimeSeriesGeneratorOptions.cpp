@@ -400,7 +400,7 @@ const TimeSeriesGeneratorOptions::TimeList& TimeSeriesGeneratorOptions::getDataT
  * \brief Parse time series generation options.
  *
  * Note: If you add a new parameter, please do not forget to change
- *       the timeseries-plugin hash_value method accordinly.
+ *       the timeseries-plugin hash_value method accordingly.
  */
 // ----------------------------------------------------------------------
 

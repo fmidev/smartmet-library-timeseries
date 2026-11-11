@@ -1198,7 +1198,7 @@ void percentage_t()
 
 void count_t()
 {
-  // not count doesn't make much sense when aggregating over time, since weigths are used
+  // not count doesn't make much sense when aggregating over time, since weights are used
   std::string test_result =
       to_string(*execute_time_aggregation_function(TS::FunctionId::Count, 120, 0));
 
@@ -1349,7 +1349,7 @@ void mean_a()
 
 void mean_a_with_range()
 {
-  // Inclue values between 3.0 and 15.0
+  // Include values between 3.0 and 15.0
   std::string test_result =
       to_string(*execute_area_aggregation_function_with_range(TS::FunctionId::Mean, 3.0, 15.0));
 
@@ -1584,14 +1584,14 @@ void time_aggregation_with_selected_times()
   std::set<int> exclude = { 34, 56, 368, 722, 724, 1224, 1260 };
   TS::TimeSeries timeseries;
 
-  // Generate timesries with some fictious minute data for 24 hours
+  // Generate timesries with some fictitious minute data for 24 hours
   Fmi::LocalDateTime currTime = ldt;
   for (int minutes = 0; minutes < 1440; minutes++)
   {
     Fmi::LocalDateTime currTime = ldt + Fmi::Minutes(minutes);
     if (exclude.find(minutes) == exclude.end())
     {
-      // generate some fictious values
+      // generate some fictitious values
       double value = 15 + 8 * std::sin(2 * M_PI * minutes / 1440);
       timeseries.emplace_back(TS::TimedValue(currTime, value));
     }
