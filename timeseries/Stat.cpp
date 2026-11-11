@@ -717,13 +717,13 @@ unsigned int Stat::count(double lowerLimit,
     if (!get_subvector(subvector, startTime, endTime, false))
       return static_cast<unsigned int>(itsMissingValue);
 
-    unsigned int occurrances = 0;
+    unsigned int occurrences = 0;
 
     for (const DataItem& item : subvector)
       if (item.value >= lowerLimit && item.value <= upperLimit)
-        occurrances++;
+        occurrences++;
 
-    return occurrances;
+    return occurrences;
   }
   catch (...)
   {
@@ -747,23 +747,23 @@ double Stat::percentage(double lowerLimit,
     if (!get_subvector(subvector, startTime, endTime))
       return itsMissingValue;
 
-    double occurrances = 0;
+    double occurrences = 0;
     double total_count = 0;
 
     for (const DataItem& item : subvector)
     {
       if (item.value >= lowerLimit && item.value <= upperLimit)
-        occurrances += (itsWeights ? item.weight : 1);
+        occurrences += (itsWeights ? item.weight : 1);
       total_count += (itsWeights ? item.weight : 1);
     }
 
     if (total_count == 0)
       return itsMissingValue;
 
-    if (occurrances == 0)
+    if (occurrences == 0)
       return 0.0;
 
-    return 100.0 * occurrances / total_count;
+    return 100.0 * occurrences / total_count;
   }
   catch (...)
   {
