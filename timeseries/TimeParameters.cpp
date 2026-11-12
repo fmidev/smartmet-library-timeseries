@@ -1,7 +1,6 @@
 #include "TimeParameters.h"
 #include "ParameterKeywords.h"
 #include "TimeSeries.h"
-#include <boost/range/adaptors.hpp>
 #include <macgyver/Astronomy.h>
 #include <macgyver/Exception.h>
 #include <macgyver/NumericCast.h>
