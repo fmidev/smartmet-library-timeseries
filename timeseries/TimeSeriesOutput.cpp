@@ -1,8 +1,17 @@
 #include "TimeSeriesOutput.h"
+#include "TimeSeriesTypes.h"
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <spine/LonLat.h>
-#include <spine/None.h>
+#include <ostream>
+#include <variant>
+#include <vector>
+
+namespace SmartMet::Spine
+{
+struct None;
+}  // namespace SmartMet::Spine
 
 using ::SmartMet::Spine::LonLat;
 using ::SmartMet::Spine::LonLatFormat;

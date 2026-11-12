@@ -24,7 +24,10 @@
 
 #include <macgyver/DateTime.h>
 #include <macgyver/LocalDateTime.h>
+#include <iosfwd>
 #include <limits>
+#include <utility>
+#include <vector>
 
 namespace SmartMet
 {

@@ -8,11 +8,8 @@
 
 #include "TimeSeriesGeneratorOptions.h"
 #include "TimeSeriesTypes.h"
-
 #include <macgyver/LocalDateTime.h>
 #include <cstddef>
-#include <list>
-#include <string>
 
 namespace SmartMet
 {

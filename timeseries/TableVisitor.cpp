@@ -1,7 +1,7 @@
 #include "TimeSeries.h"
 #include <macgyver/Exception.h>
-#include <newbase/NFmiGlobals.h>
-#include <spine/TableVisitor.h>
+#include <spine/TableVisitor.h>  // IWYU pragma: keep
+#include <string>
 
 namespace SmartMet
 {

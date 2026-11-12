@@ -5,8 +5,15 @@
 // ======================================================================
 
 #include "TimeSeriesGenerator.h"
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
+#include <algorithm>
+#include <iterator>
+#include <list>
+#include <optional>
+#include <set>
+#include <string>
 
 namespace SmartMet
 {

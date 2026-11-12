@@ -3,11 +3,17 @@
 #include <macgyver/Exception.h>
 #include <macgyver/NumericCast.h>
 #include <macgyver/StringConversion.h>
+#include <newbase/NFmiParameterName.h>
 #include <spine/Convenience.h>
 #include <spine/Parameter.h>
 #include <spine/Parameters.h>
+#include <algorithm>
+#include <array>
 #include <cctype>
-#include <stdexcept>
+#include <cstring>
+#include <limits>
+#include <list>
+#include <ostream>
 
 namespace SmartMet
 {

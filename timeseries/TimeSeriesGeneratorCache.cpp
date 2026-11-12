@@ -1,6 +1,9 @@
 #include "TimeSeriesGeneratorCache.h"
 #include <macgyver/Exception.h>
 #include <macgyver/Hash.h>
+#include <list>
+#include <optional>
+#include <string>
 
 namespace SmartMet
 {

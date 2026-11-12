@@ -7,14 +7,17 @@
 #pragma once
 
 #include <macgyver/DateTime.h>
+#include <cstddef>
+#include <list>
 #include <memory>
 #include <optional>
-
-#include <list>
 #include <ostream>
 #include <set>
 
-#include <spine/HTTP.h>
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
 
 namespace SmartMet
 {

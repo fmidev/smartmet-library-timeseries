@@ -1,19 +1,28 @@
 #include "TimeSeriesAggregator.h"
-
+#include "DataFunction.h"
 #include "Stat.h"
 #include "TimeSeries.h"
-#include "TimeSeriesOutput.h"
-#include "TimeSeriesUtility.h"
-#include <boost/cast.hpp>
+#include "TimeSeriesTypes.h"
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <newbase/NFmiGlobals.h>
 #include <spine/LonLat.h>
+#include <algorithm>
 #include <cmath>
-#include <iostream>
+#include <cstddef>
+#include <list>
 #include <numeric>
+#include <optional>
 #include <sstream>
-#include <stdexcept>
+#include <string>
+#include <variant>
+#include <vector>
+
+namespace SmartMet::Spine
+{
+struct None;
+}  // namespace SmartMet::Spine
 
 using namespace std;
 using SmartMet::Spine::LonLat;

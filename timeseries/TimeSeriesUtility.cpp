@@ -1,7 +1,14 @@
 #include "TimeSeriesUtility.h"
 #include "TimeSeriesOutput.h"
+#include "TimeSeriesTypes.h"
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>
 #include <algorithm>
+#include <cmath>
+#include <cstddef>
+#include <list>
+#include <memory>
+#include <ostream>
 #include <utility>
 
 namespace SmartMet

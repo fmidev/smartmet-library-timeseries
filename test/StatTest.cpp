@@ -7,9 +7,15 @@
 // ======================================================================
 
 #include "Stat.h"
+#include <macgyver/DateTime.h>
 #include <regression/tframe.h>
 #include <cmath>
+#include <iostream>
+#include <limits>
+#include <sstream>
 #include <string>
+#include <utility>
+#include <vector>
 
 using std::string;
 using namespace SmartMet::TimeSeries::Stat;

@@ -1,12 +1,21 @@
 #include "LocationParameters.h"
 #include "ParameterKeywords.h"
+#include "TimeSeries.h"
 #include "TimeSeriesOutput.h"
+#include "TimeSeriesTypes.h"
 #include <gis/CoordinateTransformation.h>
 #include <gis/SpatialReference.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <spine/None.h>
+#include <spine/Parameter.h>
+#include <algorithm>
 #include <cmath>
+#include <functional>
+#include <optional>
 #include <tuple>
+#include <variant>
+#include <vector>
 
 namespace SmartMet
 {

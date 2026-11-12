@@ -3,16 +3,14 @@
 #include <boost/algorithm/string.hpp>
 #include <gis/CoordinateTransformation.h>
 #include <gis/SpatialReference.h>
-#include <macgyver/Astronomy.h>
-#include <macgyver/CharsetTools.h>
-#include <macgyver/NumericCast.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
-#include <macgyver/TimeFormatter.h>
-#include <macgyver/ValueFormatter.h>
-#include <spine/None.h>
+#include <spine/LonLat.h>
 #include <algorithm>
+#include <iterator>
 #include <locale>
-#include <set>
+#include <optional>
+#include <utility>
 
 namespace SmartMet
 {

@@ -10,8 +10,13 @@
 #include <macgyver/Hash.h>
 #include <macgyver/NumericCast.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TimeParser.h>
 #include <spine/Convenience.h>
 #include <spine/HTTP.h>
+#include <algorithm>
+#include <iterator>
+#include <string>
+#include <vector>
 
 namespace SmartMet
 {

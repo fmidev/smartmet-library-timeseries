@@ -1,9 +1,22 @@
 #include "TimeParameters.h"
+#include "TimeSeries.h"
 #include "TimeSeriesOutput.h"
-#include <iostream>
-#include <sstream>
-#include <macgyver/ValueFormatter.h>
+#include "TimeSeriesTypes.h"
 #include <boost/test/included/unit_test.hpp>
+#include <macgyver/DateTime.h>
+#include <macgyver/LocalDateTime.h>
+#include <macgyver/TimeFormatter.h>
+#include <macgyver/TimeZones.h>
+#include <macgyver/ValueFormatter.h>
+#include <spine/Location.h>
+#include <spine/None.h>
+#include <cstring>
+#include <iostream>
+#include <locale>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <variant>
 
 using namespace SmartMet::Spine;
 using namespace SmartMet::TimeSeries::SpecialParameters;

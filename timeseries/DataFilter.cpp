@@ -3,9 +3,11 @@
 #include <boost/algorithm/string.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <cmath>
+#include <cstdio>
 #include <list>
 #include <map>
-#include <set>
+#include <utility>
 #include <vector>
 
 namespace SmartMet

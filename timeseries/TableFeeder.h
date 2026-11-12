@@ -1,12 +1,22 @@
 #pragma once
 
 #include "TimeSeries.h"
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/ValueFormatter.h>
-#include <spine/Table.h>
+#include <spine/LonLat.h>
 #include <spine/TableVisitor.h>
-#include <list>
-#include <string>
+#include <memory>
+#include <optional>
 #include <vector>
+
+namespace Fmi
+{
+class TimeFormatter;
+}  // namespace Fmi
+namespace SmartMet::Spine
+{
+class Table;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

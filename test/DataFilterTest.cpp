@@ -1,5 +1,7 @@
 #include "DataFilter.h"
 #include <boost/test/included/unit_test.hpp>
+#include <cstring>
+#include <string>
 
 using SmartMet::TimeSeries::DataFilter;
 

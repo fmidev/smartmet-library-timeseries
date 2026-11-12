@@ -1,7 +1,16 @@
 #include "TimeSeries.h"
 #include "TimeSeriesOutput.h"
 #include <boost/test/included/unit_test.hpp>
+#include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
+#include <macgyver/LocalDateTime.h>
+#include <spine/LonLat.h>
+#include <spine/None.h>
+#include <cstring>
 #include <sstream>
+#include <string>
+#include <type_traits>
+#include <utility>
 
 using SmartMet::Spine::None;
 using SmartMet::TimeSeries::Value;

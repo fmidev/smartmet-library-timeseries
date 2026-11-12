@@ -4,10 +4,21 @@
  */
 // ======================================================================
 
+#include "DataFunction.h"
+#include "TimeSeries.h"
+#include "TimeSeriesAggregator.h"
+#include "TimeSeriesGenerator.h"
 #include "TimeSeriesInclude.h"
-#include <memory>
-#include <boost/make_shared.hpp>
+#include "TimeSeriesOutput.h"
+#include "TimeSeriesTypes.h"
+#include <macgyver/DateTime.h>
+#include <macgyver/LocalDateTime.h>
 #include <regression/tframe.h>
+#include <cmath>
+#include <iostream>
+#include <set>
+#include <sstream>
+#include <string>
 
 const char *tz_eet_name = "EET";
 

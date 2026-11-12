@@ -1,6 +1,12 @@
+#include "LocationParameters.h"
 #include "ParameterTools.h"
+#include "TimeParameters.h"
 #include <boost/test/included/unit_test.hpp>
-#include <sstream>
+#include <spine/Parameter.h>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace SmartMet;
 using namespace boost::unit_test;

@@ -1,7 +1,13 @@
 #include "StationParameters.h"
 #include "ParameterKeywords.h"
+#include "TimeSeries.h"
+#include "TimeSeriesTypes.h"
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/ValueFormatter.h>
+#include <spine/Station.h>
+#include <functional>
+#include <vector>
 
 namespace SmartMet
 {

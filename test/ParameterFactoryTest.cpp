@@ -1,7 +1,11 @@
+#include "DataFunction.h"
 #include "ParameterFactory.h"
 #include <boost/test/included/unit_test.hpp>
 #include <macgyver/Exception.h>
+#include <spine/Parameter.h>
+#include <cstring>
 #include <limits>
+#include <string>
 
 using namespace SmartMet;
 using namespace boost::unit_test;

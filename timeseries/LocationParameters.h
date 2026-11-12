@@ -1,12 +1,15 @@
 #pragma once
 
 #include "OptionParsers.h"
-#include "TimeSeries.h"
 #include <macgyver/FunctionMap.h>
 #include <macgyver/ValueFormatter.h>
 #include <spine/Location.h>
-#include <memory>
 #include <string>
+
+namespace SmartMet::TimeSeries
+{
+struct Value;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {

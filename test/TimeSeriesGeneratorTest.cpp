@@ -4,12 +4,23 @@
  */
 // ======================================================================
 
+#include "TimeSeriesGenerator.h"
+#include "TimeSeriesGeneratorCache.h"
+#include "TimeSeriesGeneratorOptions.h"
 #include "TimeSeriesInclude.h"
-#include <boost/make_shared.hpp>
+#include <macgyver/DateTime.h>
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TimeZones.h>
 #include <regression/tframe.h>
+#include <iostream>
+#include <list>
+#include <memory>
+#include <optional>
+#include <set>
+#include <sstream>
+#include <string>
 
 Fmi::TimeZones timezones;
 

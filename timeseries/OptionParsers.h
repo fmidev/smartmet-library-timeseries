@@ -1,9 +1,18 @@
 #pragma once
 
 #include "ParameterFactory.h"
-#include <spine/HTTP.h>
 #include <spine/Parameter.h>
+#include <string>
 #include <vector>
+
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
+namespace SmartMet::TimeSeries
+{
+struct DataFunctions;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {

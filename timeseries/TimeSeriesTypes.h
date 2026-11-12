@@ -4,6 +4,7 @@
 #include <spine/LonLat.h>
 #include <spine/None.h>
 #include <list>
+#include <string>
 #include <variant>
 
 namespace SmartMet

@@ -1,11 +1,21 @@
 #pragma once
 
 #include "TimeSeries.h"
+#include <macgyver/DateTime.h>
 #include <macgyver/FunctionMap.h>
 #include <macgyver/LocalDateTime.h>
-#include <macgyver/TimeFormatter.h>
-#include <macgyver/TimeZones.h>
-#include <spine/Location.h>
+#include <locale>
+#include <string>
+
+namespace Fmi
+{
+class TimeFormatter;
+class TimeZones;
+}  // namespace Fmi
+namespace SmartMet::Spine
+{
+class Location;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

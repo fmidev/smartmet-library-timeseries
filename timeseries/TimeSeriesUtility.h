@@ -2,8 +2,21 @@
 
 #include "TimeSeries.h"
 #include "TimeSeriesAggregator.h"
+#include "TimeSeriesGenerator.h"
 #include "TimeSeriesGeneratorCache.h"
 #include <macgyver/Exception.h>
+#include <cstddef>
+#include <iosfwd>
+#include <map>
+#include <string>
+#include <utility>
+#include <variant>
+#include <vector>
+
+namespace SmartMet::TimeSeries
+{
+struct DataFunctions;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {

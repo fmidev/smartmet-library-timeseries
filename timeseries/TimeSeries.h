@@ -8,6 +8,8 @@
 
 #include "TimeSeriesTypes.h"
 #include <macgyver/LocalDateTime.h>
+#include <spine/LonLat.h>
+#include <spine/None.h>
 #include <memory>
 #include <string>
 #include <type_traits>

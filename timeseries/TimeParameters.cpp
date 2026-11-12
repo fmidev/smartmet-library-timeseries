@@ -1,8 +1,18 @@
 #include "TimeParameters.h"
 #include "ParameterKeywords.h"
 #include "TimeSeries.h"
+#include <boost/range/adaptors.hpp>
 #include <macgyver/Astronomy.h>
+#include <macgyver/Exception.h>
 #include <macgyver/NumericCast.h>
+#include <macgyver/StringConversion.h>
+#include <macgyver/TimeFormatter.h>
+#include <macgyver/TimeZones.h>
+#include <spine/Location.h>
+#include <cmath>
+#include <functional>
+#include <strings.h>
+#include <vector>
 
 namespace SmartMet
 {

@@ -4,7 +4,10 @@
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/ValueFormatter.h>
+#include <spine/LonLat.h>
+#include <string>
 #include <typeinfo>
+#include <utility>
 
 using namespace SmartMet::TimeSeries;
 

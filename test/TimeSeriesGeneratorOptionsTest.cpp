@@ -9,8 +9,12 @@
 #include <macgyver/DateTime.h>
 #include <regression/tframe.h>
 #include <spine/HTTP.h>
+#include <iostream>
 #include <map>
+#include <optional>
+#include <set>
 #include <string>
+#include <utility>
 
 using namespace std;
 using SmartMet::TimeSeries::TimeSeriesGeneratorOptions;

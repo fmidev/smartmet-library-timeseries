@@ -9,6 +9,10 @@
 #include "TimeSeriesGenerator.h"
 #include "TimeSeriesGeneratorOptions.h"
 #include <macgyver/Cache.h>
+#include <macgyver/CacheStats.h>
+#include <macgyver/LocalDateTime.h>
+#include <cstddef>
+#include <memory>
 
 namespace SmartMet
 {

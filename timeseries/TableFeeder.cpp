@@ -1,6 +1,11 @@
 #include "TableFeeder.h"
 #include "TimeSeriesOutput.h"
+#include "TimeSeriesTypes.h"
 #include <macgyver/Exception.h>
+#include <cstddef>
+#include <sstream>
+#include <string>
+#include <variant>
 
 namespace SmartMet
 {

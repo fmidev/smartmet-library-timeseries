@@ -1,17 +1,15 @@
 #pragma once
 
-#include "LocationParameters.h"
 #include "OptionParsers.h"
-#include "TimeParameters.h"
+#include "TimeSeries.h"
 #include "TimeSeriesInclude.h"
-#include <macgyver/TimeFormatter.h>
-#include <macgyver/TimeZones.h>
 #include <newbase/NFmiParameterName.h>
 #include <spine/Location.h>
 #include <spine/Parameter.h>
 #include <map>
-#include <set>
 #include <string>
+#include <vector>
+
 namespace Fmi
 {
 class ValueFormatter;

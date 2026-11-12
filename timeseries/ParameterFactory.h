@@ -7,10 +7,11 @@
 #pragma once
 
 #include "DataFunction.h"
-
 #include <newbase/NFmiEnumConverter.h>
 #include <spine/Parameter.h>
+#include <iosfwd>
 #include <string>
+#include <utility>
 
 namespace SmartMet
 {

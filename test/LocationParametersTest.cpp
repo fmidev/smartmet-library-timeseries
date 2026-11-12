@@ -1,10 +1,16 @@
 #include "LocationParameters.h"
+#include "TimeSeries.h"
 #include "TimeSeriesOutput.h"
+#include "TimeSeriesTypes.h"
+#include <boost/test/included/unit_test.hpp>
+#include <macgyver/ValueFormatter.h>
+#include <spine/Location.h>
+#include <spine/None.h>
+#include <cstring>
 #include <iostream>
 #include <sstream>
-#include <macgyver/ValueFormatter.h>
-#include <spine/None.h>
-#include <boost/test/included/unit_test.hpp>
+#include <string>
+#include <variant>
 
 using namespace SmartMet::Spine;
 using namespace SmartMet::TimeSeries::SpecialParameters;

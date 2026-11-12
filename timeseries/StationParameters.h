@@ -1,10 +1,16 @@
 #pragma once
 
-#include "TimeSeries.h"
-#include "TimeSeriesOutput.h"
 #include <macgyver/FunctionMap.h>
-#include <spine/Station.h>
 #include <string>
+
+namespace SmartMet::Spine
+{
+class Station;
+}  // namespace SmartMet::Spine
+namespace SmartMet::TimeSeries
+{
+struct Value;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {

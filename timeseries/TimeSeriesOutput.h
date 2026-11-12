@@ -1,8 +1,16 @@
 #pragma once
 
 #include "TimeSeries.h"
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/ValueFormatter.h>
 #include <spine/LonLat.h>
+#include <iosfwd>
+#include <string>
+
+namespace SmartMet::Spine
+{
+struct None;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

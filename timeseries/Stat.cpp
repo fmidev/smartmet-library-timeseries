@@ -1,15 +1,14 @@
 #include "Stat.h"
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/weighted_mean.hpp>
-#include <boost/accumulators/statistics/weighted_median.hpp>
 #include <boost/accumulators/statistics/weighted_variance.hpp>
 #include <macgyver/Exception.h>
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <iterator>
-#include <numeric>
-#include <stdexcept>
+#include <ostream>
+#include <string>
 
 namespace SmartMet
 {

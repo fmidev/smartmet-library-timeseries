@@ -6,12 +6,15 @@
 
 #pragma once
 
-#include "DataFunction.h"
 #include "TimeSeries.h"
 #include "TimeSeriesGenerator.h"
-#include <macgyver/Exception.h>
+#include <macgyver/LocalDateTime.h>
 
-#include <stdexcept>
+namespace SmartMet::TimeSeries
+{
+struct DataFunction;
+struct DataFunctions;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {
